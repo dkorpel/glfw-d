@@ -1,0 +1,120 @@
+name "glfw-d"
+description "D translation of GLFW, a multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input"
+authors "dkorpel"
+copyright "Copyright © 2020, dkorpel"
+license "Zlib"
+targetName "glfw-d"
+targetPath "build"
+targetType "library"
+
+subPackage "example"
+
+dflags "-preview=dip1000" "-preview=dip25"
+dflags "-preview=fieldwise"
+dflags "-preview=markdown"
+dflags "-preview=fixAliasThis"
+dflags "-preview=intpromote"
+dflags "-preview=dtorfields"
+dflags "-mixin=build/mixin.d"
+
+sourcePaths // by default dub includes everything in source/, which we don't want here
+sourceFiles "source/glfw3/context.d"
+sourceFiles "source/glfw3/init.d"
+sourceFiles "source/glfw3/input.d"
+sourceFiles "source/glfw3/monitor.d"
+sourceFiles "source/glfw3/vulkan.d"
+sourceFiles "source/glfw3/window.d"
+sourceFiles "source/glfw3/mappings.d"
+sourceFiles "source/glfw3/internal.d" // dmd wants to have _GLFWmapping.init even though it should be 0
+sourceFiles "source/glfw3/api.d" // GLFWGamepadState.init
+
+configuration "x11" {
+	platforms "linux"
+	versions "_GLFW_X11"
+	libs "X11" platform="linux"
+	sourceFiles "source/glfw3/x11_header.d"
+	buildOptions "betterC"
+
+	sourceFiles "source/glfw3/x11_platform.d"
+	sourceFiles "source/glfw3/x11_init.d"
+	sourceFiles "source/glfw3/x11_monitor.d"
+	sourceFiles "source/glfw3/x11_window.d"
+	sourceFiles "source/glfw3/xkb_unicode.d"
+	sourceFiles "source/glfw3/posix_time.d"
+	sourceFiles "source/glfw3/posix_thread.d"
+	sourceFiles "source/glfw3/glx_context.d"
+	sourceFiles "source/glfw3/egl_context.d"
+	sourceFiles "source/glfw3/osmesa_context.d"
+	sourceFiles "source/glfw3/linux_joystick.d"
+}
+
+configuration "windows" {
+	platforms "windows"
+	versions "_GLFW_WIN32"
+	buildOptions "betterC"
+
+	sourceFiles "source/glfw3/win32_platform.d"
+	sourceFiles "source/glfw3/win32_init.d"
+	sourceFiles "source/glfw3/win32_joystick.d"
+	sourceFiles "source/glfw3/win32_monitor.d"
+	sourceFiles "source/glfw3/win32_time.d"
+	sourceFiles "source/glfw3/win32_thread.d"
+	sourceFiles "source/glfw3/win32_window.d"
+	sourceFiles "source/glfw3/wgl_context.d"
+	sourceFiles "source/glfw3/egl_context.d"
+	sourceFiles "source/glfw3/osmesa_context.d"
+	sourceFiles "source/glfw3/directinput8.d"
+
+	libs "Gdi32" "User32"
+
+	// For cross-compiling:
+	// dflags "-mtriple=x86_64-windows-msvc" platform="ldc2"
+}
+
+configuration "wayland" {
+	platforms "linux"
+	versions "_GLFW_WAYLAND"
+	//buildOptions "betterC"
+	//dependency "wayland" version="0.2.0"
+	//dependency "wayland:client" version="0.2.0"
+	//dependency "wayland:client" path="../wayland-d/"
+	dependency "xkbcommon-d" version="0.5.1"
+
+	sourceFiles "source/glfw3/wl_platform.d"
+	sourceFiles "source/glfw3/wl_init.d"
+	sourceFiles "source/glfw3/wl_monitor.d"
+	sourceFiles "source/glfw3/wl_window.d"
+	sourceFiles "source/glfw3/linux_joystick.d"
+	sourceFiles "source/glfw3/posix_time.d"
+	sourceFiles "source/glfw3/posix_thread.d"
+	sourceFiles "source/glfw3/xkb_unicode.d"
+	sourceFiles "source/glfw3/egl_context.d"
+	sourceFiles "source/glfw3/osmesa_context.d"
+}
+
+configuration "osmesa" {
+	platforms "linux"
+	versions "_GLFW_OSMESA"
+	sourceFiles "source/glfw3/null_init.c"
+	sourceFiles "source/glfw3/null_monitor.c"
+	sourceFiles "source/glfw3/null_window.c"
+	sourceFiles "source/glfw3/null_joystick.c"
+	sourceFiles "source/glfw3/posix_time.c"
+	sourceFiles "source/glfw3/posix_thread.c"
+	sourceFiles "source/glfw3/osmesa_context.c"
+}
+
+configuration "cocoa" {
+	platforms "osx" // probably not the right identifier
+	versions "_GLFW_COCOA"
+	sourceFiles "source/glfw3/cocoa_platform.d"
+	sourceFiles "source/glfw3/cocoa_init.d"
+	sourceFiles "source/glfw3/cocoa_joystick.d"
+	sourceFiles "source/glfw3/cocoa_monitor.d"
+	sourceFiles "source/glfw3/cocoa_time.d"
+	sourceFiles "source/glfw3/cocoa_window.d"
+	sourceFiles "source/glfw3/posix_thread.d"
+	sourceFiles "source/glfw3/nsgl_context.d"
+	sourceFiles "source/glfw3/egl_context.d"
+	sourceFiles "source/glfw3/osmesa_context.d"
+}
