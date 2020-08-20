@@ -25,12 +25,12 @@ The translation is not affiliated with the original project.
 If you are using dub, add this package as a dependency.
 In `dub.sdl`:
 ```
-dependency "glfw-d" version="~>1.0.0"
+dependency "glfw-d" version="~>1.0.1"
 ```
 In `dub.json`:
 ```
 "dependencies": {
-	"glfw-d": "~>1.0.0"
+	"glfw-d": "~>1.0.1"
 }
 ```
 
