@@ -104,7 +104,10 @@ enum DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = cast(HANDLE) -4;
 
 // HACK: Define versionhelpers.h functions manually as MinGW lacks the header
 static {
-    import core.sys.windows.sdkddkver: _WIN32_WINNT_WINXP, _WIN32_WINNT_VISTA, _WIN32_WINNT_WIN7;
+    private enum _WIN32_WINNT_WINXP = 0x0501;
+    private enum _WIN32_WINNT_VISTA = 0x0600;
+    private enum _WIN32_WINNT_WIN7 = 0x0601;
+
     // note: already in core.sys.windows.winver, but not @nogc
     bool IsWindowsXPOrGreater() {
         return cast(bool) _glfwIsWindowsVersionOrGreaterWin32(HIBYTE(_WIN32_WINNT_WINXP),
