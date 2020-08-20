@@ -376,10 +376,9 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
     if (supportsXInput(&di.guidProduct))
         return DIENUM_CONTINUE;
 
-    if (FAILED(IDirectInput8_CreateDevice(_glfw.win32.dinput8.api,
-                                          &di.guidInstance,
-                                          &device,
-                                          null)))
+    if (FAILED(_glfw.win32.dinput8.api.CreateDevice(&di.guidInstance,
+                                                    &device,
+                                                    null)))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR, "Win32: Failed to create device");
         return DIENUM_CONTINUE;
@@ -524,7 +523,7 @@ void _glfwTerminateJoysticksWin32() {
         closeJoystick(_glfw.joysticks.ptr + jid);
 
     if (_glfw.win32.dinput8.api)
-        IDirectInput8_Release(_glfw.win32.dinput8.api);
+        _glfw.win32.dinput8.api.Release();
 }
 
 // Checks for new joysticks after DBT_DEVICEARRIVAL
@@ -572,11 +571,10 @@ void _glfwDetectJoystickConnectionWin32() {
     }
     if (_glfw.win32.dinput8.api)
     {
-        if (FAILED(IDirectInput8_EnumDevices(_glfw.win32.dinput8.api,
-                                             DI8DEVCLASS_GAMECTRL,
-                                             &deviceCallback,
-                                             null,
-                                             DIEDFL_ALLDEVICES)))
+        if (FAILED(_glfw.win32.dinput8.api.EnumDevices(DI8DEVCLASS_GAMECTRL,
+                                                       &deviceCallback,
+                                                       null,
+                                                       DIEDFL_ALLDEVICES)))
         {
             _glfwInputError(GLFW_PLATFORM_ERROR,
                             "Failed to enumerate DirectInput8 devices");

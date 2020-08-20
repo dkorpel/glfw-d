@@ -927,7 +927,7 @@ alias _DIOBJECTDATAFORMAT* LPDIOBJECTDATAFORMAT;
 alias const(DIOBJECTDATAFORMAT)* LPCDIOBJECTDATAFORMAT;
 
 struct IDirectInputW ;alias IDirectInputW* LPDIRECTINPUTW;
-/*struct IDirectInput8W*/;alias IDirectInput8W* LPDIRECTINPUT8W;
+/*struct IDirectInput8W*/;alias IDirectInput8 LPDIRECTINPUT8W;
 struct IDirectInputDeviceW ;alias IDirectInputDeviceW* LPDIRECTINPUTDEVICEW;
 /*struct IDirectInputDevice8W*/;alias IDirectInputDevice8 LPDIRECTINPUTDEVICE8W;
 struct IDirectInputEffect ;alias IDirectInputEffect* LPDIRECTINPUTEFFECT;
@@ -1059,41 +1059,15 @@ alias _DICONFIGUREDEVICESPARAMSW DICONFIGUREDEVICESPARAMSW;
 alias _DICONFIGUREDEVICESPARAMSW* LPDICONFIGUREDEVICESPARAMSW;
 alias const(DICONFIGUREDEVICESPARAMSW)* LPCDICONFIGUREDEVICESPARAMSW;
 
-struct IDirectInput8W
-{
-    private alias THIS_ = typeof(this)*;
-    // First member of struct is Vtable
-    // https://docs.microsoft.com/en-us/windows/win32/multimedia/virtual-function-tables
-    static struct Vtable {
-        import core.sys.windows.windows;
-        pure: nothrow: @nogc: extern(Windows):
-        /*** IUnknown methods ***/
-        HRESULT function(THIS_, REFIID riid, void** ppvObject) QueryInterface;
-        ULONG function(THIS_) AddRef;
-        ULONG function(THIS_) Release;
-        /*** IDirectInput8W methods ***/
-        HRESULT function(THIS_, REFGUID rguid, LPDIRECTINPUTDEVICE8W* lplpDirectInputDevice, LPUNKNOWN pUnkOuter) CreateDevice;
-        HRESULT function(THIS_, DWORD dwDevType, LPDIENUMDEVICESCALLBACKW lpCallback, LPVOID pvRef, DWORD dwFlags) EnumDevices;
-        HRESULT function(THIS_, REFGUID rguidInstance) GetDeviceStatus;
-        HRESULT function(THIS_, HWND hwndOwner, DWORD dwFlags) RunControlPanel;
-        HRESULT function(THIS_, HINSTANCE hinst, DWORD dwVersion) Initialize;
-        HRESULT function(THIS_, REFGUID rguid, LPCWSTR pszName, LPGUID pguidInstance) FindDevice;
-        HRESULT function(THIS_, LPCWSTR ptszUserName, LPDIACTIONFORMATW lpdiActionFormat, LPDIENUMDEVICESBYSEMANTICSCBW lpCallback, LPVOID pvRef, DWORD dwFlags) EnumDevicesBySemantics;
-        HRESULT function(THIS_, LPDICONFIGUREDEVICESCALLBACK, LPDICONFIGUREDEVICESPARAMSW lpdiCDParams, DWORD dwFlags, LPVOID pvRefData) ConfigureDevices;
-    }
-    Vtable* lpVtble;
+interface IDirectInput8 : IUnknown {
+extern(Windows) @nogc nothrow @system:
+	/*** IDirectInput8W methods ***/
+	HRESULT CreateDevice(REFGUID rguid, LPDIRECTINPUTDEVICE8W* lplpDirectInputDevice, LPUNKNOWN pUnkOuter);
+	HRESULT EnumDevices(DWORD dwDevType, LPDIENUMDEVICESCALLBACKW lpCallback, LPVOID pvRef, DWORD dwFlags);
+	HRESULT GetDeviceStatus(REFGUID rguidInstance);
+	HRESULT RunControlPanel(HWND hwndOwner, DWORD dwFlags);
+	HRESULT Initialize(HINSTANCE hinst, DWORD dwVersion);
+	HRESULT FindDevice(REFGUID rguid, LPCWSTR pszName, LPGUID pguidInstance);
+	HRESULT EnumDevicesBySemantics(LPCWSTR ptszUserName, LPDIACTIONFORMATW lpdiActionFormat, LPDIENUMDEVICESBYSEMANTICSCBW lpCallback, LPVOID pvRef, DWORD dwFlags);
+	HRESULT ConfigureDevices(LPDICONFIGUREDEVICESCALLBACK, LPDICONFIGUREDEVICESPARAMSW lpdiCDParams, DWORD dwFlags, LPVOID pvRefData);
 }
-
-/*** IUnknown methods ***/
-auto IDirectInput8_QueryInterface(T)(T* p,REFIID a,void** b) {return p.lpVtble.QueryInterface(p,a,b);}
-auto IDirectInput8_AddRef(T)(T* p) {return p.lpVtble.AddRef(p);}
-auto IDirectInput8_Release(T)(T* p) {return p.lpVtble.Release(p);}
-/*** IDirectInput8 methods ***/
-auto IDirectInput8_CreateDevice(T)(T* p,REFGUID a,LPDIRECTINPUTDEVICE8W* b,LPUNKNOWN c) {return p.lpVtble.CreateDevice(p,a,b,c);}
-auto IDirectInput8_EnumDevices(T)(T* p,DWORD a,LPDIENUMDEVICESCALLBACKW b,LPVOID c,DWORD d) {return p.lpVtble.EnumDevices(p,a,b,c,d);}
-auto IDirectInput8_GetDeviceStatus(T)(T* p,REFGUID a) {return p.lpVtble.GetDeviceStatus(p,a);}
-auto IDirectInput8_RunControlPanel(T)(T* p,HWND a,DWORD b) {return p.lpVtble.RunControlPanel(p,a,b);}
-auto IDirectInput8_Initialize(T)(T* p,HINSTANCE a,DWORD b) {return p.lpVtble.Initialize(p,a,b);}
-auto IDirectInput8_FindDevice(T)(T* p,REFGUID a,LPCWSTR b,LPGUID c) {return p.lpVtble.FindDevice(p,a,b,c);}
-auto IDirectInput8_EnumDevicesBySemantics(T)(T* p,LPCWSTR a,LPDIACTIONFORMATW b,LPDIENUMDEVICESBYSEMANTICSCBW c,LPVOID d,DWORD e) {return p.lpVtble.EnumDevicesBySemantics(p,a,b,c,d,e);}
-auto IDirectInput8_ConfigureDevices(T)(T* p,LPDICONFIGUREDEVICESCALLBACK a,LPDICONFIGUREDEVICESPARAMSW b,DWORD c,LPVOID d) {return p.lpVtble.ConfigureDevices(p,a,b,c,d);}

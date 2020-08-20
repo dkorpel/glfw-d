@@ -292,7 +292,7 @@ struct _GLFWlibraryWin32 {
     struct _Dinput8 {
         HINSTANCE instance;
         PFN_DirectInput8Create Create;
-        IDirectInput8W* api;
+        IDirectInput8 api;
     }_Dinput8 dinput8;
 
     struct _Xinput {
