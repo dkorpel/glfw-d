@@ -926,11 +926,54 @@ alias _DIOBJECTDATAFORMAT DIOBJECTDATAFORMAT;
 alias _DIOBJECTDATAFORMAT* LPDIOBJECTDATAFORMAT;
 alias const(DIOBJECTDATAFORMAT)* LPCDIOBJECTDATAFORMAT;
 
-struct IDirectInputW ;alias IDirectInputW* LPDIRECTINPUTW;
-/*struct IDirectInput8W*/;alias IDirectInput8 LPDIRECTINPUT8W;
-struct IDirectInputDeviceW ;alias IDirectInputDeviceW* LPDIRECTINPUTDEVICEW;
-/*struct IDirectInputDevice8W*/;alias IDirectInputDevice8 LPDIRECTINPUTDEVICE8W;
-struct IDirectInputEffect ;alias IDirectInputEffect* LPDIRECTINPUTEFFECT;
+// D interfaces are pointers (so LP prefix)
+alias LPDIRECTINPUTW = IDirectInputW;
+alias LPDIRECTINPUT8W = IDirectInput8W;
+alias LPDIRECTINPUTDEVICEW = IDirectInputDeviceW;
+alias LPDIRECTINPUTDEVICE8W = IDirectInputDevice8W;
+alias LPDIRECTINPUTEFFECT = IDirectInputEffect;
+
+interface IDirectInputW : IUnknown {
+extern(Windows) @nogc nothrow @system:
+    HRESULT CreateDevice(REFGUID, LPDIRECTINPUTDEVICEW*, LPUNKNOWN);
+    HRESULT EnumDevices(DWORD, LPDIENUMDEVICESCALLBACKW, LPVOID, DWORD);
+    HRESULT GetDeviceStatus(REFGUID);
+    HRESULT RunControlPanel(HWND, DWORD);
+    HRESULT Initialize(HINSTANCE, DWORD);
+}
+
+interface IDirectInputDeviceW : IUnknown {
+extern(Windows) @nogc nothrow @system:
+    HRESULT GetCapabilities(LPDIDEVCAPS);
+    HRESULT EnumObjects(LPDIENUMDEVICEOBJECTSCALLBACKW, LPVOID, DWORD);
+    HRESULT GetProperty(REFGUID, LPDIPROPHEADER);
+    HRESULT SetProperty(REFGUID, LPCDIPROPHEADER);
+    HRESULT Acquire();
+    HRESULT Unacquire();
+    HRESULT GetDeviceState(DWORD, LPVOID);
+    HRESULT GetDeviceData(DWORD, LPDIDEVICEOBJECTDATA, LPDWORD, DWORD);
+    HRESULT SetDataFormat(LPCDIDATAFORMAT);
+    HRESULT SetEventNotification(HANDLE);
+    HRESULT SetCooperativeLevel(HWND, DWORD);
+    HRESULT GetObjectInfo(LPDIDEVICEOBJECTINSTANCEW, DWORD, DWORD);
+    HRESULT GetDeviceInfo(LPDIDEVICEINSTANCEW);
+    HRESULT RunControlPanel(HWND, DWORD);
+    HRESULT Initialize(HINSTANCE, DWORD, REFGUID);
+}
+
+interface IDirectInputEffect : IUnknown {
+extern(Windows) @nogc nothrow @system:
+    HRESULT Initialize(HINSTANCE, DWORD, REFGUID);
+    HRESULT GetEffectGuid(LPGUID);
+    HRESULT GetParameters(LPDIEFFECT, DWORD);
+    HRESULT SetParameters(LPCDIEFFECT, DWORD);
+    HRESULT Start(DWORD, DWORD);
+    HRESULT Stop();
+    HRESULT GetEffectStatus(LPDWORD);
+    HRESULT Download();
+    HRESULT Unload();
+    HRESULT Escape(LPDIEFFESCAPE);
+}
 
 struct _DIDEVICEIMAGEINFOW {
 	WCHAR[MAX_PATH] tszImagePath;
@@ -991,7 +1034,8 @@ struct _DIACTIONFORMATW {
 }alias _DIACTIONFORMATW DIACTIONFORMATW;alias _DIACTIONFORMATW* LPDIACTIONFORMATW;
 alias const(DIACTIONFORMATW)* LPCDIACTIONFORMATW;
 
-interface IDirectInputDevice8 : IUnknown {
+alias IDirectInputDevice8 = IDirectInputDevice8W;
+interface IDirectInputDevice8W : IUnknown {
 extern(Windows) @nogc nothrow @system:
 	/*** IDirectInputDeviceW methods ***/
 	HRESULT GetCapabilities(LPDIDEVCAPS lpDIDevCaps);
@@ -1059,7 +1103,8 @@ alias _DICONFIGUREDEVICESPARAMSW DICONFIGUREDEVICESPARAMSW;
 alias _DICONFIGUREDEVICESPARAMSW* LPDICONFIGUREDEVICESPARAMSW;
 alias const(DICONFIGUREDEVICESPARAMSW)* LPCDICONFIGUREDEVICESPARAMSW;
 
-interface IDirectInput8 : IUnknown {
+alias IDirectInput8 = IDirectInput8W;
+interface IDirectInput8W : IUnknown {
 extern(Windows) @nogc nothrow @system:
 	/*** IDirectInput8W methods ***/
 	HRESULT CreateDevice(REFGUID rguid, LPDIRECTINPUTDEVICE8W* lplpDirectInputDevice, LPUNKNOWN pUnkOuter);
