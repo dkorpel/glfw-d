@@ -9,8 +9,16 @@ extern(Windows): @nogc: nothrow: __gshared:
 import core.sys.windows.windows;
 import core.sys.windows.objbase;
 
-alias IDirectInputDevice8 = IDirectInputDevice8W;
 enum DIRECTINPUT_VERSION =	0x0800;
+
+// @nogc IUnknown interface
+// Compiler doesn't care where it's from as long as it's named IUnknown
+private interface IUnknown {
+extern(Windows) @nogc nothrow @system:
+	HRESULT QueryInterface(IID* riid, void** pvObject);
+	ULONG AddRef();
+	ULONG Release();
+}
 
 struct _DIDATAFORMAT {
     DWORD dwSize;
@@ -921,7 +929,7 @@ alias const(DIOBJECTDATAFORMAT)* LPCDIOBJECTDATAFORMAT;
 struct IDirectInputW ;alias IDirectInputW* LPDIRECTINPUTW;
 /*struct IDirectInput8W*/;alias IDirectInput8W* LPDIRECTINPUT8W;
 struct IDirectInputDeviceW ;alias IDirectInputDeviceW* LPDIRECTINPUTDEVICEW;
-/*struct IDirectInputDevice8W*/;alias IDirectInputDevice8W* LPDIRECTINPUTDEVICE8W;
+/*struct IDirectInputDevice8W*/;alias IDirectInputDevice8 LPDIRECTINPUTDEVICE8W;
 struct IDirectInputEffect ;alias IDirectInputEffect* LPDIRECTINPUTEFFECT;
 
 struct _DIDEVICEIMAGEINFOW {
@@ -983,92 +991,42 @@ struct _DIACTIONFORMATW {
 }alias _DIACTIONFORMATW DIACTIONFORMATW;alias _DIACTIONFORMATW* LPDIACTIONFORMATW;
 alias const(DIACTIONFORMATW)* LPCDIACTIONFORMATW;
 
-struct IDirectInputDevice8W {
-    private alias THIS_ = typeof(this)*;
-
-    // First member of struct is Vtable
-    // https://docs.microsoft.com/en-us/windows/win32/multimedia/virtual-function-tables
-    static struct Vtable {
-        import core.sys.windows.windows;
-        pure: nothrow: @nogc: extern(Windows):
-        /*** IUnknown methods ***/
-        HRESULT function (THIS_, REFIID riid, void** ppvObject) QueryInterface;
-        ULONG function (THIS_,) AddRef;
-        ULONG function (THIS_,) Release;
-        /*** IDirectInputDeviceW methods ***/
-        HRESULT function (THIS_, LPDIDEVCAPS lpDIDevCaps) GetCapabilities;
-        HRESULT function (THIS_, LPDIENUMDEVICEOBJECTSCALLBACKW lpCallback, LPVOID pvRef, DWORD dwFlags) EnumObjects;
-        HRESULT function (THIS_, REFGUID rguidProp, LPDIPROPHEADER pdiph) GetProperty;
-        HRESULT function (THIS_, REFGUID rguidProp, LPCDIPROPHEADER pdiph) SetProperty;
-        HRESULT function (THIS_,) Acquire;
-        HRESULT function (THIS_,) Unacquire;
-        HRESULT function (THIS_, DWORD cbData, LPVOID lpvData) GetDeviceState;
-        HRESULT function (THIS_, DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags) GetDeviceData;
-        HRESULT function (THIS_, LPCDIDATAFORMAT lpdf) SetDataFormat;
-        HRESULT function (THIS_, HANDLE hEvent) SetEventNotification;
-        HRESULT function (THIS_, HWND hwnd, DWORD dwFlags) SetCooperativeLevel;
-        HRESULT function (THIS_, LPDIDEVICEOBJECTINSTANCEW pdidoi, DWORD dwObj, DWORD dwHow) GetObjectInfo;
-        HRESULT function (THIS_, LPDIDEVICEINSTANCEW pdidi) GetDeviceInfo;
-        HRESULT function (THIS_, HWND hwndOwner, DWORD dwFlags) RunControlPanel;
-        HRESULT function (THIS_, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid) Initialize;
-        /*** IDirectInputDevice2W methods ***/
-        HRESULT function (THIS_, REFGUID rguid, LPCDIEFFECT lpeff, LPDIRECTINPUTEFFECT *ppdeff, LPUNKNOWN punkOuter) CreateEffect;
-        HRESULT function (THIS_, LPDIENUMEFFECTSCALLBACKW lpCallback, LPVOID pvRef, DWORD dwEffType) EnumEffects;
-        HRESULT function (THIS_, LPDIEFFECTINFOW pdei, REFGUID rguid) GetEffectInfo;
-        HRESULT function (THIS_, LPDWORD pdwOut) GetForceFeedbackState;
-        HRESULT function (THIS_, DWORD dwFlags) SendForceFeedbackCommand;
-        HRESULT function (THIS_, LPDIENUMCREATEDEFFECTOBJECTSCALLBACK lpCallback, LPVOID pvRef, DWORD fl) EnumCreatedEffectObjects;
-        HRESULT function (THIS_, LPDIEFFESCAPE pesc) Escape;
-        HRESULT function (THIS_,) Poll;
-        HRESULT function (THIS_, DWORD cbObjectData, LPCDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD fl) SendDeviceData;
-        /*** IDirectInputDevice7W methods ***/
-        HRESULT function (THIS_, LPCWSTR lpszFileName,LPDIENUMEFFECTSINFILECALLBACK pec,LPVOID pvRef,DWORD dwFlags) EnumEffectsInFile;
-        HRESULT function (THIS_, LPCWSTR lpszFileName,DWORD dwEntries,LPDIFILEEFFECT rgDiFileEft,DWORD dwFlags) WriteEffectToFile;
-        /*** IDirectInputDevice8W methods ***/
-        HRESULT function (THIS_, LPDIACTIONFORMATW lpdiaf, LPCWSTR lpszUserName, DWORD dwFlags) BuildActionMap;
-        HRESULT function (THIS_, LPDIACTIONFORMATW lpdiaf, LPCWSTR lpszUserName, DWORD dwFlags) SetActionMap;
-        HRESULT function (THIS_, LPDIDEVICEIMAGEINFOHEADERW lpdiDevImageInfoHeader) GetImageInfo;
-    }
-    Vtable* lpVtbl;
+interface IDirectInputDevice8 : IUnknown {
+extern(Windows) @nogc nothrow @system:
+	/*** IDirectInputDeviceW methods ***/
+	HRESULT GetCapabilities(LPDIDEVCAPS lpDIDevCaps);
+	HRESULT EnumObjects(LPDIENUMDEVICEOBJECTSCALLBACKW lpCallback, LPVOID pvRef, DWORD dwFlags);
+	HRESULT GetProperty(REFGUID rguidProp, LPDIPROPHEADER pdiph);
+	HRESULT SetProperty(REFGUID rguidProp, LPCDIPROPHEADER pdiph);
+	HRESULT Acquire();
+	HRESULT Unacquire();
+	HRESULT GetDeviceState(DWORD cbData, LPVOID lpvData);
+	HRESULT GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags);
+	HRESULT SetDataFormat(LPCDIDATAFORMAT lpdf);
+	HRESULT SetEventNotification(HANDLE hEvent);
+	HRESULT SetCooperativeLevel(HWND hwnd, DWORD dwFlags);
+	HRESULT GetObjectInfo(LPDIDEVICEOBJECTINSTANCEW pdidoi, DWORD dwObj, DWORD dwHow);
+	HRESULT GetDeviceInfo(LPDIDEVICEINSTANCEW pdidi);
+	HRESULT RunControlPanel(HWND hwndOwner, DWORD dwFlags);
+	HRESULT Initialize(HINSTANCE hinst, DWORD dwVersion, REFGUID rguid);
+	/*** IDirectInputDevice2W methods ***/
+	HRESULT CreateEffect(REFGUID rguid, LPCDIEFFECT lpeff, LPDIRECTINPUTEFFECT *ppdeff, LPUNKNOWN punkOuter);
+	HRESULT EnumEffects(LPDIENUMEFFECTSCALLBACKW lpCallback, LPVOID pvRef, DWORD dwEffType);
+	HRESULT GetEffectInfo(LPDIEFFECTINFOW pdei, REFGUID rguid);
+	HRESULT GetForceFeedbackState(LPDWORD pdwOut);
+	HRESULT SendForceFeedbackCommand(DWORD dwFlags);
+	HRESULT EnumCreatedEffectObjects(LPDIENUMCREATEDEFFECTOBJECTSCALLBACK lpCallback, LPVOID pvRef, DWORD fl);
+	HRESULT Escape(LPDIEFFESCAPE pesc);
+	HRESULT Poll();
+	HRESULT SendDeviceData(DWORD cbObjectData, LPCDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD fl);
+	/*** IDirectInputDevice7W methods ***/
+	HRESULT EnumEffectsInFile(LPCWSTR lpszFileName,LPDIENUMEFFECTSINFILECALLBACK pec,LPVOID pvRef,DWORD dwFlags);
+	HRESULT WriteEffectToFile(LPCWSTR lpszFileName,DWORD dwEntries,LPDIFILEEFFECT rgDiFileEft,DWORD dwFlags);
+	/*** IDirectInputDevice8W methods ***/
+	HRESULT BuildActionMap(LPDIACTIONFORMATW lpdiaf, LPCWSTR lpszUserName, DWORD dwFlags);
+	HRESULT SetActionMap(LPDIACTIONFORMATW lpdiaf, LPCWSTR lpszUserName, DWORD dwFlags);
+	HRESULT GetImageInfo(LPDIDEVICEIMAGEINFOHEADERW lpdiDevImageInfoHeader);
 }
-
-/*** IUnknown methods **/
-auto IDirectInputDevice8_QueryInterface(T)(T* p, REFIID riid, void** ppvObject) {return p.lpVtbl.QueryInterface(p,riid,ppvObject);}
-auto IDirectInputDevice8_AddRef(T)(T* p)  {return p.lpVtbl.AddRef(p);}
-auto IDirectInputDevice8_Release(T)(T* p)  {return p.lpVtbl.Release(p);}
-/*** IDirectInputDevice methods **/
-auto IDirectInputDevice8_GetCapabilities(T)(T* p, LPDIDEVCAPS a) {return p.lpVtbl.GetCapabilities(p,a);}
-auto IDirectInputDevice8_EnumObjects(T)(T* p, LPDIENUMDEVICEOBJECTSCALLBACKW a,LPVOID b,DWORD c) {return p.lpVtbl.EnumObjects(p,a,b,c);}
-auto IDirectInputDevice8_GetProperty(T)(T* p, REFGUID a,LPDIPROPHEADER b) {return p.lpVtbl.GetProperty(p,a,b);}
-auto IDirectInputDevice8_SetProperty(T)(T* p, REFGUID a,LPCDIPROPHEADER b) {return p.lpVtbl.SetProperty(p,a,b);}
-auto IDirectInputDevice8_Acquire(T)(T* p)  {return p.lpVtbl.Acquire(p);}
-auto IDirectInputDevice8_Unacquire(T)(T* p)  {return p.lpVtbl.Unacquire(p);}
-auto IDirectInputDevice8_GetDeviceState(T)(T* p, DWORD a,LPVOID b) {return p.lpVtbl.GetDeviceState(p,a,b);}
-auto IDirectInputDevice8_GetDeviceData(T)(T* p, DWORD a, LPDIDEVICEOBJECTDATA b, LPDWORD c, DWORD d) {return p.lpVtbl.GetDeviceData(p,a,b,c,d);}
-auto IDirectInputDevice8_SetDataFormat(T)(T* p, LPCDIDATAFORMAT a) {return p.lpVtbl.SetDataFormat(p,a);}
-auto IDirectInputDevice8_SetEventNotification(T)(T* p, HANDLE a) {return p.lpVtbl.SetEventNotification(p,a);}
-auto IDirectInputDevice8_SetCooperativeLevel(T)(T* p, HWND a,DWORD b) {return p.lpVtbl.SetCooperativeLevel(p,a,b);}
-auto IDirectInputDevice8_GetObjectInfo(T)(T* p, LPDIDEVICEOBJECTINSTANCEW a,DWORD b,DWORD c) {return p.lpVtbl.GetObjectInfo(p,a,b,c);}
-auto IDirectInputDevice8_GetDeviceInfo(T)(T* p, LPDIDEVICEINSTANCEW a) {return p.lpVtbl.GetDeviceInfo(p,a);}
-auto IDirectInputDevice8_RunControlPanel(T)(T* p, HWND a,DWORD b) {return p.lpVtbl.RunControlPanel(p,a,b);}
-auto IDirectInputDevice8_Initialize(T)(T* p, HINSTANCE a,DWORD b,REFGUID c) {return p.lpVtbl.Initialize(p,a,b,c);}
-/*** IDirectInputDevice2 methods **/
-auto IDirectInputDevice8_CreateEffect(T)(T* p, REFGUID a,LPCDIEFFECT b,LPDIRECTINPUTEFFECT c,LPUNKNOWN d) {return p.lpVtbl.CreateEffect(p,a,b,c,d);}
-auto IDirectInputDevice8_EnumEffects(T)(T* p, LPDIENUMEFFECTSCALLBACKW a,LPVOID b,DWORD c) {return p.lpVtbl.EnumEffects(p,a,b,c);}
-auto IDirectInputDevice8_GetEffectInfo(T)(T* p, LPDIEFFECTINFOW a,REFGUID b) {return p.lpVtbl.GetEffectInfo(p,a,b);}
-auto IDirectInputDevice8_GetForceFeedbackState(T)(T* p, LPDWORD a) {return p.lpVtbl.GetForceFeedbackState(p,a);}
-auto IDirectInputDevice8_SendForceFeedbackCommand(T)(T* p, DWORD a) {return p.lpVtbl.SendForceFeedbackCommand(p,a);}
-auto IDirectInputDevice8_EnumCreatedEffectObjects(T)(T* p, LPDIENUMCREATEDEFFECTOBJECTSCALLBACK a,LPVOID b,DWORD c) {return p.lpVtbl.EnumCreatedEffectObjects(p,a,b,c);}
-auto IDirectInputDevice8_Escape(T)(T* p, LPDIEFFESCAPE a) {return p.lpVtbl.Escape(p,a);}
-auto IDirectInputDevice8_Poll(T)(T* p)  {return p.lpVtbl.Poll(p);}
-auto IDirectInputDevice8_SendDeviceData(T)(T* p, DWORD a,LPCDIDEVICEOBJECTDATA b,LPDWORD c,DWORD d) {return p.lpVtbl.SendDeviceData(p,a,b,c,d);}
-/*** IDirectInputDevice7 methods **/
-auto IDirectInputDevice8_EnumEffectsInFile(T)(T* p, LPCWSTR lpszFileName,LPDIENUMEFFECTSINFILECALLBACK pec,LPVOID pvRef,DWORD dwFlags) {return p.lpVtbl.EnumEffectsInFile(p,lpszFileName,pec,pvRef,dwFlags);}
-auto IDirectInputDevice8_WriteEffectToFile(T)(T* p, LPCWSTR lpszFileName,DWORD dwEntries,LPDIFILEEFFECT rgDiFileEft,DWORD dwFlags) {return p.lpVtbl.WriteEffectToFile(p,lpszFileName,dwEntries,rgDiFileEft,dwFlags);}
-/*** IDirectInputDevice8 methods **/
-auto IDirectInputDevice8_BuildActionMap(T)(T* p, LPDIACTIONFORMATW a,LPCWSTR b,DWORD c) {return p.lpVtbl.BuildActionMap(p,a,b,c);}
-auto IDirectInputDevice8_SetActionMap(T)(T* p, LPDIACTIONFORMATW a,LPCWSTR b,DWORD c) {return p.lpVtbl.SetActionMap(p,a,b,c);}
-auto IDirectInputDevice8_GetImageInfo(T)(T* p, LPDIDEVICEIMAGEINFOHEADERW a) {return p.lpVtbl.GetImageInfo(p,a);}
 
 alias DWORD D3DCOLOR;
 

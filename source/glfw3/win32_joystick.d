@@ -53,7 +53,7 @@ struct _GLFWjoyobjectWin32 {
 struct _GLFWjoystickWin32 {
     _GLFWjoyobjectWin32* objects;
     int objectCount;
-    IDirectInputDevice8W* device;
+    IDirectInputDevice8 device;
     DWORD index;
     GUID guid;
 }
@@ -69,7 +69,7 @@ enum _GLFW_TYPE_POV =      3;
 // Data produced with DirectInput device object enumeration
 //
 struct _GLFWobjenumWin32 {
-    IDirectInputDevice8W* device;
+    IDirectInputDevice8 device;
     _GLFWjoyobjectWin32* objects;
     int objectCount;
     int axisCount;
@@ -272,8 +272,8 @@ static GLFWbool supportsXInput(const(GUID)* guid) {
 static void closeJoystick(_GLFWjoystick* js) {
     if (js.win32.device)
     {
-        IDirectInputDevice8_Unacquire(js.win32.device);
-        IDirectInputDevice8_Release(js.win32.device);
+        js.win32.device.Unacquire();
+        js.win32.device.Release();
     }
 
     free(js.win32.objects);
@@ -318,9 +318,7 @@ extern(Windows) BOOL deviceObjectCallback(const(DIDEVICEOBJECTINSTANCEW)* doi, v
         dipr.lMin = -32768;
         dipr.lMax =  32767;
 
-        if (FAILED(IDirectInputDevice8_SetProperty(data.device,
-                                                   DIPROP_RANGE,
-                                                   &dipr.diph)))
+        if (FAILED(data.device.SetProperty(DIPROP_RANGE, &dipr.diph)))
         {
             return DIENUM_CONTINUE;
         }
@@ -359,7 +357,7 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
     int jid = 0;
     DIDEVCAPS dc;
     DIPROPDWORD dipd;
-    IDirectInputDevice8* device;
+    IDirectInputDevice8 device;
     _GLFWobjenumWin32 data;
     //_GLFWjoystick* js; moved down to avoid shadowing
     char[33] guid;
@@ -387,24 +385,24 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
         return DIENUM_CONTINUE;
     }
 
-    if (FAILED(IDirectInputDevice8_SetDataFormat(device, &_glfwDataFormat)))
+    if (FAILED(device.SetDataFormat(&_glfwDataFormat)))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Win32: Failed to set device data format");
 
-        IDirectInputDevice8_Release(device);
+        device.Release();
         return DIENUM_CONTINUE;
     }
 
     memset(&dc, 0, typeof(dc).sizeof);
     dc.dwSize = typeof(dc).sizeof;
 
-    if (FAILED(IDirectInputDevice8_GetCapabilities(device, &dc)))
+    if (FAILED(device.GetCapabilities(&dc)))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Win32: Failed to query device capabilities");
 
-        IDirectInputDevice8_Release(device);
+        device.Release();
         return DIENUM_CONTINUE;
     }
 
@@ -414,14 +412,12 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
     dipd.diph.dwHow = DIPH_DEVICE;
     dipd.dwData = DIPROPAXISMODE_ABS;
 
-    if (FAILED(IDirectInputDevice8_SetProperty(device,
-                                               DIPROP_AXISMODE,
-                                               &dipd.diph)))
+    if (FAILED(device.SetProperty(DIPROP_AXISMODE, &dipd.diph)))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Win32: Failed to set device axis mode");
 
-        IDirectInputDevice8_Release(device);
+        device.Release();
         return DIENUM_CONTINUE;
     }
 
@@ -430,15 +426,14 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
     data.objects = cast(_GLFWjoyobjectWin32*) calloc(dc.dwAxes + cast(size_t) dc.dwButtons + dc.dwPOVs,
                           _GLFWjoyobjectWin32.sizeof);
 
-    if (FAILED(IDirectInputDevice8_EnumObjects(device,
-                                               &deviceObjectCallback,
-                                               &data,
-                                               DIDFT_AXIS | DIDFT_BUTTON | DIDFT_POV)))
+    if (FAILED(device.EnumObjects(&deviceObjectCallback,
+                                  &data,
+                                  DIDFT_AXIS | DIDFT_BUTTON | DIDFT_POV)))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Win32: Failed to enumerate device objects");
 
-        IDirectInputDevice8_Release(device);
+        device.Release();
         free(data.objects);
         return DIENUM_CONTINUE;
     }
@@ -455,7 +450,7 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Win32: Failed to convert joystick name to UTF-8");
 
-        IDirectInputDevice8_Release(device);
+        device.Release();
         free(data.objects);
         return DIENUM_STOP;
     }
@@ -483,7 +478,7 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
                             data.povCount);
     if (!js)
     {
-        IDirectInputDevice8_Release(device);
+        device.Release();
         free(data.objects);
         return DIENUM_STOP;
     }
@@ -549,7 +544,7 @@ void _glfwDetectJoystickConnectionWin32() {
             for (jid = 0;  jid <= GLFW_JOYSTICK_LAST;  jid++)
             {
                 if (_glfw.joysticks[jid].present &&
-                    _glfw.joysticks[jid].win32.device == null &&
+                    _glfw.joysticks[jid].win32.device is null &&
                     _glfw.joysticks[jid].win32.index == index)
                 {
                     break;
@@ -615,17 +610,15 @@ int _glfwPlatformPollJoystick(_GLFWjoystick* js, int mode) {
         HRESULT result;
         DIJOYSTATE state;
 
-        IDirectInputDevice8_Poll(js.win32.device);
-        result = IDirectInputDevice8_GetDeviceState(js.win32.device,
-                                                    typeof(state).sizeof,
-                                                    &state);
+        js.win32.device.Poll();
+        result = js.win32.device.GetDeviceState(typeof(state).sizeof,
+                                                &state);
         if (result == DIERR_NOTACQUIRED || result == DIERR_INPUTLOST)
         {
-            IDirectInputDevice8_Acquire(js.win32.device);
-            IDirectInputDevice8_Poll(js.win32.device);
-            result = IDirectInputDevice8_GetDeviceState(js.win32.device,
-                                                        typeof(state).sizeof,
-                                                        &state);
+            js.win32.device.Acquire();
+            js.win32.device.Poll();
+            result = js.win32.device.GetDeviceState(typeof(state).sizeof,
+                                                    &state);
         }
 
         if (FAILED(result))
