@@ -1,5 +1,5 @@
 # GLFW-D
-A translation from C to D of [GLFW](https://github.com/glfw/glfw) version 3.3.2 (commit https://github.com/glfw/glfw/commit/0a49ef0a00baa3ab520ddc452f0e3b1e099c5589).
+A translation from C to D of [GLFW](https://github.com/glfw/glfw) version 3.3.2 ([commit 0a49ef0](https://github.com/glfw/glfw/commit/0a49ef0a00baa3ab520ddc452f0e3b1e099c5589)).
 
 GLFW is a multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input.
 (See also: [what is GLFW](https://www.glfw.org/faq.html#11---what-is-glfw))
