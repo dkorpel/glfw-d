@@ -65,7 +65,7 @@ static _GLFWinitconfig _glfwInitHints = _GLFWinitconfig(
 
 // Terminate the library
 //
-static void terminate() {
+private extern(D) void terminate() {
     int i;
 
     memset(&_glfw.callbacks, 0, typeof((_glfw.callbacks)).sizeof);
