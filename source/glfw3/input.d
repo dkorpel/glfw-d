@@ -156,7 +156,7 @@ private GLFWbool parseMapping(_GLFWmapping* mapping, const(char)* string) {
     c += length + 1;
 
     length = strcspn(c, ",");
-    if (length >= typeof((mapping.name)).sizeof || c[length] != ',')
+    if (length >= typeof(mapping.name).sizeof || c[length] != ',')
     {
         _glfwInputError(GLFW_INVALID_VALUE, null);
         return GLFW_FALSE;
@@ -171,7 +171,7 @@ private GLFWbool parseMapping(_GLFWmapping* mapping, const(char)* string) {
         if (*c == '+' || *c == '-')
             return GLFW_FALSE;
 
-        for (i = 0;  i < fields.sizeof / typeof((fields[0])).sizeof;  i++)
+        for (i = 0;  i < fields.sizeof / typeof(fields[0]).sizeof;  i++)
         {
             length = strlen(fields[i].name);
             if (strncmp(c, fields[i].name, length) != 0 || c[length] != ':')

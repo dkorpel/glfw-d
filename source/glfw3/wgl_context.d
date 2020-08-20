@@ -196,7 +196,7 @@ static int choosePixelFormat(_GLFWwindow* window, const(_GLFWctxconfig)* ctxconf
     const(_GLFWfbconfig)* closest;
     int i;int pixelFormat;int nativeCount;int usableCount = 0;int attribCount = 0;
     int[40] attribs;
-    int[attribs.sizeof / typeof((attribs[0])).sizeof] values;
+    int[attribs.sizeof / typeof(attribs[0]).sizeof] values;
 
     void addAttrib(int a) {
         assert(cast(size_t) attribCount < attribs.length);

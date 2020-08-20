@@ -241,8 +241,8 @@ static int translateKeyCode(int scancode) {
 static void createKeyTables() {
     int scancode;int key;
 
-    memset(_glfw.x11.keycodes.ptr, -1, typeof((_glfw.x11.keycodes)).sizeof);
-    memset(_glfw.x11.scancodes.ptr, -1, typeof((_glfw.x11.scancodes)).sizeof);
+    memset(_glfw.x11.keycodes.ptr, -1, typeof(_glfw.x11.keycodes).sizeof);
+    memset(_glfw.x11.scancodes.ptr, -1, typeof(_glfw.x11.scancodes).sizeof);
 
     if (_glfw.x11.xkb.available)
     {

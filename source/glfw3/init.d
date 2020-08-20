@@ -68,7 +68,7 @@ static _GLFWinitconfig _glfwInitHints = _GLFWinitconfig(
 private extern(D) void terminate() {
     int i;
 
-    memset(&_glfw.callbacks, 0, typeof((_glfw.callbacks)).sizeof);
+    memset(&_glfw.callbacks, 0, typeof(_glfw.callbacks).sizeof);
 
     while (_glfw.windowListHead)
         glfwDestroyWindow(cast(GLFWwindow*) _glfw.windowListHead);

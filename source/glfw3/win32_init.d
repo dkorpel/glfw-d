@@ -198,8 +198,8 @@ static void freeLibraries() {
 static void createKeyTables() {
     int scancode;
 
-    memset(_glfw.win32.keycodes.ptr, -1, typeof((_glfw.win32.keycodes)).sizeof);
-    memset(_glfw.win32.scancodes.ptr, -1, typeof((_glfw.win32.scancodes)).sizeof);
+    memset(_glfw.win32.keycodes.ptr, -1, typeof(_glfw.win32.keycodes).sizeof);
+    memset(_glfw.win32.scancodes.ptr, -1, typeof(_glfw.win32.scancodes).sizeof);
 
     _glfw.win32.keycodes[0x00B] = GLFW_KEY_0;
     _glfw.win32.keycodes[0x002] = GLFW_KEY_1;

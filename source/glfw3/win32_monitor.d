@@ -486,9 +486,9 @@ void _glfwPlatformSetGammaRamp(_GLFWmonitor* monitor, const(GLFWgammaramp)* ramp
         return;
     }
 
-    memcpy(values[0].ptr, ramp.red,   typeof((values[0])).sizeof);
-    memcpy(values[1].ptr, ramp.green, typeof((values[1])).sizeof);
-    memcpy(values[2].ptr, ramp.blue,  typeof((values[2])).sizeof);
+    memcpy(values[0].ptr, ramp.red,   typeof(values[0]).sizeof);
+    memcpy(values[1].ptr, ramp.green, typeof(values[1]).sizeof);
+    memcpy(values[2].ptr, ramp.blue,  typeof(values[2]).sizeof);
 
     dc = CreateDCW("DISPLAY"w.ptr, monitor.win32.adapterName.ptr, null, null);
     SetDeviceGammaRamp(dc, values.ptr);

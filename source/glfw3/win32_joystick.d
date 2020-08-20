@@ -312,7 +312,7 @@ extern(Windows) BOOL deviceObjectCallback(const(DIDEVICEOBJECTINSTANCEW)* doi, v
 
         memset(&dipr, 0, typeof(dipr).sizeof);
         dipr.diph.dwSize = typeof(dipr).sizeof;
-        dipr.diph.dwHeaderSize = typeof((dipr.diph)).sizeof;
+        dipr.diph.dwHeaderSize = typeof(dipr.diph).sizeof;
         dipr.diph.dwObj = doi.dwType;
         dipr.diph.dwHow = DIPH_BYID;
         dipr.lMin = -32768;
@@ -407,7 +407,7 @@ private extern(Windows) BOOL deviceCallback(const(DIDEVICEINSTANCE)* di, void* u
 
     memset(&dipd, 0, typeof(dipd).sizeof);
     dipd.diph.dwSize = typeof(dipd).sizeof;
-    dipd.diph.dwHeaderSize = typeof((dipd.diph)).sizeof;
+    dipd.diph.dwHeaderSize = typeof(dipd.diph).sizeof;
     dipd.diph.dwHow = DIPH_DEVICE;
     dipd.dwData = DIPROPAXISMODE_ABS;
 

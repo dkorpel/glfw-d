@@ -789,7 +789,7 @@ static GLFWbool createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* w
 static Atom writeTargetToProperty(const(XSelectionRequestEvent)* request) {
     char* selectionString = null;
     const(Atom)[2] formats = [ _glfw.x11.UTF8_STRING, XA_STRING ];
-    const(int) formatCount = formats.length; //sizeof / typeof((formats[0])).sizeof;
+    const(int) formatCount = formats.length; //sizeof / typeof(formats[0]).sizeof;
 
     if (request.selection == _glfw.x11.PRIMARY)
         selectionString = _glfw.x11.primarySelectionString;
@@ -948,7 +948,7 @@ static void handleSelectionRequest(XEvent* event) {
 static const(char)* getSelectionString(Atom selection) {
     char** selectionString = null;
     const(Atom)[2] targets = [ _glfw.x11.UTF8_STRING, XA_STRING ];
-    const(size_t) targetCount = targets.length; //targets.sizeof / typeof((targets[0])).sizeof;
+    const(size_t) targetCount = targets.length; //targets.sizeof / typeof(targets[0]).sizeof;
 
     if (selection == _glfw.x11.PRIMARY)
         selectionString = &_glfw.x11.primarySelectionString;
