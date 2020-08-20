@@ -190,7 +190,7 @@ static HICON createIcon(const(GLFWimage)* image, int xhot, int yhot, GLFWbool ic
 
 // Translate content area size to full window size according to styles and DPI
 //
-static void getFullWindowSize(DWORD style, DWORD exStyle, int contentWidth, int contentHeight, int* fullWidth, int* fullHeight, UINT dpi) {
+private extern(D) void getFullWindowSize(DWORD style, DWORD exStyle, int contentWidth, int contentHeight, int* fullWidth, int* fullHeight, UINT dpi) {
     RECT rect = RECT(0, 0, contentWidth, contentHeight);
 
     if (_glfwIsWindows10AnniversaryUpdateOrGreaterWin32())
@@ -203,7 +203,7 @@ static void getFullWindowSize(DWORD style, DWORD exStyle, int contentWidth, int 
 }
 // Enforce the content area aspect ratio based on which edge is being dragged
 //
-static void applyAspectRatio(_GLFWwindow* window, int edge, RECT* area) {
+private extern(D) void applyAspectRatio(_GLFWwindow* window, int edge, RECT* area) {
     int xoff;int yoff;
     UINT dpi = USER_DEFAULT_SCREEN_DPI;
     const(float) ratio = cast(float) window.numer / cast(float) window.denom;
@@ -234,7 +234,7 @@ static void applyAspectRatio(_GLFWwindow* window, int edge, RECT* area) {
 
 // Updates the cursor image according to its cursor mode
 //
-static void updateCursorImage(_GLFWwindow* window) {
+private extern(D) void updateCursorImage(_GLFWwindow* window) {
     if (window.cursorMode == GLFW_CURSOR_NORMAL)
     {
         if (window.cursor)
@@ -248,7 +248,7 @@ static void updateCursorImage(_GLFWwindow* window) {
 
 // Updates the cursor clip rect
 //
-static void updateClipRect(_GLFWwindow* window) {
+private extern(D) void updateClipRect(_GLFWwindow* window) {
     if (window)
     {
         RECT clipRect;
@@ -263,7 +263,7 @@ static void updateClipRect(_GLFWwindow* window) {
 
 // Enables WM_INPUT messages for the mouse for the specified window
 //
-static void enableRawMouseMotion(_GLFWwindow* window) {
+private extern(D) void enableRawMouseMotion(_GLFWwindow* window) {
     const(RAWINPUTDEVICE) rid = RAWINPUTDEVICE( 0x01, 0x02, 0, cast(void*) window.win32.handle );
 
     if (!RegisterRawInputDevices(&rid, 1, typeof(rid).sizeof))
@@ -275,7 +275,7 @@ static void enableRawMouseMotion(_GLFWwindow* window) {
 
 // Disables WM_INPUT messages for the mouse
 //
-static void disableRawMouseMotion(_GLFWwindow* window) {
+private extern(D) void disableRawMouseMotion(_GLFWwindow* window) {
     const RAWINPUTDEVICE rid = RAWINPUTDEVICE(0x01, 0x02, RIDEV_REMOVE, null);
 
     if (!RegisterRawInputDevices(&rid, 1, typeof(rid).sizeof))
@@ -287,7 +287,7 @@ static void disableRawMouseMotion(_GLFWwindow* window) {
 
 // Apply disabled cursor mode to a focused window
 //
-static void disableCursor(_GLFWwindow* window) {
+private extern(D) void disableCursor(_GLFWwindow* window) {
     _glfw.win32.disabledCursorWindow = window;
     _glfwPlatformGetCursorPos(window,
                               &_glfw.win32.restoreCursorPosX,
@@ -302,7 +302,7 @@ static void disableCursor(_GLFWwindow* window) {
 
 // Exit disabled cursor mode for the specified window
 //
-static void enableCursor(_GLFWwindow* window) {
+private extern(D) void enableCursor(_GLFWwindow* window) {
     if (window.rawMouseMotion)
         disableRawMouseMotion(window);
 
@@ -335,7 +335,7 @@ static GLFWbool cursorInContentArea(_GLFWwindow* window) {
 
 // Update native window styles to match attributes
 //
-static void updateWindowStyles(const(_GLFWwindow)* window) {
+private extern(D) void updateWindowStyles(const(_GLFWwindow)* window) {
     RECT rect;
     DWORD style = GetWindowLongW(cast(void*) window.win32.handle, GWL_STYLE);
     style &= ~(WS_OVERLAPPEDWINDOW | WS_POPUP);
@@ -363,7 +363,7 @@ static void updateWindowStyles(const(_GLFWwindow)* window) {
 
 // Update window framebuffer transparency
 //
-static void updateFramebufferTransparency(const(_GLFWwindow)* window) {
+private extern(D) void updateFramebufferTransparency(const(_GLFWwindow)* window) {
     BOOL enabled;
 
     if (!IsWindowsVistaOrGreater())
@@ -432,7 +432,7 @@ static int getKeyMods() {
     return mods;
 }
 
-static void fitToMonitor(_GLFWwindow* window) {
+private extern(D) void fitToMonitor(_GLFWwindow* window) {
     MONITORINFO mi = MONITORINFO(MONITORINFO.sizeof);
     GetMonitorInfo(window.monitor.win32.handle, &mi);
     SetWindowPos(cast(void*) window.win32.handle, HWND_TOPMOST,
@@ -445,7 +445,7 @@ static void fitToMonitor(_GLFWwindow* window) {
 
 // Make the specified window and its video mode active on its monitor
 //
-static void acquireMonitor(_GLFWwindow* window) {
+private extern(D) void acquireMonitor(_GLFWwindow* window) {
     if (!_glfw.win32.acquiredMonitorCount)
     {
         SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED);
@@ -468,7 +468,7 @@ static void acquireMonitor(_GLFWwindow* window) {
 
 // Remove the window and restore the original video mode
 //
-static void releaseMonitor(_GLFWwindow* window) {
+private extern(D) void releaseMonitor(_GLFWwindow* window) {
     if (window.monitor.window != window)
         return;
 

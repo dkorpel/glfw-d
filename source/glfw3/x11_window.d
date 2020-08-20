@@ -219,7 +219,7 @@ static int translateKey(int scancode) {
 
 // Sends an EWMH or ICCCM event to the window manager
 //
-static void sendEventToWM(_GLFWwindow* window, Atom type, int a, int b, int c, int d, int e) {
+private extern(D) void sendEventToWM(_GLFWwindow* window, Atom type, int a, int b, int c, int d, int e) {
     XEvent event = XEvent(ClientMessage);
     event.xclient.window = window.x11.handle;
     event.xclient.format = 32; // Data is 32-bit longs
@@ -238,7 +238,7 @@ static void sendEventToWM(_GLFWwindow* window, Atom type, int a, int b, int c, i
 
 // Updates the normal hints according to the window settings
 //
-static void updateNormalHints(_GLFWwindow* window, int width, int height) {
+private extern(D) void updateNormalHints(_GLFWwindow* window, int width, int height) {
     XSizeHints* hints = XAllocSizeHints();
 
     if (!window.monitor)
@@ -286,7 +286,7 @@ static void updateNormalHints(_GLFWwindow* window, int width, int height) {
 
 // Updates the full screen status of the window
 //
-static void updateWindowMode(_GLFWwindow* window) {
+private extern(D) void updateWindowMode(_GLFWwindow* window) {
     if (window.monitor)
     {
         if (_glfw.x11.xinerama.available &&
@@ -503,7 +503,7 @@ static char* convertLatin1toUTF8(const(char)* source) {
 
 // Updates the cursor image according to its cursor mode
 //
-static void updateCursorImage(_GLFWwindow* window) {
+private extern(D) void updateCursorImage(_GLFWwindow* window) {
     if (window.cursorMode == GLFW_CURSOR_NORMAL)
     {
         if (window.cursor)
@@ -523,7 +523,7 @@ static void updateCursorImage(_GLFWwindow* window) {
 
 // Enable XI2 raw mouse motion events
 //
-static void enableRawMouseMotion(_GLFWwindow* window) {
+private extern(D) void enableRawMouseMotion(_GLFWwindow* window) {
     XIEventMask em;
     ubyte[XIMaskLen(XI_RawMotion)] mask = 0;
 
@@ -538,7 +538,7 @@ static void enableRawMouseMotion(_GLFWwindow* window) {
 
 // Disable XI2 raw mouse motion events
 //
-static void disableRawMouseMotion(_GLFWwindow* window) {
+private extern(D) void disableRawMouseMotion(_GLFWwindow* window) {
     XIEventMask em;
     ubyte[1] mask = [0];
 
@@ -551,7 +551,7 @@ static void disableRawMouseMotion(_GLFWwindow* window) {
 
 // Apply disabled cursor mode to a focused window
 //
-static void disableCursor(_GLFWwindow* window) {
+private extern(D) void disableCursor(_GLFWwindow* window) {
     if (window.rawMouseMotion)
         enableRawMouseMotion(window);
 
@@ -571,7 +571,7 @@ static void disableCursor(_GLFWwindow* window) {
 
 // Exit disabled cursor mode for the specified window
 //
-static void enableCursor(_GLFWwindow* window) {
+private extern(D) void enableCursor(_GLFWwindow* window) {
     if (window.rawMouseMotion)
         disableRawMouseMotion(window);
 
@@ -918,7 +918,7 @@ static Atom writeTargetToProperty(const(XSelectionRequestEvent)* request) {
     return None;
 }
 
-static void handleSelectionClear(XEvent* event) {
+private extern(D) void handleSelectionClear(XEvent* event) {
     if (event.xselectionclear.selection == _glfw.x11.PRIMARY)
     {
         free(_glfw.x11.primarySelectionString);
@@ -931,7 +931,7 @@ static void handleSelectionClear(XEvent* event) {
     }
 }
 
-static void handleSelectionRequest(XEvent* event) {
+private extern(D) void handleSelectionRequest(XEvent* event) {
     XSelectionRequestEvent* request = &event.xselectionrequest;
 
     XEvent reply = XEvent(SelectionNotify);
@@ -1087,7 +1087,7 @@ static const(char)* getSelectionString(Atom selection) {
 
 // Make the specified window and its video mode active on its monitor
 //
-static void acquireMonitor(_GLFWwindow* window) {
+private extern(D) void acquireMonitor(_GLFWwindow* window) {
     if (_glfw.x11.saver.count == 0)
     {
         // Remember old screen saver settings
@@ -1125,7 +1125,7 @@ static void acquireMonitor(_GLFWwindow* window) {
 
 // Remove the window and restore the original video mode
 //
-static void releaseMonitor(_GLFWwindow* window) {
+private extern(D) void releaseMonitor(_GLFWwindow* window) {
     if (window.monitor.window != window)
         return;
 
@@ -1147,7 +1147,7 @@ static void releaseMonitor(_GLFWwindow* window) {
 
 // Process the specified X event
 //
-static void processEvent(XEvent* event) {
+private extern(D) void processEvent(XEvent* event) {
     int keycode = 0;
     Bool filtered = False;
 

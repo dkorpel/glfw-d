@@ -170,7 +170,7 @@ static GLFWbool loadLibraries() {
 
 // Unload used libraries (DLLs)
 //
-static void freeLibraries() {
+private extern(D) void freeLibraries() {
     if (_glfw.win32.xinput.instance)
         FreeLibrary(_glfw.win32.xinput.instance);
 
@@ -195,7 +195,7 @@ static void freeLibraries() {
 
 // Create key code translation tables
 //
-static void createKeyTables() {
+private extern(D) void createKeyTables() {
     int scancode;
 
     memset(_glfw.win32.keycodes.ptr, -1, typeof(_glfw.win32.keycodes).sizeof);
