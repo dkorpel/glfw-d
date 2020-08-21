@@ -1,0 +1,26 @@
+name: Build the application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+    test:
+        name: Build example application
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+                dc: [dmd-latest, ldc-latest, dmd-2.085.0, ldc-1.17.0]
+        runs-on: ${{ matrix.os }}
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install D compiler
+              uses: dlang-community/setup-dlang@v1
+              with:
+                  compiler: ${{ matrix.dc }}
+
+            - name: Invoke Dub
+              run: dub -q build glfw-d:example
