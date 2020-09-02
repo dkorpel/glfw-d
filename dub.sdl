@@ -78,7 +78,7 @@ configuration "wayland" {
 	//dependency "wayland" version="0.2.0"
 	//dependency "wayland:client" version="0.2.0"
 	//dependency "wayland:client" path="../wayland-d/"
-	dependency "xkbcommon-d" version="0.5.1"
+	//dependency "xkbcommon-d" version="0.5.1"
 
 	sourceFiles "source/glfw3/wl_platform.d"
 	sourceFiles "source/glfw3/wl_init.d"
