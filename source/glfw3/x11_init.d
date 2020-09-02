@@ -238,7 +238,7 @@ static int translateKeyCode(int scancode) {
 
 // Create key code translation tables
 //
-static void createKeyTables() {
+private extern(D) void createKeyTables() {
     int scancode;int key;
 
     memset(_glfw.x11.keycodes.ptr, -1, typeof(_glfw.x11.keycodes).sizeof);
@@ -372,7 +372,7 @@ static Atom getSupportedAtom(Atom* supportedAtoms, c_ulong atomCount, const(char
 
 // Check whether the running window manager is EWMH-compliant
 //
-static void detectEWMH() {
+private extern(D) void detectEWMH() {
     // First we read the _NET_SUPPORTING_WM_CHECK property on the root window
 
     Window* windowFromRoot = null;
@@ -791,7 +791,7 @@ version (Cygwin) {
 
 // Retrieve system content scale via folklore heuristics
 //
-static void getSystemContentScale(float* xscale, float* yscale) {
+private extern(D) void getSystemContentScale(float* xscale, float* yscale) {
     // Start by assuming the default X11 DPI
     // NOTE: Some desktop environments (KDE) may remove the Xft.dpi field when it
     //       would be set to 96, so assume that is the case if we cannot find it
