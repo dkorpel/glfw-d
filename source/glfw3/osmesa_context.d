@@ -77,7 +77,7 @@ struct _GLFWcontextOSMesa {
     int height;
     void* buffer;
 
-}/+alias _GLFWcontextOSMesa _GLFWcontextOSMesa;+/
+}
 
 // OSMesa-specific global data
 //
@@ -92,7 +92,7 @@ struct _GLFWlibraryOSMesa {
     PFN_OSMesaGetDepthBuffer GetDepthBuffer;
     PFN_OSMesaGetProcAddress GetProcAddress;
 
-}/+alias _GLFWlibraryOSMesa _GLFWlibraryOSMesa;+/
+}
 
 GLFWbool _glfwInitOSMesa();
 void _glfwTerminateOSMesa();

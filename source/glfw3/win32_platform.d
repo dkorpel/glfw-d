@@ -262,7 +262,7 @@ struct _GLFWwindowWin32 {
     // The last received cursor position, regardless of source
     int lastCursorPosX;int lastCursorPosY;
 
-}/+alias _GLFWwindowWin32 _GLFWwindowWin32;+/
+}
 
 // Win32-specific global data
 //
@@ -329,7 +329,7 @@ struct _GLFWlibraryWin32 {
         PFN_RtlVerifyVersionInfo RtlVerifyVersionInfo_;
     }_Ntdll ntdll;
 
-}/+alias _GLFWlibraryWin32 _GLFWlibraryWin32;+/
+}
 
 // Win32-specific per-monitor data
 //
@@ -343,14 +343,14 @@ struct _GLFWmonitorWin32 {
     GLFWbool modesPruned;
     GLFWbool modeChanged;
 
-}/+alias _GLFWmonitorWin32 _GLFWmonitorWin32;+/
+}
 
 // Win32-specific per-cursor data
 //
 struct _GLFWcursorWin32 {
     HCURSOR handle;
 
-}/+alias _GLFWcursorWin32 _GLFWcursorWin32;+/
+}
 
 // Win32-specific global timer data
 //
@@ -358,7 +358,7 @@ struct _GLFWtimerWin32 {
     GLFWbool hasPC;
     ulong frequency;
 
-}/+alias _GLFWtimerWin32 _GLFWtimerWin32;+/
+}
 
 // Win32-specific thread local storage data
 //
@@ -366,7 +366,7 @@ struct _GLFWtlsWin32 {
     GLFWbool allocated;
     DWORD index;
 
-}/+alias _GLFWtlsWin32 _GLFWtlsWin32;+/
+}
 
 // Win32-specific mutex data
 //
@@ -374,7 +374,7 @@ struct _GLFWmutexWin32 {
     GLFWbool allocated;
     CRITICAL_SECTION section;
 
-}/+alias _GLFWmutexWin32 _GLFWmutexWin32;+/
+}
 
 
 GLFWbool _glfwRegisterWindowClassWin32();

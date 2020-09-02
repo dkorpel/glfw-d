@@ -146,7 +146,7 @@ struct VkXlibSurfaceCreateInfoKHR {
     VkXlibSurfaceCreateFlagsKHR flags;
     Display* dpy;
     Window window;
-}/+alias VkXlibSurfaceCreateInfoKHR VkXlibSurfaceCreateInfoKHR;+/
+}
 
 struct VkXcbSurfaceCreateInfoKHR {
     VkStructureType sType;
@@ -154,7 +154,7 @@ struct VkXcbSurfaceCreateInfoKHR {
     VkXcbSurfaceCreateFlagsKHR flags;
     xcb_connection_t* connection;
     xcb_window_t window;
-}/+alias VkXcbSurfaceCreateInfoKHR VkXcbSurfaceCreateInfoKHR;+/
+}
 
 alias VkResult function(VkInstance, const(VkXlibSurfaceCreateInfoKHR)*, const(VkAllocationCallbacks)*, VkSurfaceKHR*) PFN_vkCreateXlibSurfaceKHR;
 alias VkBool32 function(VkPhysicalDevice, uint, Display*, VisualID) PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR;
@@ -214,7 +214,7 @@ struct _GLFWwindowX11 {
     // The time of the last KeyPress event
     Time lastKeyTime;
 
-}/+alias _GLFWwindowX11 _GLFWwindowX11;+/
+}
 
 // X11-specific global data
 //
@@ -416,7 +416,7 @@ struct _GLFWlibraryX11 {
         PFN_XRenderFindVisualFormat FindVisualFormat;
     }_Xrender xrender;
 
-}/+alias _GLFWlibraryX11 _GLFWlibraryX11;+/
+}
 
 // X11-specific per-monitor data
 //
@@ -429,14 +429,14 @@ struct _GLFWmonitorX11 {
     // for EWMH full screen window placement
     int index;
 
-}/+alias _GLFWmonitorX11 _GLFWmonitorX11;+/
+}
 
 // X11-specific per-cursor data
 //
 struct _GLFWcursorX11 {
     Cursor handle;
 
-}/+alias _GLFWcursorX11 _GLFWcursorX11;+/
+}
 
 
 void _glfwPollMonitorsX11();

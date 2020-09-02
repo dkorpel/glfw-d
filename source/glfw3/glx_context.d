@@ -124,7 +124,7 @@ struct _GLFWcontextGLX {
     GLXContext handle;
     GLXWindow window;
 
-}/+alias _GLFWcontextGLX _GLFWcontextGLX;+/
+}
 
 // GLX-specific global data
 //
@@ -171,7 +171,7 @@ struct _GLFWlibraryGLX {
     GLFWbool ARB_create_context_no_error;
     GLFWbool ARB_context_flush_control;
 
-}/+alias _GLFWlibraryGLX _GLFWlibraryGLX;+/
+}
 
 GLFWbool _glfwInitGLX();
 void _glfwTerminateGLX();

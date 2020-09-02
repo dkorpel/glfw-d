@@ -164,7 +164,7 @@ struct _GLFWcontextEGL {
 
    void* client;
 
-}/+alias _GLFWcontextEGL _GLFWcontextEGL;+/
+}
 
 // EGL-specific global data
 //
@@ -198,7 +198,7 @@ struct _GLFWlibraryEGL {
     PFN_eglQueryString QueryString;
     PFN_eglGetProcAddress GetProcAddress;
 
-}/+alias _GLFWlibraryEGL _GLFWlibraryEGL;+/
+}
 
 
 GLFWbool _glfwInitEGL();
