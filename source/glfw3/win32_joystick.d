@@ -745,3 +745,18 @@ void _glfwPlatformUpdateGamepadGUID(char* guid) {
                 original.ptr, original.ptr + 4);
     }
 }
+
+int _glfwPlatformSetJoystickRumble(_GLFWjoystick* js, float slowMotorIntensity, float fastMotorIntensity)
+{
+    XINPUT_VIBRATION effect;
+
+    if (js.win32.device)
+        return GLFW_FALSE;
+
+    ZeroMemory(&effect, XINPUT_VIBRATION.sizeof);
+
+    effect.wLeftMotorSpeed  = cast(WORD)(65535.0f * slowMotorIntensity);
+    effect.wRightMotorSpeed = cast(WORD)(65535.0f * fastMotorIntensity);
+
+    return cast(int) (mixin(XInputSetState)(js.win32.index, &effect) == ERROR_SUCCESS);
+}

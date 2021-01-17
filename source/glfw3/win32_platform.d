@@ -171,6 +171,7 @@ extern(Windows) {
     alias PFN_XInputGetState = DWORD function(DWORD,XINPUT_STATE*);
     enum XInputGetCapabilities = "_glfw.win32.xinput.GetCapabilities";
     enum XInputGetState = "_glfw.win32.xinput.GetState";
+    enum XInputSetState = "_glfw.win32.xinput.SetState";
 
     // dinput8.dll function pointer typedefs
     alias PFN_DirectInput8Create = HRESULT function(HINSTANCE,DWORD,REFIID,LPVOID*,LPUNKNOWN);
@@ -299,6 +300,7 @@ struct _GLFWlibraryWin32 {
         HINSTANCE instance;
         PFN_XInputGetCapabilities GetCapabilities;
         PFN_XInputGetState GetState;
+        PFN_XInputSetState SetState;
     }_Xinput xinput;
 
     struct _User32 {

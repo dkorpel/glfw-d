@@ -5199,6 +5199,38 @@ const(char)* glfwGetGamepadName(int jid);
  */
 int glfwGetGamepadState(int jid, GLFWgamepadstate* state);
 
+/** Sets the intensity of a joystick's rumble effect.
+ *
+ *  This function sends vibration data to joysticks that implement haptic feedback
+ *  effects using two vibration motors: a low-frequency motor, and a
+ *  high-frequency motor.
+ *
+ *  Vibration intensity is a value between 0.0 and 1.0 inclusive, where 0.0 is no
+ *  vibration, and 1.0 is maximum vibration. It is set separately for the
+ *  joystick's low frequency and high frequency rumble motors.
+ *
+ *  If the specified joystick is not present or does not support the rumble effect,
+ *  this function will return `GLFW_FALSE` but will not generate an error.
+ *
+ *  Params:
+ *   jid = The [joystick](@ref joysticks) to vibrate.
+ *   slowMotorIntensity = The low frequency vibration intensity.
+ *   fastMotorIntensity = The high frequency vibration intensity.
+ *  Returns: `GLFW_TRUE` if successful, or `GLFW_FALSE` if no joystick is connected,
+ *  or the joystick does not support the rumble effect.
+ *
+ *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED and @ref
+ *  GLFW_INVALID_ENUM.
+ *
+ *  Thread_Safety: This function must only be called from the main thread.
+ *
+ *  Note: @win32 This function is only implemented for XInput devices.
+ *  Note: @macos This function is not implemented.
+ *
+ *  Ingroup: input
+ */
+int glfwSetJoystickRumble(int jid, float slowMotorIntensity, float fastMotorIntensity);
+
 /** Sets the clipboard to the specified string.
  *
  *  This function sets the system clipboard to the specified, UTF-8 encoded

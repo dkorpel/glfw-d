@@ -587,6 +587,7 @@ const(char)* _glfwPlatformGetClipboardString();
 
 int _glfwPlatformPollJoystick(_GLFWjoystick* js, int mode);
 void _glfwPlatformUpdateGamepadGUID(char* guid);
+int _glfwPlatformSetJoystickRumble(_GLFWjoystick* js, float slowMotorIntensity, float fastMotorIntensity);
 
 ulong _glfwPlatformGetTimerValue();
 ulong _glfwPlatformGetTimerFrequency();

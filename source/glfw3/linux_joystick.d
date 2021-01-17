@@ -64,6 +64,8 @@ struct _GLFWjoystickLinux {
     int[ABS_CNT] absMap;
     input_absinfo[ABS_CNT] absInfo;
     int[2][4] hats;
+    bool hasRumble = false;
+    ff_effect rumble;
 }
 
 // Linux-specific joystick API data
@@ -156,6 +158,30 @@ private void pollAbsState(_GLFWjoystick* js) {
 //  #define isBitSet(bit, arr) (arr[(bit) / 8] & (1 << ((bit) % 8)))
 enum string isBitSet(string bit, string arr) = ` (`~arr~`[(`~bit~`) / 8] & (1 << ((`~bit~`) % 8)))`;
 
+private void initJoystickForceFeedback(_GLFWjoystickLinux *linjs)
+{
+    linjs.hasRumble = false;
+
+    char[(FF_CNT + 7) / 8] ffBits = 0;
+    if (ioctl(linjs.fd, EVIOCGBIT!(typeof(ffBits))(EV_FF), ffBits.ptr) < 0)
+    {
+        return;
+    }
+
+    if (mixin(isBitSet!("FF_RUMBLE", "ffBits")))
+    {
+        linjs.rumble.type =
+        linjs.rumble.type =      FF_RUMBLE;
+        linjs.rumble.id =        -1;
+        linjs.rumble.direction = 0;
+        linjs.rumble.trigger = ff_trigger(/*.button*/ 0, /*.interval*/ 0);
+        linjs.rumble.replay = ff_replay(/*length*/ 2000, /*delay*/ 0);
+        linjs.rumble.u.rumble = ff_rumble_effect(/*strong_magnitude*/ 0, /*weak_magnitude*/ 0); // xinput rumble lasts ~2 seconds
+
+        linjs.hasRumble = (ioctl(linjs.fd, EVIOCSFF, &linjs.rumble) >= 0);
+    }
+}
+
 // Attempt to open the specified joystick device
 //
 private GLFWbool openJoystickDevice(const(char)* path) {
@@ -168,7 +194,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     }
 
     _GLFWjoystickLinux linjs = _GLFWjoystickLinux(0);
-    linjs.fd = open(path, O_RDONLY | O_NONBLOCK);
+    linjs.fd = open(path, O_RDWR | O_NONBLOCK);
     if (linjs.fd == -1)
         return GLFW_FALSE;
 
@@ -254,6 +280,8 @@ private GLFWbool openJoystickDevice(const(char)* path) {
             axisCount++;
         }
     }
+
+    initJoystickForceFeedback(&linjs);
 
     _GLFWjoystick* js = _glfwAllocJoystick(name.ptr, guid.ptr, axisCount, buttonCount, hatCount);
     if (!js)
@@ -508,4 +536,31 @@ int _glfwPlatformPollJoystick(_GLFWjoystick* js, int mode) {
 }
 
 void _glfwPlatformUpdateGamepadGUID(char* guid) {
+}
+
+int _glfwPlatformSetJoystickRumble(_GLFWjoystick* js, float slowMotorIntensity, float fastMotorIntensity)
+{
+    _GLFWjoystickLinux *linjs = &js.linjs;
+
+    if (!js.linjs.hasRumble)
+        return GLFW_FALSE;
+
+    js.linjs.rumble.u.rumble = ff_rumble_effect(
+        /*strong_magnitude*/ cast(ushort) (65_535 * slowMotorIntensity),
+        /*weak_magnitude*/   cast(ushort) (65_535 * fastMotorIntensity)
+    );
+
+    input_event play;
+    play.type = EV_FF;
+    play.code = linjs.rumble.id;
+    play.value = 1;
+
+    if (ioctl(linjs.fd, EVIOCSFF, &linjs.rumble) < 0) {
+        return GLFW_FALSE;
+    }
+    if (write(linjs.fd, &play, play.sizeof) < 0) {
+        return GLFW_FALSE;
+    }
+
+    return GLFW_TRUE;
 }

@@ -132,6 +132,8 @@ static GLFWbool loadLibraries() {
                     GetProcAddress(_glfw.win32.xinput.instance, "XInputGetCapabilities");
                 _glfw.win32.xinput.GetState = cast(PFN_XInputGetState)
                     GetProcAddress(_glfw.win32.xinput.instance, "XInputGetState");
+                _glfw.win32.xinput.SetState = cast(PFN_XInputSetState)
+                    GetProcAddress(_glfw.win32.xinput.instance, "XInputSetState");
 
                 break;
             }
