@@ -169,6 +169,7 @@ extern(Windows) {
     // xinput.dll function pointer typedefs
     alias PFN_XInputGetCapabilities = DWORD function(DWORD,DWORD,XINPUT_CAPABILITIES*);
     alias PFN_XInputGetState = DWORD function(DWORD,XINPUT_STATE*);
+    alias PFN_XInputSetState = DWORD function(DWORD,XINPUT_VIBRATION*);
     enum XInputGetCapabilities = "_glfw.win32.xinput.GetCapabilities";
     enum XInputGetState = "_glfw.win32.xinput.GetState";
     enum XInputSetState = "_glfw.win32.xinput.SetState";
