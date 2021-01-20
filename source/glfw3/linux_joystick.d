@@ -155,22 +155,22 @@ private void pollAbsState(_GLFWjoystick* js) {
     }
 }
 
-//  #define isBitSet(bit, arr) (arr[(bit) / 8] & (1 << ((bit) % 8)))
-enum string isBitSet(string bit, string arr) = ` (`~arr~`[(`~bit~`) / 8] & (1 << ((`~bit~`) % 8)))`;
+// #define isBitSet(bit, arr) (arr[(bit) / 8] & (1 << ((bit) % 8)))
+// enum string isBitSet(string bit, string arr) = ` (`~arr~`[(`~bit~`) / 8] & (1 << ((`~bit~`) % 8)))`;
+private bool isBitSet(int bit, scope const ubyte[] arr) {return cast(bool) (arr[bit / 8] & (1 << (bit % 8)));}
 
 private void initJoystickForceFeedback(_GLFWjoystickLinux *linjs)
 {
     linjs.hasRumble = false;
 
-    char[(FF_CNT + 7) / 8] ffBits = 0;
+    ubyte[(FF_CNT + 7) / 8] ffBits = 0;
     if (ioctl(linjs.fd, EVIOCGBIT!(typeof(ffBits))(EV_FF), ffBits.ptr) < 0)
     {
         return;
     }
 
-    if (mixin(isBitSet!("FF_RUMBLE", "ffBits")))
+    if (isBitSet(FF_RUMBLE, ffBits))
     {
-        linjs.rumble.type =
         linjs.rumble.type =      FF_RUMBLE;
         linjs.rumble.id =        -1;
         linjs.rumble.direction = 0;
@@ -198,9 +198,9 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     if (linjs.fd == -1)
         return GLFW_FALSE;
 
-    char[(EV_CNT + 7) / 8] evBits = '\0';
-    char[(KEY_CNT + 7) / 8] keyBits = '\0';
-    char[(ABS_CNT + 7) / 8] absBits = '\0';
+    ubyte[(EV_CNT + 7) / 8] evBits = 0;
+    ubyte[(KEY_CNT + 7) / 8] keyBits = 0;
+    ubyte[(ABS_CNT + 7) / 8] absBits = 0;
     input_id id;
 
     if (ioctl(linjs.fd, EVIOCGBIT!(typeof(evBits) )(     0), evBits.ptr) < 0 ||
@@ -216,7 +216,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     }
 
     // Ensure this device supports the events expected of a joystick
-    if (!mixin(isBitSet!("EV_KEY", "evBits")) || !mixin(isBitSet!("EV_ABS", "evBits")))
+    if (!isBitSet(EV_KEY, evBits) || !isBitSet(EV_ABS, evBits))
     {
         close(linjs.fd);
         return GLFW_FALSE;
@@ -251,7 +251,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
 
     for (int code = BTN_MISC;  code < KEY_CNT;  code++)
     {
-        if (!mixin(isBitSet!("code", "keyBits")))
+        if (!isBitSet(code, keyBits))
             continue;
 
         linjs.keyMap[code - BTN_MISC] = buttonCount;
@@ -261,7 +261,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     for (int code = 0;  code < ABS_CNT;  code++)
     {
         linjs.absMap[code] = -1;
-        if (!mixin(isBitSet!("code", "absBits")))
+        if (!isBitSet(code, absBits))
             continue;
 
         if (code >= ABS_HAT0X && code <= ABS_HAT3Y)

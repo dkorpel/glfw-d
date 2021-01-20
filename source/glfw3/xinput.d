@@ -5,7 +5,6 @@ extern(Windows): @nogc: nothrow: __gshared:
 
 import core.sys.windows.windef;
 
-
 enum XINPUT_GAMEPAD_DPAD_UP =          0x0001;
 enum XINPUT_GAMEPAD_DPAD_DOWN =        0x0002;
 enum XINPUT_GAMEPAD_DPAD_LEFT =        0x0004;
@@ -21,11 +20,9 @@ enum XINPUT_GAMEPAD_B =                0x2000;
 enum XINPUT_GAMEPAD_X =                0x4000;
 enum XINPUT_GAMEPAD_Y =                0x8000;
 
-
 enum XINPUT_KEYSTROKE_KEYDOWN =        0x0001;
 enum XINPUT_KEYSTROKE_KEYUP =          0x0002;
 enum XINPUT_KEYSTROKE_REPEAT =         0x0004;
-
 
 enum VK_PAD_A =                        0x5800;
 enum VK_PAD_B =                        0x5801;
@@ -60,7 +57,6 @@ enum VK_PAD_RTHUMB_UPRIGHT =           0x5835;
 enum VK_PAD_RTHUMB_DOWNRIGHT =         0x5836;
 enum VK_PAD_RTHUMB_DOWNLEFT =          0x5837;
 
-
 enum XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE =  7849;
 enum XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE = 8689;
 enum XINPUT_GAMEPAD_TRIGGER_THRESHOLD =    30;
@@ -73,7 +69,6 @@ enum XINPUT_DEVSUBTYPE_FLIGHT_SICK =   0x04;
 enum XINPUT_DEVSUBTYPE_DANCE_PAD =     0x05;
 enum XINPUT_DEVSUBTYPE_GUITAR =        0x06;
 enum XINPUT_DEVSUBTYPE_DRUM_KIT =      0x08;
-
 
 enum XINPUT_CAPS_VOICE_SUPPORTED =     0x0004;
 enum XINPUT_FLAG_GAMEPAD =             0x00000001;

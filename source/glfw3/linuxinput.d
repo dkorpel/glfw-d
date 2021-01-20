@@ -37,11 +37,11 @@ auto EVIOCSABS(T)(T abs) {return _IOW!input_absinfo('E', 0xc0 + (abs));}
 enum EVIOCGID = _IOR!input_id('E', 0x02);
 auto EVIOCGNAME(T)() {return _IOC!T(_IOC_READ, 'E', 0x06);}
 
-enum EVIOCSFF =		_IOW!ff_effect('E', 0x80);
-enum EVIOCRMFF =	_IOW!int('E', 0x81);
-enum EVIOCGEFFECTS =_IOR!int('E', 0x84);
-enum EVIOCGRAB =	_IOW!int('E', 0x90);
-enum EVIOCREVOKE =	_IOW!int('E', 0x91);
+enum EVIOCSFF = _IOW!ff_effect('E', 0x80);
+enum EVIOCRMFF = _IOW!int('E', 0x81);
+enum EVIOCGEFFECTS = _IOR!int('E', 0x84);
+enum EVIOCGRAB = _IOW!int('E', 0x90);
+enum EVIOCREVOKE = _IOW!int('E', 0x91);
 
 // force feedback
 enum FF_STATUS_STOPPED =	0x00;
