@@ -7,7 +7,7 @@ targetName "glfw-d"
 targetPath "build"
 targetType "library"
 
-subPackage "example"
+subPackage "examples/empty-window"
 
 dflags "-preview=dip1000" "-preview=dip25"
 dflags "-preview=fieldwise"
