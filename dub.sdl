@@ -8,6 +8,8 @@ targetPath "build"
 targetType "library"
 
 subPackage "examples/empty-window"
+subPackage "examples/triangle-gl"
+//subPackage "examples/triangle-vulkan"
 
 dflags "-preview=dip1000" "-preview=dip25"
 dflags "-preview=fieldwise"
