@@ -44,9 +44,11 @@ void main() {
 	glfwTerminate();
 }
 ```
-Check out the [example subpackage](https://github.com/dkorpel/glfw-d/tree/master/example) for an example of a GLFW application that creates a window and reads input:
+Example GLFW projects can be found in the [examples folder](https://github.com/dkorpel/glfw-d/tree/master/examples/).
+You can run them from the root of the repository using:
 ```
-dub run glfw-d:example
+dub run glfw-d:empty-window
+dub run glfw-d:triangle-gl
 ```
 Note that you probably want to use OpenGL / Vulkan bindings ([bindbc-opengl](https://code.dlang.org/packages/bindbc-opengl) or [erupted](https://code.dlang.org/packages/erupted)) in order to actually display anything in your window.
 
