@@ -1,5 +1,5 @@
 /// Translated from C to D
-module x11_init;
+module glfw3.x11_init;
 
 extern(C): @nogc: nothrow: __gshared:
 

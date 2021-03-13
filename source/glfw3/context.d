@@ -1,5 +1,5 @@
 /// Translated from C to D
-module context;
+module glfw3.context;
 
 extern(C): @nogc: nothrow: __gshared:
 //========================================================================
