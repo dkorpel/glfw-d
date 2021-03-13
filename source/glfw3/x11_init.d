@@ -49,7 +49,7 @@ import core.stdc.config: c_long, c_ulong;
 
 // Translate an X11 key code to a GLFW key code.
 //
-static int translateKeyCode(int scancode) {
+private int translateKeyCode(int scancode) {
     int keySym;
 
     // Valid key code range is  [8,255], according to the Xlib manual
@@ -336,7 +336,7 @@ private extern(D) void createKeyTables() {
 
 // Check whether the IM has a usable style
 //
-static GLFWbool hasUsableInputMethodStyle() {
+private GLFWbool hasUsableInputMethodStyle() {
     GLFWbool found = GLFW_FALSE;
     XIMStyles* styles = null;
 
@@ -358,7 +358,7 @@ static GLFWbool hasUsableInputMethodStyle() {
 
 // Check whether the specified atom is supported
 //
-static Atom getSupportedAtom(Atom* supportedAtoms, c_ulong atomCount, const(char)* atomName) {
+private Atom getSupportedAtom(Atom* supportedAtoms, c_ulong atomCount, const(char)* atomName) {
     const(Atom) atom = XInternAtom(_glfw.x11.display, atomName, False);
 
     for (uint i = 0;  i < atomCount;  i++)
@@ -461,7 +461,7 @@ private extern(D) void detectEWMH() {
 
 // Look for and initialize supported X11 extensions
 //
-static GLFWbool initExtensions() {
+private GLFWbool initExtensions() {
     _glfw.x11.vidmode.handle = _glfw_dlopen("libXxf86vm.so.1");
     if (_glfw.x11.vidmode.handle)
     {
@@ -825,7 +825,7 @@ private extern(D) void getSystemContentScale(float* xscale, float* yscale) {
 
 // Create a blank cursor for hidden and disabled cursor modes
 //
-static Cursor createHiddenCursor() {
+private Cursor createHiddenCursor() {
     ubyte[16 * 16 * 4] pixels = 0;
     GLFWimage image = GLFWimage(16, 16, pixels.ptr);
     return _glfwCreateCursorX11(&image, 0, 0);
@@ -833,7 +833,7 @@ static Cursor createHiddenCursor() {
 
 // Create a helper window for IPC
 //
-static Window createHelperWindow() {
+private Window createHelperWindow() {
     XSetWindowAttributes wa;
     wa.event_mask = PropertyChangeMask;
 
@@ -846,7 +846,7 @@ static Window createHelperWindow() {
 
 // X error handler
 //
-static int errorHandler(Display* display, XErrorEvent* event) {
+private int errorHandler(Display* display, XErrorEvent* event) {
     _glfw.x11.errorCode = event.error_code;
     return 0;
 }

@@ -46,7 +46,7 @@ import core.sys.windows.windows;
 
 // Returns the window style for the specified window
 //
-static DWORD getWindowStyle(const(_GLFWwindow)* window) {
+private DWORD getWindowStyle(const(_GLFWwindow)* window) {
     DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 
     if (window.monitor)
@@ -71,7 +71,7 @@ static DWORD getWindowStyle(const(_GLFWwindow)* window) {
 
 // Returns the extended window style for the specified window
 //
-static DWORD getWindowExStyle(const(_GLFWwindow)* window) {
+private DWORD getWindowExStyle(const(_GLFWwindow)* window) {
     DWORD style = WS_EX_APPWINDOW;
 
     if (window.monitor || window.floating)
@@ -82,7 +82,7 @@ static DWORD getWindowExStyle(const(_GLFWwindow)* window) {
 
 // Returns the image whose area most closely matches the desired one
 //
-static const(GLFWimage)* chooseImage(int count, const(GLFWimage)* images, int width, int height) {
+private const(GLFWimage)* chooseImage(int count, const(GLFWimage)* images, int width, int height) {
     int i;int leastDiff = INT_MAX;
     const(GLFWimage)* closest = null;
 
@@ -102,7 +102,7 @@ static const(GLFWimage)* chooseImage(int count, const(GLFWimage)* images, int wi
 
 // Creates an RGBA icon or cursor
 //
-static HICON createIcon(const(GLFWimage)* image, int xhot, int yhot, GLFWbool icon) {
+private HICON createIcon(const(GLFWimage)* image, int xhot, int yhot, GLFWbool icon) {
     int i;
     HDC dc;
     HICON handle;
@@ -316,7 +316,7 @@ private extern(D) void enableCursor(_GLFWwindow* window) {
 
 // Returns whether the cursor is in the content area of the specified window
 //
-static GLFWbool cursorInContentArea(_GLFWwindow* window) {
+private GLFWbool cursorInContentArea(_GLFWwindow* window) {
     RECT area;
     POINT pos;
 
@@ -413,7 +413,7 @@ private extern(D) void updateFramebufferTransparency(const(_GLFWwindow)* window)
 
 // Retrieves and translates modifier keys
 //
-static int getKeyMods() {
+private int getKeyMods() {
     int mods = 0;
 
     if (GetKeyState(VK_SHIFT) & 0x8000)
@@ -488,7 +488,7 @@ private extern(D) void releaseMonitor(_GLFWwindow* window) {
 
 // Window callback function (handles window messages)
 //
-static LRESULT windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+private LRESULT windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     auto window = cast(_GLFWwindow*) GetPropW(hWnd, "GLFW"w.ptr);
     if (!window)
     {
@@ -1164,7 +1164,7 @@ static LRESULT windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 // Creates the GLFW window
 //
-static int createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig, const(_GLFWfbconfig)* fbconfig) {
+private int createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig, const(_GLFWfbconfig)* fbconfig) {
     int xpos;int ypos;int fullWidth;int fullHeight;
     WCHAR* wideTitle;
     DWORD style = getWindowStyle(window);

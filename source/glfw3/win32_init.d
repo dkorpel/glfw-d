@@ -40,7 +40,7 @@ public import glfw3.internal;
 import core.stdc.stdlib;
 import core.stdc.string;
 
-static const(GUID) _glfw_GUID_DEVINTERFACE_HID = GUID(0x4d1e55b2,0xf16f,0x11cf,[0x88,0xcb,0x00,0x11,0x11,0x00,0x00,0x30]);
+private const(GUID) _glfw_GUID_DEVINTERFACE_HID = GUID(0x4d1e55b2,0xf16f,0x11cf,[0x88,0xcb,0x00,0x11,0x11,0x00,0x00,0x30]);
 
 enum GUID_DEVINTERFACE_HID = _glfw_GUID_DEVINTERFACE_HID;
 
@@ -72,7 +72,7 @@ extern(Windows) BOOL DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) 
 
 // Load necessary libraries (DLLs)
 //
-static GLFWbool loadLibraries() {
+private GLFWbool loadLibraries() {
     _glfw.win32.winmm.instance = LoadLibraryA("winmm.dll");
     if (!_glfw.win32.winmm.instance)
     {
@@ -335,7 +335,7 @@ private extern(D) void createKeyTables() {
 
 // Creates a dummy window for behind-the-scenes work
 //
-static GLFWbool createHelperWindow() {
+private GLFWbool createHelperWindow() {
     MSG msg;
 
     _glfw.win32.helperWindowHandle =

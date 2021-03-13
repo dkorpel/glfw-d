@@ -34,7 +34,7 @@ extern(C): @nogc: nothrow: __gshared:
 import glfw3.internal;
 
 
-static int createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig) {
+private int createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig) {
     window.null_.width = wndconfig.width;
     window.null_.height = wndconfig.height;
 

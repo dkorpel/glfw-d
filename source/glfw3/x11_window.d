@@ -72,7 +72,7 @@ enum _GLFW_XDND_VERSION = 5;
 // This avoids blocking other threads via the per-display Xlib lock that also
 // covers GLX functions
 //
-static GLFWbool waitForEvent(double* timeout) {
+private GLFWbool waitForEvent(double* timeout) {
     fd_set fds;
     const(int) fd = ConnectionNumber(_glfw.x11.display);
     int count = fd + 1;
@@ -116,7 +116,7 @@ version (linux) {
 // Waits until a VisibilityNotify event arrives for the specified window or the
 // timeout period elapses (ICCCM section 4.2.2)
 //
-static GLFWbool waitForVisibilityNotify(_GLFWwindow* window) {
+private GLFWbool waitForVisibilityNotify(_GLFWwindow* window) {
     XEvent dummy;
     double timeout = 0.1;
 
@@ -134,7 +134,7 @@ static GLFWbool waitForVisibilityNotify(_GLFWwindow* window) {
 
 // Returns whether the window is iconified
 //
-static int getWindowState(_GLFWwindow* window) {
+private int getWindowState(_GLFWwindow* window) {
     int result = WithdrawnState;
     struct _State {
         CARD32 state;
@@ -157,7 +157,7 @@ static int getWindowState(_GLFWwindow* window) {
 
 // Returns whether the event is a selection event
 //
-static Bool isSelectionEvent(Display* display, XEvent* event, XPointer pointer) {
+private Bool isSelectionEvent(Display* display, XEvent* event, XPointer pointer) {
     if (event.xany.window != _glfw.x11.helperWindowHandle)
         return False;
 
@@ -168,7 +168,7 @@ static Bool isSelectionEvent(Display* display, XEvent* event, XPointer pointer) 
 
 // Returns whether it is a _NET_FRAME_EXTENTS event for the specified window
 //
-static Bool isFrameExtentsEvent(Display* display, XEvent* event, XPointer pointer) {
+private Bool isFrameExtentsEvent(Display* display, XEvent* event, XPointer pointer) {
     _GLFWwindow* window = cast(_GLFWwindow*) pointer;
     return event.type == PropertyNotify &&
            event.xproperty.state == PropertyNewValue &&
@@ -178,7 +178,7 @@ static Bool isFrameExtentsEvent(Display* display, XEvent* event, XPointer pointe
 
 // Returns whether it is a property event for the specified selection transfer
 //
-static Bool isSelPropNewValueNotify(Display* display, XEvent* event, XPointer pointer) {
+private Bool isSelPropNewValueNotify(Display* display, XEvent* event, XPointer pointer) {
     XEvent* notification = cast(XEvent*) pointer;
     return event.type == PropertyNotify &&
            event.xproperty.state == PropertyNewValue &&
@@ -188,7 +188,7 @@ static Bool isSelPropNewValueNotify(Display* display, XEvent* event, XPointer po
 
 // Translates an X event modifier state mask
 //
-static int translateState(int state) {
+private int translateState(int state) {
     int mods = 0;
 
     if (state & ShiftMask)
@@ -209,7 +209,7 @@ static int translateState(int state) {
 
 // Translates an X11 key code to a GLFW key token
 //
-static int translateKey(int scancode) {
+private int translateKey(int scancode) {
     // Use the pre-filled LUT (see createKeyTables() in x11_init.c)
     if (scancode < 0 || scancode > 255)
         return GLFW_KEY_UNKNOWN;
@@ -380,7 +380,7 @@ private extern(D) void updateWindowMode(_GLFWwindow* window) {
 // Splits and translates a text/uri-list into separate file paths
 // NOTE: This function destroys the provided string
 //
-static char** parseUriList(char* text, int* count) {
+private char** parseUriList(char* text, int* count) {
     const(char)* prefix = "file://";
     char** paths = null;
     char* line;
@@ -433,7 +433,7 @@ static char** parseUriList(char* text, int* count) {
 // Encode a Unicode code point to a UTF-8 stream
 // Based on cutef8 by Jeff Bezanson (Public Domain)
 //
-static size_t encodeUTF8(char* s, uint ch) {
+private size_t encodeUTF8(char* s, uint ch) {
     size_t count = 0;
 
     if (ch < 0x80)
@@ -464,7 +464,7 @@ static size_t encodeUTF8(char* s, uint ch) {
 // Based on cutef8 by Jeff Bezanson (Public Domain)
 //
 version (X_HAVE_UTF8_STRING) {
-static uint decodeUTF8(const(char)** s) {
+private uint decodeUTF8(const(char)** s) {
     uint ch = 0;uint count = 0;
     static const(uint)* offsets = [
         0x00000000u, 0x00003080u, 0x000e2080u,
@@ -485,7 +485,7 @@ static uint decodeUTF8(const(char)** s) {
 
 // Convert the specified Latin-1 string to UTF-8
 //
-static char* convertLatin1toUTF8(const(char)* source) {
+private char* convertLatin1toUTF8(const(char)* source) {
     size_t size = 1;
     const(char)* sp;
 
@@ -585,7 +585,7 @@ private extern(D) void enableCursor(_GLFWwindow* window) {
 
 // Create the X11 window (and its colormap)
 //
-static GLFWbool createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig, Visual* visual, int depth) {
+private GLFWbool createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig, Visual* visual, int depth) {
     int width = wndconfig.width;
     int height = wndconfig.height;
 
@@ -786,7 +786,7 @@ static GLFWbool createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* w
 
 // Set the specified property to the selection converted to the requested target
 //
-static Atom writeTargetToProperty(const(XSelectionRequestEvent)* request) {
+private Atom writeTargetToProperty(const(XSelectionRequestEvent)* request) {
     char* selectionString = null;
     const(Atom)[2] formats = [ _glfw.x11.UTF8_STRING, XA_STRING ];
     const(int) formatCount = formats.length; //sizeof / typeof(formats[0]).sizeof;
@@ -945,7 +945,7 @@ private extern(D) void handleSelectionRequest(XEvent* event) {
     XSendEvent(_glfw.x11.display, request.requestor, False, 0, &reply);
 }
 
-static const(char)* getSelectionString(Atom selection) {
+private const(char)* getSelectionString(Atom selection) {
     char** selectionString = null;
     const(Atom)[2] targets = [ _glfw.x11.UTF8_STRING, XA_STRING ];
     const(size_t) targetCount = targets.length; //targets.sizeof / typeof(targets[0]).sizeof;

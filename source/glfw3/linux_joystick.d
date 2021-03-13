@@ -94,7 +94,7 @@ private void handleKeyEvent(_GLFWjoystick* js, int code, int value) {
 
 // Apply an EV_ABS event to the specified joystick
 //
-static void handleAbsEvent(_GLFWjoystick* js, int code, int value) {
+private void handleAbsEvent(_GLFWjoystick* js, int code, int value) {
     const(int) index = js.linjs.absMap[code];
 
     if (code >= ABS_HAT0X && code <= ABS_HAT3Y)

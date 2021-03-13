@@ -52,11 +52,11 @@ import xkbcommon.xkbcommon;
 //public import wayland-client;
 //import wayland.native.util;
 
-pragma(inline, true) extern(D) static int min(int n1, int n2) {
+pragma(inline, true) extern(D) private int min(int n1, int n2) {
     return n1 < n2 ? n1 : n2;
 }
 
-static _GLFWwindow* findWindowFromDecorationSurface(wl_surface* surface, int* which) {
+private _GLFWwindow* findWindowFromDecorationSurface(wl_surface* surface, int* which) {
     int focus;
     _GLFWwindow* window = _glfw.windowListHead;
     if (!which)
@@ -88,7 +88,7 @@ static _GLFWwindow* findWindowFromDecorationSurface(wl_surface* surface, int* wh
     return window;
 }
 
-static void pointerHandleEnter(void* data, wl_pointer* pointer, uint serial, wl_surface* surface, wl_fixed_t sx, wl_fixed_t sy) {
+private void pointerHandleEnter(void* data, wl_pointer* pointer, uint serial, wl_surface* surface, wl_fixed_t sx, wl_fixed_t sy) {
     // Happens in the case we just destroyed the surface.
     if (!surface)
         return;
@@ -112,7 +112,7 @@ static void pointerHandleEnter(void* data, wl_pointer* pointer, uint serial, wl_
     _glfwInputCursorEnter(window, GLFW_TRUE);
 }
 
-static void pointerHandleLeave(void* data, wl_pointer* pointer, uint serial, wl_surface* surface) {
+private void pointerHandleLeave(void* data, wl_pointer* pointer, uint serial, wl_surface* surface) {
     _GLFWwindow* window = _glfw.wl.pointerFocus;
 
     if (!window)
@@ -126,7 +126,7 @@ static void pointerHandleLeave(void* data, wl_pointer* pointer, uint serial, wl_
     _glfw.wl.cursorPreviousName = null;
 }
 
-static void setCursor(_GLFWwindow* window, const(char)* name) {
+private void setCursor(_GLFWwindow* window, const(char)* name) {
     wl_buffer* buffer;
     wl_cursor* cursor;
     wl_cursor_image* image;
@@ -170,7 +170,7 @@ static void setCursor(_GLFWwindow* window, const(char)* name) {
     _glfw.wl.cursorPreviousName = name;
 }
 
-static void pointerHandleMotion(void* data, wl_pointer* pointer, uint time, wl_fixed_t sx, wl_fixed_t sy) {
+private void pointerHandleMotion(void* data, wl_pointer* pointer, uint time, wl_fixed_t sx, wl_fixed_t sy) {
     _GLFWwindow* window = _glfw.wl.pointerFocus;
     const(char)* cursorName = null;
     double x;double y;
@@ -224,7 +224,7 @@ static void pointerHandleMotion(void* data, wl_pointer* pointer, uint time, wl_f
         setCursor(window, cursorName);
 }
 
-static void pointerHandleButton(void* data, wl_pointer* pointer, uint serial, uint time, uint button, uint state) {
+private void pointerHandleButton(void* data, wl_pointer* pointer, uint serial, uint time, uint button, uint state) {
     _GLFWwindow* window = _glfw.wl.pointerFocus;
     int glfwButton;
 
@@ -313,7 +313,7 @@ static void pointerHandleButton(void* data, wl_pointer* pointer, uint serial, ui
                          _glfw.wl.xkb.modifiers);
 }
 
-static void pointerHandleAxis(void* data, wl_pointer* pointer, uint time, uint axis, wl_fixed_t value) {
+private void pointerHandleAxis(void* data, wl_pointer* pointer, uint time, uint axis, wl_fixed_t value) {
     _GLFWwindow* window = _glfw.wl.pointerFocus;
     double x = 0.0;double y = 0.0;
     // Wayland scroll events are in pointer motion coordinate space (think two
@@ -335,7 +335,7 @@ static void pointerHandleAxis(void* data, wl_pointer* pointer, uint time, uint a
     _glfwInputScroll(window, x, y);
 }
 
-static const(wl_pointer_listener) pointerListener = wl_pointer_listener(
+private const(wl_pointer_listener) pointerListener = wl_pointer_listener(
     &pointerHandleEnter,
     &pointerHandleLeave,
     &pointerHandleMotion,
@@ -343,7 +343,7 @@ static const(wl_pointer_listener) pointerListener = wl_pointer_listener(
     &pointerHandleAxis,
 );
 
-static void keyboardHandleKeymap(void* data, wl_keyboard* keyboard, uint format, int fd, uint size) {
+private void keyboardHandleKeymap(void* data, wl_keyboard* keyboard, uint format, int fd, uint size) {
     xkb_keymap* keymap;
     xkb_state* state;
 
@@ -440,7 +440,7 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
         1 << _glfw.wl.xkb.keymap_mod_get_index(_glfw.wl.xkb.keymap, "Mod2");
 }
 
-static void keyboardHandleEnter(void* data, wl_keyboard* keyboard, uint serial, wl_surface* surface, wl_array* keys) {
+private void keyboardHandleEnter(void* data, wl_keyboard* keyboard, uint serial, wl_surface* surface, wl_array* keys) {
     // Happens in the case we just destroyed the surface.
     if (!surface)
         return;
@@ -458,7 +458,7 @@ static void keyboardHandleEnter(void* data, wl_keyboard* keyboard, uint serial, 
     _glfwInputWindowFocus(window, GLFW_TRUE);
 }
 
-static void keyboardHandleLeave(void* data, wl_keyboard* keyboard, uint serial, wl_surface* surface) {
+private void keyboardHandleLeave(void* data, wl_keyboard* keyboard, uint serial, wl_surface* surface) {
     _GLFWwindow* window = _glfw.wl.keyboardFocus;
 
     if (!window)
@@ -469,7 +469,7 @@ static void keyboardHandleLeave(void* data, wl_keyboard* keyboard, uint serial, 
     _glfwInputWindowFocus(window, GLFW_FALSE);
 }
 
-static int toGLFWKeyCode(uint key) {
+private int toGLFWKeyCode(uint key) {
     if (key < _glfw.wl.keycodes.length)
         return _glfw.wl.keycodes[key];
 
@@ -477,7 +477,7 @@ static int toGLFWKeyCode(uint key) {
 }
 
 version (HAVE_XKBCOMMON_COMPOSE_H) {
-static xkb_keysym_t composeSymbol(xkb_keysym_t sym) {
+private xkb_keysym_t composeSymbol(xkb_keysym_t sym) {
     if (sym == XKB_KEY_NoSymbol || !_glfw.wl.xkb.composeState)
         return sym;
     if (xkb_compose_state_feed(_glfw.wl.xkb.composeState, sym)
@@ -497,7 +497,7 @@ static xkb_keysym_t composeSymbol(xkb_keysym_t sym) {
 }
 }
 
-static GLFWbool inputChar(_GLFWwindow* window, uint key) {
+private GLFWbool inputChar(_GLFWwindow* window, uint key) {
     uint code;uint numSyms;
     c_long cp;
     const(xkb_keysym_t)* syms;
@@ -525,7 +525,7 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
     return _glfw.wl.xkb.keymap_key_repeats(_glfw.wl.xkb.keymap, syms[0]);
 }
 
-static void keyboardHandleKey(void* data, wl_keyboard* keyboard, uint serial, uint time, uint key, uint state) {
+private void keyboardHandleKey(void* data, wl_keyboard* keyboard, uint serial, uint time, uint key, uint state) {
     int keyCode;
     int action;
     _GLFWwindow* window = _glfw.wl.keyboardFocus;
@@ -562,7 +562,7 @@ static void keyboardHandleKey(void* data, wl_keyboard* keyboard, uint serial, ui
     timerfd_settime(_glfw.wl.timerfd, 0, &timer, null);
 }
 
-static void keyboardHandleModifiers(void* data, wl_keyboard* keyboard, uint serial, uint modsDepressed, uint modsLatched, uint modsLocked, uint group) {
+private void keyboardHandleModifiers(void* data, wl_keyboard* keyboard, uint serial, uint modsDepressed, uint modsLatched, uint modsLocked, uint group) {
     xkb_mod_mask_t mask;
     uint modifiers = 0;
 
@@ -600,7 +600,7 @@ static void keyboardHandleModifiers(void* data, wl_keyboard* keyboard, uint seri
 }
 
 version (WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION) {
-    static void keyboardHandleRepeatInfo(void* data, wl_keyboard* keyboard, int rate, int delay) {
+    private void keyboardHandleRepeatInfo(void* data, wl_keyboard* keyboard, int rate, int delay) {
         if (keyboard != _glfw.wl.keyboard)
             return;
 
@@ -608,7 +608,7 @@ version (WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION) {
         _glfw.wl.keyboardRepeatDelay = delay;
     }
 
-    static const(wl_keyboard_listener) keyboardListener = wl_keyboard_listener(
+    private const(wl_keyboard_listener) keyboardListener = wl_keyboard_listener(
         &keyboardHandleKeymap,
         &keyboardHandleEnter,
         &keyboardHandleLeave,
@@ -617,7 +617,7 @@ version (WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION) {
         &keyboardHandleRepeatInfo,
     );
 } else {
-    static const(wl_keyboard_listener) keyboardListener = wl_keyboard_listener(
+    private const(wl_keyboard_listener) keyboardListener = wl_keyboard_listener(
         &keyboardHandleKeymap,
         &keyboardHandleEnter,
         &keyboardHandleLeave,
@@ -627,7 +627,7 @@ version (WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION) {
     );
 }
 
-static void seatHandleCapabilities(void* data, wl_seat* seat, /*enum wl_seat_capability*/ uint caps) {
+private void seatHandleCapabilities(void* data, wl_seat* seat, /*enum wl_seat_capability*/ uint caps) {
     if ((caps & WL_SEAT_CAPABILITY_POINTER) && !_glfw.wl.pointer)
     {
         _glfw.wl.pointer = wl_seat_get_pointer(seat);
@@ -651,22 +651,22 @@ static void seatHandleCapabilities(void* data, wl_seat* seat, /*enum wl_seat_cap
     }
 }
 
-static void seatHandleName(void* data, wl_seat* seat, const(char)* name) {
+private void seatHandleName(void* data, wl_seat* seat, const(char)* name) {
 }
 
-static const(wl_seat_listener) seatListener = wl_seat_listener(
+private const(wl_seat_listener) seatListener = wl_seat_listener(
     &seatHandleCapabilities,
     &seatHandleName,
 );
 
-static void dataOfferHandleOffer(void* data, wl_data_offer* dataOffer, const(char)* mimeType) {
+private void dataOfferHandleOffer(void* data, wl_data_offer* dataOffer, const(char)* mimeType) {
 }
 
-static const(wl_data_offer_listener) dataOfferListener = wl_data_offer_listener(
+private const(wl_data_offer_listener) dataOfferListener = wl_data_offer_listener(
     &dataOfferHandleOffer,
 );
 
-static void dataDeviceHandleDataOffer(void* data, wl_data_device* dataDevice, wl_data_offer* id) {
+private void dataDeviceHandleDataOffer(void* data, wl_data_device* dataDevice, wl_data_offer* id) {
     if (_glfw.wl.dataOffer)
         wl_data_offer_destroy(_glfw.wl.dataOffer);
 
@@ -674,22 +674,22 @@ static void dataDeviceHandleDataOffer(void* data, wl_data_device* dataDevice, wl
     wl_data_offer_add_listener(_glfw.wl.dataOffer, &dataOfferListener, null);
 }
 
-static void dataDeviceHandleEnter(void* data, wl_data_device* dataDevice, uint serial, wl_surface* surface, wl_fixed_t x, wl_fixed_t y, wl_data_offer* id) {
+private void dataDeviceHandleEnter(void* data, wl_data_device* dataDevice, uint serial, wl_surface* surface, wl_fixed_t x, wl_fixed_t y, wl_data_offer* id) {
 }
 
-static void dataDeviceHandleLeave(void* data, wl_data_device* dataDevice) {
+private void dataDeviceHandleLeave(void* data, wl_data_device* dataDevice) {
 }
 
-static void dataDeviceHandleMotion(void* data, wl_data_device* dataDevice, uint time, wl_fixed_t x, wl_fixed_t y) {
+private void dataDeviceHandleMotion(void* data, wl_data_device* dataDevice, uint time, wl_fixed_t x, wl_fixed_t y) {
 }
 
-static void dataDeviceHandleDrop(void* data, wl_data_device* dataDevice) {
+private void dataDeviceHandleDrop(void* data, wl_data_device* dataDevice) {
 }
 
-static void dataDeviceHandleSelection(void* data, wl_data_device* dataDevice, wl_data_offer* id) {
+private void dataDeviceHandleSelection(void* data, wl_data_device* dataDevice, wl_data_offer* id) {
 }
 
-static const(wl_data_device_listener) dataDeviceListener = wl_data_device_listener(
+private const(wl_data_device_listener) dataDeviceListener = wl_data_device_listener(
     &dataDeviceHandleDataOffer,
     &dataDeviceHandleEnter,
     &dataDeviceHandleLeave,
@@ -698,15 +698,15 @@ static const(wl_data_device_listener) dataDeviceListener = wl_data_device_listen
     &dataDeviceHandleSelection,
 );
 
-static void wmBaseHandlePing(void* data, xdg_wm_base* wmBase, uint serial) {
+private void wmBaseHandlePing(void* data, xdg_wm_base* wmBase, uint serial) {
     xdg_wm_base_pong(wmBase, serial);
 }
 
-static const(xdg_wm_base_listener) wmBaseListener = xdg_wm_base_listener(
+private const(xdg_wm_base_listener) wmBaseListener = xdg_wm_base_listener(
     &wmBaseHandlePing
 );
 
-static void registryHandleGlobal(void* data, wl_registry* registry, uint name, const(char)* interface_, uint version_) {
+private void registryHandleGlobal(void* data, wl_registry* registry, uint name, const(char)* interface_, uint version_) {
     if (strcmp(interface_, "wl_compositor") == 0)
     {
         _glfw.wl.compositorVersion = min(3, version_);
@@ -794,7 +794,7 @@ static void registryHandleGlobal(void* data, wl_registry* registry, uint name, c
     }
 }
 
-static void registryHandleGlobalRemove(void* data, wl_registry* registry, uint name) {
+private void registryHandleGlobalRemove(void* data, wl_registry* registry, uint name) {
     int i;
     _GLFWmonitor* monitor;
 
@@ -810,14 +810,14 @@ static void registryHandleGlobalRemove(void* data, wl_registry* registry, uint n
 }
 
 
-static const(wl_registry_listener) registryListener = wl_registry_listener(
+private const(wl_registry_listener) registryListener = wl_registry_listener(
     &registryHandleGlobal,
     &registryHandleGlobalRemove
 );
 
 // Create key code translation tables
 //
-static void createKeyTables() {
+private void createKeyTables() {
     int scancode;
 
     memset(_glfw.wl.keycodes.ptr, -1, typeof(_glfw.wl.keycodes).sizeof);

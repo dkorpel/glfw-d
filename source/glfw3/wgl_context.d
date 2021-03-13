@@ -174,7 +174,7 @@ import core.stdc.assert_;
 
 // Return the value corresponding to the specified attribute
 //
-static int findPixelFormatAttribValue(const(int)* attribs, int attribCount, const(int)* values, int attrib) {
+private int findPixelFormatAttribValue(const(int)* attribs, int attribCount, const(int)* values, int attrib) {
     int i;
 
     for (i = 0;  i < attribCount;  i++)
@@ -191,7 +191,7 @@ static int findPixelFormatAttribValue(const(int)* attribs, int attribCount, cons
 
 // Return a list of available and usable framebuffer configs
 //
-static int choosePixelFormat(_GLFWwindow* window, const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbconfig)* fbconfig) {
+private int choosePixelFormat(_GLFWwindow* window, const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbconfig)* fbconfig) {
     _GLFWfbconfig* usableConfigs;
     const(_GLFWfbconfig)* closest;
     int i;int pixelFormat;int nativeCount;int usableCount = 0;int attribCount = 0;
@@ -423,7 +423,7 @@ static int choosePixelFormat(_GLFWwindow* window, const(_GLFWctxconfig)* ctxconf
     return pixelFormat;
 }
 
-static void makeContextCurrentWGL(_GLFWwindow* window) {
+private void makeContextCurrentWGL(_GLFWwindow* window) {
     if (window)
     {
         if (_glfw.wgl.MakeCurrent(window.context.wgl.dc, window.context.wgl.handle))
@@ -447,7 +447,7 @@ static void makeContextCurrentWGL(_GLFWwindow* window) {
     }
 }
 
-static void swapBuffersWGL(_GLFWwindow* window) {
+private void swapBuffersWGL(_GLFWwindow* window) {
     if (!window.monitor)
     {
         if (IsWindowsVistaOrGreater())
@@ -469,7 +469,7 @@ static void swapBuffersWGL(_GLFWwindow* window) {
     SwapBuffers(window.context.wgl.dc);
 }
 
-static void swapIntervalWGL(int interval) {
+private void swapIntervalWGL(int interval) {
     auto window = cast(_GLFWwindow*) _glfwPlatformGetTls(&_glfw.contextSlot);
 
     window.context.wgl.interval = interval;
@@ -493,7 +493,7 @@ static void swapIntervalWGL(int interval) {
         _glfw.wgl.SwapIntervalEXT(interval);
 }
 
-static int extensionSupportedWGL(const(char)* extension) {
+private int extensionSupportedWGL(const(char)* extension) {
     const(char)* extensions = null;
 
     if (_glfw.wgl.GetExtensionsStringARB)
@@ -507,7 +507,7 @@ static int extensionSupportedWGL(const(char)* extension) {
     return _glfwStringInExtensionString(extension, extensions);
 }
 
-static GLFWglproc getProcAddressWGL(const(char)* procname) {
+private GLFWglproc getProcAddressWGL(const(char)* procname) {
     const(GLFWglproc) proc = cast(GLFWglproc) _glfw.wgl.GetProcAddress(procname);
     if (proc)
         return proc;
@@ -515,7 +515,7 @@ static GLFWglproc getProcAddressWGL(const(char)* procname) {
     return cast(GLFWglproc) GetProcAddress(_glfw.wgl.instance, procname);
 }
 
-static void destroyContextWGL(_GLFWwindow* window) {
+private void destroyContextWGL(_GLFWwindow* window) {
     if (window.context.wgl.handle)
     {
         _glfw.wgl.DeleteContext(window.context.wgl.handle);

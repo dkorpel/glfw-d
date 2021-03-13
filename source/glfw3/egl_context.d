@@ -220,7 +220,7 @@ import core.stdc.stdint;
 
 // Return a description of the specified EGL error
 //
-static const(char)* getEGLErrorString(EGLint error) {
+private const(char)* getEGLErrorString(EGLint error) {
     switch (error)
     {
         case EGL_SUCCESS:
@@ -260,7 +260,7 @@ static const(char)* getEGLErrorString(EGLint error) {
 
 // Returns the specified attribute of the specified EGLConfig
 //
-static int getEGLConfigAttrib(EGLConfig config, int attrib) {
+private int getEGLConfigAttrib(EGLConfig config, int attrib) {
     int value;
     _glfw.egl.GetConfigAttrib(_glfw.egl.display, config, attrib, &value);
     return value;
@@ -268,7 +268,7 @@ static int getEGLConfigAttrib(EGLConfig config, int attrib) {
 
 // Return the EGLConfig most closely matching the specified hints
 //
-static GLFWbool chooseEGLConfig(const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbconfig)* desired, EGLConfig* result) {
+private GLFWbool chooseEGLConfig(const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbconfig)* desired, EGLConfig* result) {
     EGLConfig* nativeConfigs;
     _GLFWfbconfig* usableConfigs;
     const(_GLFWfbconfig)* closest;
@@ -365,7 +365,7 @@ static GLFWbool chooseEGLConfig(const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbc
     return closest != null;
 }
 
-static void makeContextCurrentEGL(_GLFWwindow* window) {
+private void makeContextCurrentEGL(_GLFWwindow* window) {
     if (window)
     {
         if (!_glfw.egl.MakeCurrent(_glfw.egl.display,
@@ -396,7 +396,7 @@ static void makeContextCurrentEGL(_GLFWwindow* window) {
     _glfwPlatformSetTls(&_glfw.contextSlot, window);
 }
 
-static void swapBuffersEGL(_GLFWwindow* window) {
+private void swapBuffersEGL(_GLFWwindow* window) {
     if (window != _glfwPlatformGetTls(&_glfw.contextSlot))
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
@@ -407,11 +407,11 @@ static void swapBuffersEGL(_GLFWwindow* window) {
     _glfw.egl.SwapBuffers(_glfw.egl.display, window.context.egl.surface);
 }
 
-static void swapIntervalEGL(int interval) {
+private void swapIntervalEGL(int interval) {
     _glfw.egl.SwapInterval(_glfw.egl.display, interval);
 }
 
-static int extensionSupportedEGL(const(char)* extension) {
+private int extensionSupportedEGL(const(char)* extension) {
     const(char)* extensions = _glfw.egl.QueryString(_glfw.egl.display, EGL_EXTENSIONS);
     if (extensions)
     {
@@ -422,7 +422,7 @@ static int extensionSupportedEGL(const(char)* extension) {
     return GLFW_FALSE;
 }
 
-static GLFWglproc getProcAddressEGL(const(char)* procname) {
+private GLFWglproc getProcAddressEGL(const(char)* procname) {
     auto window = cast(_GLFWwindow*) _glfwPlatformGetTls(&_glfw.contextSlot);
 
     if (window.context.egl.client)
@@ -436,7 +436,7 @@ static GLFWglproc getProcAddressEGL(const(char)* procname) {
     return _glfw.egl.GetProcAddress(procname);
 }
 
-static void destroyContextEGL(_GLFWwindow* window) {
+private void destroyContextEGL(_GLFWwindow* window) {
     // NOTE: Do not unload libGL.so.1 while the X11 display is still open,
     //       as it will make XCloseDisplay segfault
     version (_GLFW_X11) {

@@ -80,15 +80,15 @@ struct _GLFWobjenumWin32 {
 
 // Define local copies of the necessary GUIDs
 //
-static immutable GUID _glfw_IID_IDirectInput8W = GUID(0xbf798031,0x483a,0x4da2,[0xaa,0x99,0x5d,0x64,0xed,0x36,0x97,0x00]);
-static immutable GUID _glfw_GUID_XAxis = GUID(0xa36d02e0,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_YAxis = GUID(0xa36d02e1,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_ZAxis = GUID(0xa36d02e2,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_RxAxis = GUID(0xa36d02f4,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_RyAxis = GUID(0xa36d02f5,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_RzAxis = GUID(0xa36d02e3,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_Slider = GUID(0xa36d02e4,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
-static immutable GUID _glfw_GUID_POV = GUID(0xa36d02f2,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_IID_IDirectInput8W = GUID(0xbf798031,0x483a,0x4da2,[0xaa,0x99,0x5d,0x64,0xed,0x36,0x97,0x00]);
+private immutable GUID _glfw_GUID_XAxis = GUID(0xa36d02e0,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_YAxis = GUID(0xa36d02e1,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_ZAxis = GUID(0xa36d02e2,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_RxAxis = GUID(0xa36d02f4,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_RyAxis = GUID(0xa36d02f5,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_RzAxis = GUID(0xa36d02e3,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_Slider = GUID(0xa36d02e4,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
+private immutable GUID _glfw_GUID_POV = GUID(0xa36d02f2,0xc9f3,0x11cf,[0xbf,0xc7,0x44,0x45,0x53,0x54,0x00,0x00]);
 
 alias IID_IDirectInput8W = _glfw_IID_IDirectInput8W;
 alias GUID_XAxis = _glfw_GUID_XAxis;
@@ -103,7 +103,7 @@ alias GUID_POV = _glfw_GUID_POV;
 // Object data array for our clone of c_dfDIJoystick
 // Generated with https://github.com/elmindreda/c_dfDIJoystick2
 //
-static DIOBJECTDATAFORMAT[44] _glfwObjectDataFormats = [
+private DIOBJECTDATAFORMAT[44] _glfwObjectDataFormats = [
     DIOBJECTDATAFORMAT(&GUID_XAxis,DIJOFS_X,DIDFT_AXIS|DIDFT_OPTIONAL|DIDFT_ANYINSTANCE,DIDOI_ASPECTPOSITION),
     DIOBJECTDATAFORMAT(&GUID_YAxis,DIJOFS_Y,DIDFT_AXIS|DIDFT_OPTIONAL|DIDFT_ANYINSTANCE,DIDOI_ASPECTPOSITION),
     DIOBJECTDATAFORMAT(&GUID_ZAxis,DIJOFS_Z,DIDFT_AXIS|DIDFT_OPTIONAL|DIDFT_ANYINSTANCE,DIDOI_ASPECTPOSITION),
@@ -152,7 +152,7 @@ static DIOBJECTDATAFORMAT[44] _glfwObjectDataFormats = [
 
 // Our clone of c_dfDIJoystick
 //
-static const DIDATAFORMAT _glfwDataFormat = DIDATAFORMAT(
+private const DIDATAFORMAT _glfwDataFormat = DIDATAFORMAT(
     DIDATAFORMAT.sizeof,
     DIOBJECTDATAFORMAT.sizeof,
     DIDFT_ABSAXIS,
@@ -163,7 +163,7 @@ static const DIDATAFORMAT _glfwDataFormat = DIDATAFORMAT(
 
 // Returns a description fitting the specified XInput capabilities
 //
-static const(char)* getDeviceDescription(const(XINPUT_CAPABILITIES)* xic) {
+private const(char)* getDeviceDescription(const(XINPUT_CAPABILITIES)* xic) {
     switch (xic.SubType)
     {
         case XINPUT_DEVSUBTYPE_WHEEL:
@@ -193,7 +193,7 @@ static const(char)* getDeviceDescription(const(XINPUT_CAPABILITIES)* xic) {
 
 // Lexically compare device objects
 //
-static int compareJoystickObjects(const(void)* first, const(void)* second) {
+private int compareJoystickObjects(const(void)* first, const(void)* second) {
     auto fo = cast(const(_GLFWjoyobjectWin32)*) first;
     auto so = cast(const(_GLFWjoyobjectWin32)*) second;
 
@@ -206,7 +206,7 @@ static int compareJoystickObjects(const(void)* first, const(void)* second) {
 // Checks whether the specified device supports XInput
 // Technique from FDInputJoystickManager::IsXInputDeviceFast in ZDoom
 //
-static GLFWbool supportsXInput(const(GUID)* guid) {
+private GLFWbool supportsXInput(const(GUID)* guid) {
     UINT i;UINT count = 0;
     RAWINPUTDEVICELIST* ridl;
     GLFWbool result = GLFW_FALSE;
@@ -269,7 +269,7 @@ static GLFWbool supportsXInput(const(GUID)* guid) {
 
 // Frees all resources associated with the specified joystick
 //
-static void closeJoystick(_GLFWjoystick* js) {
+private void closeJoystick(_GLFWjoystick* js) {
     if (js.win32.device)
     {
         js.win32.device.Unacquire();

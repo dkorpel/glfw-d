@@ -40,7 +40,7 @@ import core.stdc.wchar_;
 
 // Callback for EnumDisplayMonitors in createMonitor
 //
-extern(Windows) static BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect, LPARAM data) {
+extern(Windows) private BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect, LPARAM data) {
     MONITORINFOEXW mi;
     memset(&mi, 0, typeof(mi).sizeof);
     mi.cbSize = typeof(mi).sizeof;
@@ -57,7 +57,7 @@ extern(Windows) static BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect,
 
 // Create monitor from an adapter and (optionally) a display
 //
-static _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter, DISPLAY_DEVICEW* display) {
+private extern(D) _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter, DISPLAY_DEVICEW* display) {
     _GLFWmonitor* monitor;
     int widthMM;int heightMM;
     char* name;

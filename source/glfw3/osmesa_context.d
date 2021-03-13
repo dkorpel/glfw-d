@@ -150,15 +150,15 @@ private void destroyContextOSMesa(_GLFWwindow* window) {
     }
 }
 
-static void swapBuffersOSMesa(_GLFWwindow* window) {
+private void swapBuffersOSMesa(_GLFWwindow* window) {
     // No double buffering on OSMesa
 }
 
-static void swapIntervalOSMesa(int interval) {
+private void swapIntervalOSMesa(int interval) {
     // No swap interval on OSMesa
 }
 
-static int extensionSupportedOSMesa(const(char)* extension) {
+private int extensionSupportedOSMesa(const(char)* extension) {
     // OSMesa does not have extensions
     return GLFW_FALSE;
 }
