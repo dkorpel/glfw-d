@@ -54,9 +54,7 @@ GLFWbool _glfwInitVulkan(int mode) {
         return GLFW_TRUE;
 
 version (_GLFW_VULKAN_STATIC) {} else {
-version (_GLFW_VULKAN_LIBRARY) {
-    _glfw.vk.handle = _glfw_dlopen(_GLFW_VULKAN_LIBRARY);
-} else version (_GLFW_WIN32) {
+version (_GLFW_WIN32) {
     _glfw.vk.handle = _glfw_dlopen("vulkan-1.dll");
 } else version (_GLFW_COCOA) {
     _glfw.vk.handle = _glfw_dlopen("libvulkan.1.dylib");
