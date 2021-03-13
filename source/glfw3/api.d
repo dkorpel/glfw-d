@@ -5662,6 +5662,9 @@ const(char)** glfwGetRequiredInstanceExtensions(uint* count);
 
 version (VK_VERSION_1_0) {
 
+import glfw3.vulkan;
+import glfw3.internal;
+
 /** Returns the address of the specified Vulkan instance function.
  *
  *  This function returns the address of the specified Vulkan core or extension

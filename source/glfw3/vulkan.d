@@ -1,5 +1,5 @@
 /// Translated from C to D
-module vulkan;
+module glfw3.vulkan;
 
 extern(C): @nogc: nothrow: __gshared:
 //========================================================================
