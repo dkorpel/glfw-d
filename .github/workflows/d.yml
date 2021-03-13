@@ -1,4 +1,4 @@
-name: Build example application
+name: Build example applications
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
     test:
-        name: Build example application
+        name: Build empty window example
         strategy:
             matrix:
                 os: [ubuntu-latest, windows-latest]
@@ -22,5 +22,8 @@ jobs:
               with:
                   compiler: ${{ matrix.dc }}
 
-            - name: Invoke Dub
-              run: dub -q build glfw-d:example
+            - name: Build empty window example
+              run: dub -q build glfw-d:empty-window
+
+            - name: Build OpenGL triangle example
+              run: dub -q build glfw-d:triangle-gl
