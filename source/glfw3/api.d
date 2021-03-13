@@ -1511,7 +1511,7 @@ struct GLFWvidmode {
     /** The refresh rate, in Hz, of the video mode.
      */
     int refreshRate;
-}/+alias GLFWvidmode GLFWvidmode;+/
+}
 
 /** Gamma ramp.
  *
@@ -1538,7 +1538,7 @@ struct GLFWgammaramp {
     /** The number of elements in each array.
      */
     uint size;
-}/+alias GLFWgammaramp GLFWgammaramp;+/
+}
 
 /** Image data.
  *
@@ -1563,7 +1563,7 @@ struct GLFWimage {
     /** The pixel data of this image, arranged left-to-right, top-to-bottom.
      */
     ubyte* pixels;
-}/+alias GLFWimage GLFWimage;+/
+}
 
 /** Gamepad input state
  *
@@ -1585,7 +1585,7 @@ struct GLFWgamepadstate {
      *  to 1.0 inclusive.
      */
     float[6] axes;
-}/+alias GLFWgamepadstate GLFWgamepadstate;+/
+}
 
 
 /*************************************************************************
@@ -5661,6 +5661,9 @@ int glfwVulkanSupported();
 const(char)** glfwGetRequiredInstanceExtensions(uint* count);
 
 version (VK_VERSION_1_0) {
+
+import glfw3.vulkan;
+import glfw3.internal;
 
 /** Returns the address of the specified Vulkan instance function.
  *

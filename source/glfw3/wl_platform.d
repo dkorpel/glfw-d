@@ -176,7 +176,7 @@ struct _GLFWdecorationWayland {
     wl_subsurface* subsurface;
     wp_viewport* viewport;
 
-}/+alias _GLFWdecorationWayland _GLFWdecorationWayland;+/
+}
 
 // Wayland-specific per-window data
 //
@@ -225,7 +225,7 @@ struct _GLFWwindowWayland {
         int focus;
     }_Decorations decorations;
 
-}/+alias _GLFWwindowWayland _GLFWwindowWayland;+/
+}
 
 // Wayland-specific global data
 //
@@ -333,7 +333,7 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
         PFN_wl_egl_window_resize window_resize;
     }_Egl egl;
 
-}/+alias _GLFWlibraryWayland _GLFWlibraryWayland;+/
+}
 
 // Wayland-specific per-monitor data
 //
@@ -346,7 +346,7 @@ struct _GLFWmonitorWayland {
     int y;
     int scale;
 
-}/+alias _GLFWmonitorWayland _GLFWmonitorWayland;+/
+}
 
 // Wayland-specific per-cursor data
 //
@@ -357,7 +357,7 @@ struct _GLFWcursorWayland {
     int width;int height;
     int xhot;int yhot;
     int currentImage;
-}/+alias _GLFWcursorWayland _GLFWcursorWayland;+/
+}
 
 
 void _glfwAddOutputWayland(uint name, uint version_);

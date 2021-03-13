@@ -99,7 +99,7 @@ enum VkStructureType{
     VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK = 1000123000,
     VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT = 1000217000,
     VK_STRUCTURE_TYPE_MAX_ENUM = 0x7FFFFFFF
-}/+alias VkStructureType VkStructureType;+/
+}
 
 enum VkResult {
     VK_SUCCESS = 0,
@@ -126,14 +126,14 @@ enum VkResult {
     VK_ERROR_NATIVE_WINDOW_IN_USE_KHR = -1000000001,
     VK_ERROR_VALIDATION_FAILED_EXT = -1000011001,
     VK_RESULT_MAX_ENUM = 0x7FFFFFFF
-}/+alias VkResult VkResult;+/
+}
 
 struct VkAllocationCallbacks;
 
 struct VkExtensionProperties{
     char[256] extensionName;
     uint specVersion;
-}/+alias VkExtensionProperties VkExtensionProperties;+/
+}
 
 alias PFN_vkVoidFunction = void function();
 
