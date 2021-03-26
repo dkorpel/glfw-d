@@ -118,7 +118,7 @@ void printMonitorState() {
 		printf("  current video mode: %dx%d %dHz r%dg%db%d\n", mode.width, mode.height, mode.refreshRate, mode.redBits, mode.greenBits, mode.blueBits);
 		printf("  position: %d, %d\n", xpos, ypos);
 		glfwGetMonitorWorkarea(mt, &xpos, &ypos, &width, &height);
-		printf("  work area: %d, %d to %d, %d\n", xpos, ypos, width, height);
+		printf("  work area: (%d, %d), size (%d, %d)\n", xpos, ypos, width, height);
 	}
 }
 

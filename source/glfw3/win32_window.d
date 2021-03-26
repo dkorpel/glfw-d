@@ -33,16 +33,14 @@ extern(C): __gshared:
 // Please use C89 style variable declarations in this file because VS 2010
 //========================================================================
 
-public import glfw3.internal;
+import glfw3.internal;
 
-public import glfw3.win32_platform: IsWindowsVistaOrGreater, IsWindowsXPOrGreater, IsWindows7OrGreater;
+import glfw3.win32_platform: IsWindowsVistaOrGreater, IsWindowsXPOrGreater, IsWindows7OrGreater;
 
 import core.stdc.limits;
 import core.stdc.stdlib;
 import core.stdc.string;
 import core.sys.windows.windows;
-//public import windowsx;
-//public import shellapi;
 
 // Returns the window style for the specified window
 //

@@ -103,7 +103,7 @@ version (all) {
 enum DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = cast(HANDLE) -4;
 
 // HACK: Define versionhelpers.h functions manually as MinGW lacks the header
-private {
+package {
     enum _WIN32_WINNT_WINXP = 0x0501;
     enum _WIN32_WINNT_VISTA = 0x0600;
     enum _WIN32_WINNT_WIN7 = 0x0601;
@@ -224,6 +224,7 @@ struct VkWin32SurfaceCreateInfoKHR {
 alias PFN_vkCreateWin32SurfaceKHR = VkResult function(VkInstance, const(VkWin32SurfaceCreateInfoKHR)*, const(VkAllocationCallbacks)*, VkSurfaceKHR*);
 alias PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR = VkBool32 function(VkPhysicalDevice, uint32_t);
 
+import glfw3.internal;
 public import glfw3.win32_joystick;
 public import glfw3.wgl_context;
 public import glfw3.egl_context;

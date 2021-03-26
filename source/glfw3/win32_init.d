@@ -3,9 +3,6 @@ module glfw3.win32_init;
 
 extern(C): @nogc: nothrow: __gshared:
 
-private template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
 //========================================================================
 // GLFW 3.3 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -35,7 +32,7 @@ private template HasVersion(string versionId) {
 // Please use C89 style variable declarations in this file because VS 2010
 //========================================================================
 
-public import glfw3.internal;
+import glfw3.internal;
 
 import core.stdc.stdlib;
 import core.stdc.string;
@@ -44,7 +41,10 @@ private const(GUID) _glfw_GUID_DEVINTERFACE_HID = GUID(0x4d1e55b2,0xf16f,0x11cf,
 
 enum GUID_DEVINTERFACE_HID = _glfw_GUID_DEVINTERFACE_HID;
 
-static if (HasVersion!"_GLFW_USE_HYBRID_HPG" || HasVersion!"_GLFW_USE_OPTIMUS_HPG") {
+version(_GLFW_USE_HYBRID_HPG) version = _GLFW_USE_HPG;
+version(_GLFW_USE_OPTIMUS_HPG) version = _GLFW_USE_HPG;
+
+version(_GLFW_USE_HPG) {
 
 // Executables (but not DLLs) exporting this symbol with this value will be
 // automatically directed to the high-performance GPU on Nvidia Optimus systems
@@ -58,7 +58,7 @@ DWORD NvOptimusEnablement = 1;
 //
 int AmdPowerXpressRequestHighPerformance = 1;
 
-} // _GLFW_USE_HYBRID_HPG
+}
 
 version (_GLFW_BUILD_DLL) {
 
@@ -68,7 +68,7 @@ extern(Windows) BOOL DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) 
     return TRUE;
 }
 
-} // _GLFW_BUILD_DLL
+}
 
 // Load necessary libraries (DLLs)
 //
