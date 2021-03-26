@@ -35,6 +35,7 @@ import glfw3.internal;
 
 import core.stdc.assert_;
 import core.stdc.string: memset;
+package:
 
 //////////////////////////////////////////////////////////////////////////
 //////                       GLFW platform API                      //////

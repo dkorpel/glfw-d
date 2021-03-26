@@ -37,6 +37,7 @@ import glfw3.internal;
 import core.stdc.assert_;
 import core.stdc.string;
 import core.stdc.stdlib;
+package:
 
 //////////////////////////////////////////////////////////////////////////
 //////                         GLFW event API                       //////

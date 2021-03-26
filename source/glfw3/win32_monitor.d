@@ -38,6 +38,8 @@ import core.stdc.string;
 import core.stdc.limits;
 import core.stdc.wchar_;
 
+package:
+
 // Callback for EnumDisplayMonitors in createMonitor
 //
 extern(Windows) private BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect, LPARAM data) {

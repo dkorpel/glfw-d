@@ -39,6 +39,8 @@ import core.stdc.string;
 
 private const(GUID) _glfw_GUID_DEVINTERFACE_HID = GUID(0x4d1e55b2,0xf16f,0x11cf,[0x88,0xcb,0x00,0x11,0x11,0x00,0x00,0x30]);
 
+package:
+
 enum GUID_DEVINTERFACE_HID = _glfw_GUID_DEVINTERFACE_HID;
 
 version(_GLFW_USE_HYBRID_HPG) version = _GLFW_USE_HPG;

@@ -40,6 +40,8 @@ public import glfw3.xinput;
 public import core.sys.windows.objbase; // GUID
 public import core.sys.windows.dbt;
 
+package:
+
 // TODO: make this @nogc nothrow upstream
 @nogc nothrow extern (Windows) ULONGLONG VerSetConditionMask(ULONGLONG, DWORD, BYTE);
 

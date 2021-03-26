@@ -41,6 +41,7 @@ import core.stdc.limits;
 import core.stdc.stdlib;
 import core.stdc.string;
 import core.sys.windows.windows;
+package:
 
 // Returns the window style for the specified window
 //

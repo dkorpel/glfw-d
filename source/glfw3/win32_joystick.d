@@ -35,6 +35,8 @@ import glfw3.internal;
 import core.stdc.stdlib; // free
 import core.stdc.string; // memset
 
+package:
+
 // header
 mixin template _GLFW_PLATFORM_JOYSTICK_STATE() {_GLFWjoystickWin32 win32;}
 mixin template _GLFW_PLATFORM_LIBRARY_JOYSTICK_STATE() {int dummyLibraryJoystick;}
