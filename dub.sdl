@@ -11,12 +11,10 @@ subPackage "examples/empty-window"
 subPackage "examples/triangle-gl"
 //subPackage "examples/triangle-vulkan"
 
-dflags "-preview=dip1000" "-preview=dip25"
+dflags "-preview=dip1000"
 dflags "-preview=fieldwise"
-dflags "-preview=markdown"
 dflags "-preview=fixAliasThis"
 dflags "-preview=intpromote"
-dflags "-preview=dtorfields"
 dflags "-mixin=build/mixin.d"
 
 sourcePaths // by default dub includes everything in source/, which we don't want here
