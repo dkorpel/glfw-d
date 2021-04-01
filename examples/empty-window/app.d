@@ -118,13 +118,14 @@ void printMonitorState() {
 		printf("  current video mode: %dx%d %dHz r%dg%db%d\n", mode.width, mode.height, mode.refreshRate, mode.redBits, mode.greenBits, mode.blueBits);
 		printf("  position: %d, %d\n", xpos, ypos);
 		glfwGetMonitorWorkarea(mt, &xpos, &ypos, &width, &height);
-		printf("  work area: %d, %d to %d, %d\n", xpos, ypos, width, height);
+		printf("  work area: (%d, %d), size (%d, %d)\n", xpos, ypos, width, height);
 	}
 }
 
 void printJoystickState() {
 	for (int js = GLFW_JOYSTICK_1; js <= GLFW_JOYSTICK_LAST; js++) {
 		if (glfwJoystickPresent(js)) {
+			//glfwSetJoystickRumble(js, /*slow*/ 0.25, /*fast*/ 0.25);
 			printf("Joystick %d has name `%s` and GUID `%s`\n", js, glfwGetJoystickName(js), glfwGetJoystickGUID(js));
 			int buttonsLength, axesLength, hatsLength;
 			const(ubyte)* buttonsPtr = glfwGetJoystickButtons(js, &buttonsLength);

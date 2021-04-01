@@ -42,11 +42,11 @@ public import core.sys.posix.sys.mman;
 public import core.sys.linux.timerfd;
 public import core.sys.posix.poll;
 
-static void shellSurfaceHandlePing(void* data, wl_shell_surface* shellSurface, uint serial) {
+private void shellSurfaceHandlePing(void* data, wl_shell_surface* shellSurface, uint serial) {
     wl_shell_surface_pong(shellSurface, serial);
 }
 
-static void shellSurfaceHandleConfigure(void* data, wl_shell_surface* shellSurface, uint edges, int width, int height) {
+private void shellSurfaceHandleConfigure(void* data, wl_shell_surface* shellSurface, uint edges, int width, int height) {
     auto window = cast(_GLFWwindow*) data;
     float aspectRatio;
     float targetRatio;
@@ -89,16 +89,16 @@ static void shellSurfaceHandleConfigure(void* data, wl_shell_surface* shellSurfa
     _glfwInputWindowDamage(window);
 }
 
-static void shellSurfaceHandlePopupDone(void* data, wl_shell_surface* shellSurface) {
+private void shellSurfaceHandlePopupDone(void* data, wl_shell_surface* shellSurface) {
 }
 
-static const(wl_shell_surface_listener) shellSurfaceListener = wl_shell_surface_listener(
+private const(wl_shell_surface_listener) shellSurfaceListener = wl_shell_surface_listener(
     &shellSurfaceHandlePing,
     &shellSurfaceHandleConfigure,
     &shellSurfaceHandlePopupDone
 );
 
-static int createTmpfileCloexec(char* tmpname) {
+private int createTmpfileCloexec(char* tmpname) {
     int fd;
 
     fd = mkostemp(tmpname, O_CLOEXEC);
@@ -128,8 +128,8 @@ static int createTmpfileCloexec(char* tmpname) {
  * is set to ENOSPC. If posix_fallocate() is not supported, program may
  * receive SIGBUS on accessing mmap()'ed file contents instead.
  */
-static int createAnonymousFile(off_t size) {
-    static const(char)* template_ = "/glfw-shared-XXXXXX";
+private int createAnonymousFile(off_t size) {
+    private const(char)* template_ = "/glfw-shared-XXXXXX";
     const(char)* path;
     char* name;
     int fd;
@@ -197,7 +197,7 @@ version (SHM_ANON) {
     return fd;
 }
 
-static wl_buffer* createShmBuffer(const(GLFWimage)* image) {
+private wl_buffer* createShmBuffer(const(GLFWimage)* image) {
     wl_shm_pool* pool;
     wl_buffer* buffer;
     int stride = image.width * 4;
@@ -249,7 +249,7 @@ static wl_buffer* createShmBuffer(const(GLFWimage)* image) {
     return buffer;
 }
 
-static void createDecoration(_GLFWdecorationWayland* decoration, wl_surface* parent, wl_buffer* buffer, GLFWbool opaque, int x, int y, int width, int height) {
+private void createDecoration(_GLFWdecorationWayland* decoration, wl_surface* parent, wl_buffer* buffer, GLFWbool opaque, int x, int y, int width, int height) {
     wl_region* region;
 
     decoration.surface = wl_compositor_create_surface(_glfw.wl.compositor);
@@ -274,7 +274,7 @@ static void createDecoration(_GLFWdecorationWayland* decoration, wl_surface* par
         wl_surface_commit(decoration.surface);
 }
 
-static void createDecorations(_GLFWwindow* window) {
+private void createDecorations(_GLFWwindow* window) {
     ubyte[4] data = [ 224, 224, 224, 255 ];
     const(GLFWimage) image = GLFWimage( 1, 1, data.ptr );
     GLFWbool opaque = (data[3] == 255);
@@ -305,7 +305,7 @@ static void createDecorations(_GLFWwindow* window) {
                      window.wl.width + _GLFW_DECORATION_HORIZONTAL, _GLFW_DECORATION_WIDTH);
 }
 
-static void destroyDecoration(_GLFWdecorationWayland* decoration) {
+private void destroyDecoration(_GLFWdecorationWayland* decoration) {
     if (decoration.surface)
         wl_surface_destroy(decoration.surface);
     if (decoration.subsurface)
@@ -317,14 +317,14 @@ static void destroyDecoration(_GLFWdecorationWayland* decoration) {
     decoration.viewport = null;
 }
 
-static void destroyDecorations(_GLFWwindow* window) {
+private void destroyDecorations(_GLFWwindow* window) {
     destroyDecoration(&window.wl.decorations.top);
     destroyDecoration(&window.wl.decorations.left);
     destroyDecoration(&window.wl.decorations.right);
     destroyDecoration(&window.wl.decorations.bottom);
 }
 
-static void xdgDecorationHandleConfigure(void* data, zxdg_toplevel_decoration_v1* decoration, uint mode) {
+private void xdgDecorationHandleConfigure(void* data, zxdg_toplevel_decoration_v1* decoration, uint mode) {
     _GLFWwindow* window = data;
 
     window.wl.decorations.serverSide = (mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE);
@@ -333,12 +333,12 @@ static void xdgDecorationHandleConfigure(void* data, zxdg_toplevel_decoration_v1
         createDecorations(window);
 }
 
-static const(zxdg_toplevel_decoration_v1_listener) xdgDecorationListener = zxdg_toplevel_decoration_v1_listener(
+private const(zxdg_toplevel_decoration_v1_listener) xdgDecorationListener = zxdg_toplevel_decoration_v1_listener(
     &xdgDecorationHandleConfigure,
 );
 
 // Makes the surface considered as XRGB instead of ARGB.
-static void setOpaqueRegion(_GLFWwindow* window) {
+private void setOpaqueRegion(_GLFWwindow* window) {
     wl_region* region;
 
     region = wl_compositor_create_region(_glfw.wl.compositor);
@@ -352,7 +352,7 @@ static void setOpaqueRegion(_GLFWwindow* window) {
 }
 
 
-static void resizeWindow(_GLFWwindow* window) {
+private void resizeWindow(_GLFWwindow* window) {
     int scale = window.wl.scale;
     int scaledWidth = window.wl.width * scale;
     int scaledHeight = window.wl.height * scale;
@@ -390,7 +390,7 @@ static void resizeWindow(_GLFWwindow* window) {
     wl_surface_commit(window.wl.decorations.bottom.surface);
 }
 
-static void checkScaleChange(_GLFWwindow* window) {
+private void checkScaleChange(_GLFWwindow* window) {
     int scale = 1;
     int i;
     int monitorScale;
@@ -416,7 +416,7 @@ static void checkScaleChange(_GLFWwindow* window) {
     }
 }
 
-static void surfaceHandleEnter(void* data, wl_surface* surface, wl_output* output) {
+private void surfaceHandleEnter(void* data, wl_surface* surface, wl_output* output) {
     _GLFWwindow* window = data;
     _GLFWmonitor* monitor = wl_output_get_user_data(output);
 
@@ -433,7 +433,7 @@ static void surfaceHandleEnter(void* data, wl_surface* surface, wl_output* outpu
     checkScaleChange(window);
 }
 
-static void surfaceHandleLeave(void* data, wl_surface* surface, wl_output* output) {
+private void surfaceHandleLeave(void* data, wl_surface* surface, wl_output* output) {
     _GLFWwindow* window = data;
     _GLFWmonitor* monitor = wl_output_get_user_data(output);
     GLFWbool found;
@@ -451,12 +451,12 @@ static void surfaceHandleLeave(void* data, wl_surface* surface, wl_output* outpu
     checkScaleChange(window);
 }
 
-static const(wl_surface_listener) surfaceListener = wl_surface_listener(
+private const(wl_surface_listener) surfaceListener = wl_surface_listener(
     &surfaceHandleEnter,
     &surfaceHandleLeave
 );
 
-static void setIdleInhibitor(_GLFWwindow* window, GLFWbool enable) {
+private void setIdleInhibitor(_GLFWwindow* window, GLFWbool enable) {
     if (enable && !window.wl.idleInhibitor && _glfw.wl.idleInhibitManager)
     {
         window.wl.idleInhibitor =
@@ -473,7 +473,7 @@ static void setIdleInhibitor(_GLFWwindow* window, GLFWbool enable) {
     }
 }
 
-static GLFWbool createSurface(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig) {
+private GLFWbool createSurface(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig) {
     window.wl.surface = wl_compositor_create_surface(_glfw.wl.compositor);
     if (!window.wl.surface)
         return GLFW_FALSE;
@@ -500,7 +500,7 @@ static GLFWbool createSurface(_GLFWwindow* window, const(_GLFWwndconfig)* wndcon
     return GLFW_TRUE;
 }
 
-static void setFullscreen(_GLFWwindow* window, _GLFWmonitor* monitor, int refreshRate) {
+private void setFullscreen(_GLFWwindow* window, _GLFWmonitor* monitor, int refreshRate) {
     if (window.wl.xdg.toplevel)
     {
         xdg_toplevel_set_fullscreen(
@@ -520,7 +520,7 @@ static void setFullscreen(_GLFWwindow* window, _GLFWmonitor* monitor, int refres
         destroyDecorations(window);
 }
 
-static GLFWbool createShellSurface(_GLFWwindow* window) {
+private GLFWbool createShellSurface(_GLFWwindow* window) {
     if (!_glfw.wl.shell)
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
@@ -566,7 +566,7 @@ static GLFWbool createShellSurface(_GLFWwindow* window) {
     return GLFW_TRUE;
 }
 
-static void xdgToplevelHandleConfigure(void* data, xdg_toplevel* toplevel, int width, int height, wl_array* states) {
+private void xdgToplevelHandleConfigure(void* data, xdg_toplevel* toplevel, int width, int height, wl_array* states) {
     _GLFWwindow* window = cast(_GLFWwindow*) data;
     float aspectRatio;
     float targetRatio;
@@ -626,25 +626,25 @@ static void xdgToplevelHandleConfigure(void* data, xdg_toplevel* toplevel, int w
     _glfwInputWindowFocus(window, activated);
 }
 
-static void xdgToplevelHandleClose(void* data, xdg_toplevel* toplevel) {
+private void xdgToplevelHandleClose(void* data, xdg_toplevel* toplevel) {
     _GLFWwindow* window = data;
     _glfwInputWindowCloseRequest(window);
 }
 
-static const(xdg_toplevel_listener) xdgToplevelListener = xdg_toplevel_listener(
+private const(xdg_toplevel_listener) xdgToplevelListener = xdg_toplevel_listener(
     &xdgToplevelHandleConfigure,
     &xdgToplevelHandleClose
 );
 
-static void xdgSurfaceHandleConfigure(void* data, xdg_surface* surface, uint serial) {
+private void xdgSurfaceHandleConfigure(void* data, xdg_surface* surface, uint serial) {
     xdg_surface_ack_configure(surface, serial);
 }
 
-static const(xdg_surface_listener) xdgSurfaceListener = xdg_surface_listener(
+private const(xdg_surface_listener) xdgSurfaceListener = xdg_surface_listener(
     &xdgSurfaceHandleConfigure
 );
 
-static void setXdgDecorations(_GLFWwindow* window) {
+private void setXdgDecorations(_GLFWwindow* window) {
     if (_glfw.wl.decorationManager)
     {
         window.wl.xdg.decoration =
@@ -664,7 +664,7 @@ static void setXdgDecorations(_GLFWwindow* window) {
     }
 }
 
-static GLFWbool createXdgSurface(_GLFWwindow* window) {
+private GLFWbool createXdgSurface(_GLFWwindow* window) {
     window.wl.xdg.surface = xdg_wm_base_get_xdg_surface(_glfw.wl.wmBase,
                                                          window.wl.surface);
     if (!window.wl.xdg.surface)
@@ -724,7 +724,7 @@ static GLFWbool createXdgSurface(_GLFWwindow* window) {
     return GLFW_TRUE;
 }
 
-static void setCursorImage(_GLFWwindow* window, _GLFWcursorWayland* cursorWayland) {
+private void setCursorImage(_GLFWwindow* window, _GLFWcursorWayland* cursorWayland) {
     itimerspec timer = {};
     wl_cursor* wlCursor = cursorWayland.cursor;
     wl_cursor_image* image;
@@ -768,7 +768,7 @@ static void setCursorImage(_GLFWwindow* window, _GLFWcursorWayland* cursorWaylan
     wl_surface_commit(surface);
 }
 
-static void incrementCursorImage(_GLFWwindow* window) {
+private void incrementCursorImage(_GLFWwindow* window) {
     _GLFWcursor* cursor;
 
     if (!window || window.wl.decorations.focus != mainWindow)
@@ -783,7 +783,7 @@ static void incrementCursorImage(_GLFWwindow* window) {
     }
 }
 
-static void handleEvents(int timeout) {
+private void handleEvents(int timeout) {
     wl_display* display = _glfw.wl.display;
     pollfd* fds = [
         [ wl_display_get_fd(display), POLLIN ],
@@ -1262,7 +1262,7 @@ void _glfwPlatformGetCursorPos(_GLFWwindow* window, double* xpos, double* ypos) 
         *ypos = window.wl.cursorPosY;
 }
 
-static GLFWbool isPointerLocked(_GLFWwindow* window);
+private GLFWbool isPointerLocked(_GLFWwindow* window);
 
 void _glfwPlatformSetCursorPos(_GLFWwindow* window, double x, double y) {
     if (isPointerLocked(window))
@@ -1334,7 +1334,7 @@ void _glfwPlatformDestroyCursor(_GLFWcursor* cursor) {
         wl_buffer_destroy(cursor.wl.buffer);
 }
 
-static void relativePointerHandleRelativeMotion(void* data, zwp_relative_pointer_v1* pointer, uint timeHi, uint timeLo, wl_fixed_t dx, wl_fixed_t dy, wl_fixed_t dxUnaccel, wl_fixed_t dyUnaccel) {
+private void relativePointerHandleRelativeMotion(void* data, zwp_relative_pointer_v1* pointer, uint timeHi, uint timeLo, wl_fixed_t dx, wl_fixed_t dy, wl_fixed_t dxUnaccel, wl_fixed_t dyUnaccel) {
     _GLFWwindow* window = data;
     double xpos = window.virtualCursorPosX;
     double ypos = window.virtualCursorPosY;
@@ -1356,14 +1356,14 @@ static void relativePointerHandleRelativeMotion(void* data, zwp_relative_pointer
     _glfwInputCursorPos(window, xpos, ypos);
 }
 
-static const(zwp_relative_pointer_v1_listener) relativePointerListener = zwp_relative_pointer_v1_listener(
+private const(zwp_relative_pointer_v1_listener) relativePointerListener = zwp_relative_pointer_v1_listener(
     &relativePointerHandleRelativeMotion
 );
 
-static void lockedPointerHandleLocked(void* data, zwp_locked_pointer_v1* lockedPointer) {
+private void lockedPointerHandleLocked(void* data, zwp_locked_pointer_v1* lockedPointer) {
 }
 
-static void unlockPointer(_GLFWwindow* window) {
+private void unlockPointer(_GLFWwindow* window) {
     zwp_relative_pointer_v1* relativePointer = window.wl.pointerLock.relativePointer;
     zwp_locked_pointer_v1* lockedPointer = window.wl.pointerLock.lockedPointer;
 
@@ -1374,17 +1374,17 @@ static void unlockPointer(_GLFWwindow* window) {
     window.wl.pointerLock.lockedPointer = null;
 }
 
-static void lockPointer(_GLFWwindow* window);
+private void lockPointer(_GLFWwindow* window);
 
-static void lockedPointerHandleUnlocked(void* data, zwp_locked_pointer_v1* lockedPointer) {
+private void lockedPointerHandleUnlocked(void* data, zwp_locked_pointer_v1* lockedPointer) {
 }
 
-static const(zwp_locked_pointer_v1_listener) lockedPointerListener = zwp_locked_pointer_v1_listener(
+private const(zwp_locked_pointer_v1_listener) lockedPointerListener = zwp_locked_pointer_v1_listener(
     &lockedPointerHandleLocked,
     &lockedPointerHandleUnlocked
 );
 
-static void lockPointer(_GLFWwindow* window) {
+private void lockPointer(_GLFWwindow* window) {
     zwp_relative_pointer_v1* relativePointer;
     zwp_locked_pointer_v1* lockedPointer;
 
@@ -1421,7 +1421,7 @@ static void lockPointer(_GLFWwindow* window) {
                           null, 0, 0);
 }
 
-static GLFWbool isPointerLocked(_GLFWwindow* window) {
+private GLFWbool isPointerLocked(_GLFWwindow* window) {
     return window.wl.pointerLock.lockedPointer != null;
 }
 
@@ -1483,7 +1483,7 @@ void _glfwPlatformSetCursor(_GLFWwindow* window, _GLFWcursor* cursor) {
     }
 }
 
-static void dataSourceHandleTarget(void* data, wl_data_source* dataSource, const(char)* mimeType) {
+private void dataSourceHandleTarget(void* data, wl_data_source* dataSource, const(char)* mimeType) {
     if (_glfw.wl.dataSource != dataSource)
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
@@ -1492,7 +1492,7 @@ static void dataSourceHandleTarget(void* data, wl_data_source* dataSource, const
     }
 }
 
-static void dataSourceHandleSend(void* data, wl_data_source* dataSource, const(char)* mimeType, int fd) {
+private void dataSourceHandleSend(void* data, wl_data_source* dataSource, const(char)* mimeType, int fd) {
     const(char)* string = _glfw.wl.clipboardSendString;
     size_t len = _glfw.wl.clipboardSendSize;
     int ret;
@@ -1537,7 +1537,7 @@ static void dataSourceHandleSend(void* data, wl_data_source* dataSource, const(c
     close(fd);
 }
 
-static void dataSourceHandleCancelled(void* data, wl_data_source* dataSource) {
+private void dataSourceHandleCancelled(void* data, wl_data_source* dataSource) {
     wl_data_source_destroy(dataSource);
 
     if (_glfw.wl.dataSource != dataSource)
@@ -1550,7 +1550,7 @@ static void dataSourceHandleCancelled(void* data, wl_data_source* dataSource) {
     _glfw.wl.dataSource = null;
 }
 
-static const(wl_data_source_listener) dataSourceListener = wl_data_source_listener(
+private const(wl_data_source_listener) dataSourceListener = wl_data_source_listener(
     &dataSourceHandleTarget,
     &dataSourceHandleSend,
     &dataSourceHandleCancelled,
@@ -1595,7 +1595,7 @@ void _glfwPlatformSetClipboardString(const(char)* string) {
                                  _glfw.wl.serial);
 }
 
-static GLFWbool growClipboardString() {
+private GLFWbool growClipboardString() {
     char* clipboard = _glfw.wl.clipboardString;
 
     clipboard = realloc(clipboard, _glfw.wl.clipboardSize * 2);

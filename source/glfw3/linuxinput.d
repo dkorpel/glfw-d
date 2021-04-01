@@ -37,6 +37,121 @@ auto EVIOCSABS(T)(T abs) {return _IOW!input_absinfo('E', 0xc0 + (abs));}
 enum EVIOCGID = _IOR!input_id('E', 0x02);
 auto EVIOCGNAME(T)() {return _IOC!T(_IOC_READ, 'E', 0x06);}
 
+enum EVIOCSFF = _IOW!ff_effect('E', 0x80);
+enum EVIOCRMFF = _IOW!int('E', 0x81);
+enum EVIOCGEFFECTS = _IOR!int('E', 0x84);
+enum EVIOCGRAB = _IOW!int('E', 0x90);
+enum EVIOCREVOKE = _IOW!int('E', 0x91);
+
+// force feedback
+enum FF_STATUS_STOPPED =	0x00;
+enum FF_STATUS_PLAYING =	0x01;
+enum FF_STATUS_MAX =		0x01;
+
+struct ff_replay {
+	ushort length;
+	ushort delay;
+}
+
+struct ff_trigger {
+	ushort button;
+	ushort interval;
+}
+
+struct ff_envelope {
+	ushort attack_length;
+	ushort attack_level;
+	ushort fade_length;
+	ushort fade_level;
+}
+
+struct ff_constant_effect {
+	short level;
+	ff_envelope envelope;
+}
+
+struct ff_ramp_effect {
+	short start_level;
+	short end_level;
+	ff_envelope envelope;
+}
+
+struct ff_condition_effect {
+	ushort right_saturation;
+	ushort left_saturation;
+
+	short right_coeff;
+	short left_coeff;
+
+	ushort deadband;
+	short center;
+}
+
+struct ff_periodic_effect {
+	ushort waveform;
+	ushort period;
+	short magnitude;
+	short offset;
+	ushort phase;
+
+	ff_envelope envelope;
+
+	uint custom_len;
+	short* custom_data;
+}
+
+struct ff_rumble_effect {
+	ushort strong_magnitude;
+	ushort weak_magnitude;
+}
+
+struct ff_effect {
+	ushort type;
+	short id;
+	ushort direction;
+	ff_trigger trigger;
+	ff_replay replay;
+
+	union _U {
+		ff_constant_effect constant;
+		ff_ramp_effect ramp;
+		ff_periodic_effect periodic;
+		ff_condition_effect[2] condition;
+		ff_rumble_effect rumble;
+	}
+	_U u;
+}
+
+enum FF_RUMBLE =	0x50;
+enum FF_PERIODIC =	0x51;
+enum FF_CONSTANT =	0x52;
+enum FF_SPRING =	0x53;
+enum FF_FRICTION =	0x54;
+enum FF_DAMPER =	0x55;
+enum FF_INERTIA =	0x56;
+enum FF_RAMP =		0x57;
+
+enum FF_EFFECT_MIN =	FF_RUMBLE;
+enum FF_EFFECT_MAX =	FF_RAMP;
+
+enum FF_SQUARE =	0x58;
+enum FF_TRIANGLE =	0x59;
+enum FF_SINE =		0x5a;
+enum FF_SAW_UP =	0x5b;
+enum FF_SAW_DOWN =	0x5c;
+enum FF_CUSTOM =	0x5d;
+
+enum FF_WAVEFORM_MIN =	FF_SQUARE;
+enum FF_WAVEFORM_MAX =	FF_CUSTOM;
+
+enum FF_GAIN =		0x60;
+enum FF_AUTOCENTER =	0x61;
+
+enum FF_MAX_EFFECTS =	FF_GAIN;
+
+enum FF_MAX =		0x7f;
+enum FF_CNT =		(FF_MAX+1);
+
 //
 // input-event-codes.h
 //

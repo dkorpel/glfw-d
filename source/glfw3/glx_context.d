@@ -192,7 +192,7 @@ enum GLXBadProfileARB = 13;
 
 // Returns the specified attribute of the specified GLXFBConfig
 //
-static int getGLXFBConfigAttrib(GLXFBConfig fbconfig, int attrib) {
+private int getGLXFBConfigAttrib(GLXFBConfig fbconfig, int attrib) {
     int value;
     _glfw.glx.GetFBConfigAttrib(_glfw.x11.display, fbconfig, attrib, &value);
     return value;
@@ -200,7 +200,7 @@ static int getGLXFBConfigAttrib(GLXFBConfig fbconfig, int attrib) {
 
 // Return the GLXFBConfig most closely matching the specified hints
 //
-static GLFWbool chooseGLXFBConfig(const(_GLFWfbconfig)* desired, GLXFBConfig* result) {
+private GLFWbool chooseGLXFBConfig(const(_GLFWfbconfig)* desired, GLXFBConfig* result) {
     GLXFBConfig* nativeConfigs;
     _GLFWfbconfig* usableConfigs;
     const(_GLFWfbconfig)* closest;
@@ -293,7 +293,7 @@ static GLFWbool chooseGLXFBConfig(const(_GLFWfbconfig)* desired, GLXFBConfig* re
 
 // Create the OpenGL context using legacy API
 //
-static GLXContext createLegacyContextGLX(_GLFWwindow* window, GLXFBConfig fbconfig, GLXContext share) {
+private GLXContext createLegacyContextGLX(_GLFWwindow* window, GLXFBConfig fbconfig, GLXContext share) {
     return _glfw.glx.CreateNewContext(_glfw.x11.display,
                                fbconfig,
                                GLX_RGBA_TYPE,
@@ -301,7 +301,7 @@ static GLXContext createLegacyContextGLX(_GLFWwindow* window, GLXFBConfig fbconf
                                True);
 }
 
-static void makeContextCurrentGLX(_GLFWwindow* window) {
+private void makeContextCurrentGLX(_GLFWwindow* window) {
     if (window)
     {
         if (!_glfw.glx.MakeCurrent(_glfw.x11.display,
@@ -326,11 +326,11 @@ static void makeContextCurrentGLX(_GLFWwindow* window) {
     _glfwPlatformSetTls(&_glfw.contextSlot, window);
 }
 
-static void swapBuffersGLX(_GLFWwindow* window) {
+private void swapBuffersGLX(_GLFWwindow* window) {
     _glfw.glx.SwapBuffers(_glfw.x11.display, window.context.glx.window);
 }
 
-static void swapIntervalGLX(int interval) {
+private void swapIntervalGLX(int interval) {
     auto window = cast(_GLFWwindow*) _glfwPlatformGetTls(&_glfw.contextSlot);
 
     if (_glfw.glx.EXT_swap_control)
@@ -348,7 +348,7 @@ static void swapIntervalGLX(int interval) {
     }
 }
 
-static int extensionSupportedGLX(const(char)* extension) {
+private int extensionSupportedGLX(const(char)* extension) {
     const(char)* extensions = _glfw.glx.QueryExtensionsString(_glfw.x11.display, _glfw.x11.screen);
     if (extensions)
     {
@@ -359,7 +359,7 @@ static int extensionSupportedGLX(const(char)* extension) {
     return GLFW_FALSE;
 }
 
-static GLFWglproc getProcAddressGLX(const(char)* procname) {
+private GLFWglproc getProcAddressGLX(const(char)* procname) {
     if (_glfw.glx.GetProcAddress)
         return cast(typeof(return)) _glfw.glx.GetProcAddress(cast(const(GLubyte)*) procname);
     else if (_glfw.glx.GetProcAddressARB)
@@ -368,7 +368,7 @@ static GLFWglproc getProcAddressGLX(const(char)* procname) {
         return cast(typeof(return)) _glfw_dlsym(_glfw.glx.handle, procname);
 }
 
-static void destroyContextGLX(_GLFWwindow* window) {
+private void destroyContextGLX(_GLFWwindow* window) {
     if (window.context.glx.window)
     {
         _glfw.glx.DestroyWindow(_glfw.x11.display, window.context.glx.window);

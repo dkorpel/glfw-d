@@ -39,7 +39,7 @@ public import core.stdc.errno;
 public import core.stdc.math;
 
 
-static void outputHandleGeometry(void* data, wl_output* output, int x, int y, int physicalWidth, int physicalHeight, int subpixel, const(char)* make, const(char)* model, int transform) {
+private void outputHandleGeometry(void* data, wl_output* output, int x, int y, int physicalWidth, int physicalHeight, int subpixel, const(char)* make, const(char)* model, int transform) {
     auto monitor = cast(_GLFWmonitor*) data;
     char[1024] name;
 
@@ -52,7 +52,7 @@ static void outputHandleGeometry(void* data, wl_output* output, int x, int y, in
     monitor.name = _glfw_strdup(name.ptr);
 }
 
-static void outputHandleMode(void* data, wl_output* output, uint flags, int width, int height, int refresh) {
+private void outputHandleMode(void* data, wl_output* output, uint flags, int width, int height, int refresh) {
     auto monitor = cast(_GLFWmonitor*) data;
     GLFWvidmode mode;
 
@@ -72,19 +72,19 @@ static void outputHandleMode(void* data, wl_output* output, uint flags, int widt
         monitor.wl.currentMode = monitor.modeCount - 1;
 }
 
-static void outputHandleDone(void* data, wl_output* output) {
+private void outputHandleDone(void* data, wl_output* output) {
     auto monitor = cast(_GLFWmonitor*) data;
 
     _glfwInputMonitor(monitor, GLFW_CONNECTED, _GLFW_INSERT_LAST);
 }
 
-static void outputHandleScale(void* data, wl_output* output, int factor) {
+private void outputHandleScale(void* data, wl_output* output, int factor) {
     auto monitor = cast(_GLFWmonitor*) data;
 
     monitor.wl.scale = factor;
 }
 
-static const(wl_output_listener) outputListener = wl_output_listener(
+private const(wl_output_listener) outputListener = wl_output_listener(
     &outputHandleGeometry,
     &outputHandleMode,
     &outputHandleDone,

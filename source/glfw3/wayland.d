@@ -242,7 +242,7 @@ struct wl_shell_surface_listener {
 	void function(void* data, wl_shell_surface* wl_shell_surface) popup_done;
 }
 
-pragma(inline, true) static void* wl_registry_bind(wl_registry* wl_registry, uint name, const(wl_interface)* interface_, uint version_) {
+pragma(inline, true) private void* wl_registry_bind(wl_registry* wl_registry, uint name, const(wl_interface)* interface_, uint version_) {
 	wl_proxy* id;
 	id = wl_proxy_marshal_constructor_versioned(cast(wl_proxy*) wl_registry,
 			 WL_REGISTRY_BIND, interface_, version_, name, interface_.name, version_, null);
@@ -250,12 +250,12 @@ pragma(inline, true) static void* wl_registry_bind(wl_registry* wl_registry, uin
 	return cast(void*) id;
 }
 
-pragma(inline, true) static int wl_output_add_listener(wl_output* wl_output, const(wl_output_listener)* listener, void* data) {
+pragma(inline, true) private int wl_output_add_listener(wl_output* wl_output, const(wl_output_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_output,
 				     cast(void function()) listener, data);
 }
 
-pragma(inline, true) static void wl_output_destroy(wl_output* wl_output) {
+pragma(inline, true) private void wl_output_destroy(wl_output* wl_output) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_output);
 }
 
@@ -304,7 +304,7 @@ struct wl_display_listener {
 	void function(void* data, wl_display* wl_display, void* object_id, uint code, const(char)* message) error;
 	void function(void* data, wl_display* wl_display, uint id) delete_id;
 }
-pragma(inline, true) static int wl_display_add_listener(wl_display* wl_display, const(wl_display_listener)* listener, void* data) {
+pragma(inline, true) private int wl_display_add_listener(wl_display* wl_display, const(wl_display_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_display,
 				     cast(void function()) listener, data);
 }
@@ -315,13 +315,13 @@ enum WL_DISPLAY_DELETE_ID_SINCE_VERSION = 1;
 enum WL_DISPLAY_SYNC_SINCE_VERSION = 1;
 enum WL_DISPLAY_GET_REGISTRY_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_display_set_user_data(wl_display* wl_display, void* user_data) {
+pragma(inline, true) private void wl_display_set_user_data(wl_display* wl_display, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_display, user_data);
 }
-pragma(inline, true) static void* wl_display_get_user_data(wl_display* wl_display) {
+pragma(inline, true) private void* wl_display_get_user_data(wl_display* wl_display) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_display);
 }
-pragma(inline, true) static uint wl_display_get_version(wl_display* wl_display) {
+pragma(inline, true) private uint wl_display_get_version(wl_display* wl_display) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_display);
 }
 pragma(inline, true) static wl_callback* wl_display_sync(wl_display* wl_display) {
@@ -336,7 +336,7 @@ pragma(inline, true) static wl_registry* wl_display_get_registry(wl_display* wl_
 			 WL_DISPLAY_GET_REGISTRY, &wl_registry_interface, null);
 	return cast(wl_registry*) registry;
 }
-pragma(inline, true) static int wl_registry_add_listener(wl_registry* wl_registry, const(wl_registry_listener)* listener, void* data) {
+pragma(inline, true) private int wl_registry_add_listener(wl_registry* wl_registry, const(wl_registry_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_registry,
 				     cast(void function()) listener, data);
 }
@@ -345,38 +345,38 @@ enum WL_REGISTRY_GLOBAL_SINCE_VERSION = 1;
 enum WL_REGISTRY_GLOBAL_REMOVE_SINCE_VERSION = 1;
 enum WL_REGISTRY_BIND_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_registry_set_user_data(wl_registry* wl_registry, void* user_data) {
+pragma(inline, true) private void wl_registry_set_user_data(wl_registry* wl_registry, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_registry, user_data);
 }
-pragma(inline, true) static void* wl_registry_get_user_data(wl_registry* wl_registry) {
+pragma(inline, true) private void* wl_registry_get_user_data(wl_registry* wl_registry) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_registry);
 }
-pragma(inline, true) static uint wl_registry_get_version(wl_registry* wl_registry) {
+pragma(inline, true) private uint wl_registry_get_version(wl_registry* wl_registry) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_registry);
 }
 
-pragma(inline, true) static void wl_registry_destroy(wl_registry* wl_registry) {
+pragma(inline, true) private void wl_registry_destroy(wl_registry* wl_registry) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_registry);
 }
 struct wl_callback_listener {
 	void function(void* data, wl_callback* wl_callback, uint callback_data) done;
 }
-pragma(inline, true) static int wl_callback_add_listener(wl_callback* wl_callback, const(wl_callback_listener)* listener, void* data) {
+pragma(inline, true) private int wl_callback_add_listener(wl_callback* wl_callback, const(wl_callback_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_callback,
 				     cast(void function()) listener, data);
 }
 enum WL_CALLBACK_DONE_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_callback_set_user_data(wl_callback* wl_callback, void* user_data) {
+pragma(inline, true) private void wl_callback_set_user_data(wl_callback* wl_callback, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_callback, user_data);
 }
-pragma(inline, true) static void* wl_callback_get_user_data(wl_callback* wl_callback) {
+pragma(inline, true) private void* wl_callback_get_user_data(wl_callback* wl_callback) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_callback);
 }
-pragma(inline, true) static uint wl_callback_get_version(wl_callback* wl_callback) {
+pragma(inline, true) private uint wl_callback_get_version(wl_callback* wl_callback) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_callback);
 }
-pragma(inline, true) static void wl_callback_destroy(wl_callback* wl_callback) {
+pragma(inline, true) private void wl_callback_destroy(wl_callback* wl_callback) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_callback);
 }
 enum WL_COMPOSITOR_CREATE_SURFACE = 0;
@@ -384,16 +384,16 @@ enum WL_COMPOSITOR_CREATE_REGION = 1;
 enum WL_COMPOSITOR_CREATE_SURFACE_SINCE_VERSION = 1;
 enum WL_COMPOSITOR_CREATE_REGION_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_compositor_set_user_data(wl_compositor* wl_compositor, void* user_data) {
+pragma(inline, true) private void wl_compositor_set_user_data(wl_compositor* wl_compositor, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_compositor, user_data);
 }
-pragma(inline, true) static void* wl_compositor_get_user_data(wl_compositor* wl_compositor) {
+pragma(inline, true) private void* wl_compositor_get_user_data(wl_compositor* wl_compositor) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_compositor);
 }
-pragma(inline, true) static uint wl_compositor_get_version(wl_compositor* wl_compositor) {
+pragma(inline, true) private uint wl_compositor_get_version(wl_compositor* wl_compositor) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_compositor);
 }
-pragma(inline, true) static void wl_compositor_destroy(wl_compositor* wl_compositor) {
+pragma(inline, true) private void wl_compositor_destroy(wl_compositor* wl_compositor) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_compositor);
 }
 pragma(inline, true) static wl_surface* wl_compositor_create_surface(wl_compositor* wl_compositor) {
@@ -415,13 +415,13 @@ enum WL_SHM_POOL_CREATE_BUFFER_SINCE_VERSION = 1;
 enum WL_SHM_POOL_DESTROY_SINCE_VERSION = 1;
 enum WL_SHM_POOL_RESIZE_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_shm_pool_set_user_data(wl_shm_pool* wl_shm_pool, void* user_data) {
+pragma(inline, true) private void wl_shm_pool_set_user_data(wl_shm_pool* wl_shm_pool, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_shm_pool, user_data);
 }
-pragma(inline, true) static void* wl_shm_pool_get_user_data(wl_shm_pool* wl_shm_pool) {
+pragma(inline, true) private void* wl_shm_pool_get_user_data(wl_shm_pool* wl_shm_pool) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_shm_pool);
 }
-pragma(inline, true) static uint wl_shm_pool_get_version(wl_shm_pool* wl_shm_pool) {
+pragma(inline, true) private uint wl_shm_pool_get_version(wl_shm_pool* wl_shm_pool) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_shm_pool);
 }
 pragma(inline, true) static wl_buffer* wl_shm_pool_create_buffer(wl_shm_pool* wl_shm_pool, int offset, int width, int height, int stride, uint format) {
@@ -430,12 +430,12 @@ pragma(inline, true) static wl_buffer* wl_shm_pool_create_buffer(wl_shm_pool* wl
 			 WL_SHM_POOL_CREATE_BUFFER, &wl_buffer_interface, null, offset, width, height, stride, format);
 	return cast(wl_buffer*) id;
 }
-pragma(inline, true) static void wl_shm_pool_destroy(wl_shm_pool* wl_shm_pool) {
+pragma(inline, true) private void wl_shm_pool_destroy(wl_shm_pool* wl_shm_pool) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shm_pool,
 			 WL_SHM_POOL_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_shm_pool);
 }
-pragma(inline, true) static void wl_shm_pool_resize(wl_shm_pool* wl_shm_pool, int size) {
+pragma(inline, true) private void wl_shm_pool_resize(wl_shm_pool* wl_shm_pool, int size) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shm_pool, WL_SHM_POOL_RESIZE, size);
 }
 enum wl_shm_error {
@@ -506,23 +506,23 @@ enum wl_shm_format {
 struct wl_shm_listener {
 	void function(void* data, wl_shm* wl_shm, uint format) format;
 };
-pragma(inline, true) static int wl_shm_add_listener(wl_shm* wl_shm, const(wl_shm_listener)* listener, void* data) {
+pragma(inline, true) private int wl_shm_add_listener(wl_shm* wl_shm, const(wl_shm_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_shm, cast(void function()) listener, data);
 }
 enum WL_SHM_CREATE_POOL = 0;
 enum WL_SHM_FORMAT_SINCE_VERSION = 1;
 enum WL_SHM_CREATE_POOL_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_shm_set_user_data(wl_shm* wl_shm, void* user_data) {
+pragma(inline, true) private void wl_shm_set_user_data(wl_shm* wl_shm, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_shm, user_data);
 }
-pragma(inline, true) static void* wl_shm_get_user_data(wl_shm* wl_shm) {
+pragma(inline, true) private void* wl_shm_get_user_data(wl_shm* wl_shm) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_shm);
 }
-pragma(inline, true) static uint wl_shm_get_version(wl_shm* wl_shm) {
+pragma(inline, true) private uint wl_shm_get_version(wl_shm* wl_shm) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_shm);
 }
-pragma(inline, true) static void wl_shm_destroy(wl_shm* wl_shm) {
+pragma(inline, true) private void wl_shm_destroy(wl_shm* wl_shm) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_shm);
 }
 pragma(inline, true) static wl_shm_pool* wl_shm_create_pool(wl_shm* wl_shm, int fd, int size) {
@@ -534,23 +534,23 @@ pragma(inline, true) static wl_shm_pool* wl_shm_create_pool(wl_shm* wl_shm, int 
 struct wl_buffer_listener {
 	void function(void* data, wl_buffer* wl_buffer) release;
 };
-pragma(inline, true) static int wl_buffer_add_listener(wl_buffer* wl_buffer, const(wl_buffer_listener)* listener, void* data) {
+pragma(inline, true) private int wl_buffer_add_listener(wl_buffer* wl_buffer, const(wl_buffer_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_buffer,
 				     cast(void function()) listener, data);
 }
 enum WL_BUFFER_DESTROY = 0;
 enum WL_BUFFER_RELEASE_SINCE_VERSION = 1;
 enum WL_BUFFER_DESTROY_SINCE_VERSION = 1;
-pragma(inline, true) static void wl_buffer_set_user_data(wl_buffer* wl_buffer, void* user_data) {
+pragma(inline, true) private void wl_buffer_set_user_data(wl_buffer* wl_buffer, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_buffer, user_data);
 }
-pragma(inline, true) static void* wl_buffer_get_user_data(wl_buffer* wl_buffer) {
+pragma(inline, true) private void* wl_buffer_get_user_data(wl_buffer* wl_buffer) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_buffer);
 }
-pragma(inline, true) static uint wl_buffer_get_version(wl_buffer* wl_buffer) {
+pragma(inline, true) private uint wl_buffer_get_version(wl_buffer* wl_buffer) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_buffer);
 }
-pragma(inline, true) static void wl_buffer_destroy(wl_buffer* wl_buffer) {
+pragma(inline, true) private void wl_buffer_destroy(wl_buffer* wl_buffer) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_buffer,
 			 WL_BUFFER_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_buffer);
@@ -561,7 +561,7 @@ enum wl_data_offer_error {
 	WL_DATA_OFFER_ERROR_INVALID_ACTION = 2,
 	WL_DATA_OFFER_ERROR_INVALID_OFFER = 3,
 }
-pragma(inline, true) static int wl_data_offer_add_listener(wl_data_offer* wl_data_offer, const(wl_data_offer_listener)* listener, void* data) {
+pragma(inline, true) private int wl_data_offer_add_listener(wl_data_offer* wl_data_offer, const(wl_data_offer_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_data_offer,
 				     cast(void function()) listener, data);
 }
@@ -578,33 +578,33 @@ enum WL_DATA_OFFER_RECEIVE_SINCE_VERSION = 1;
 enum WL_DATA_OFFER_DESTROY_SINCE_VERSION = 1;
 enum WL_DATA_OFFER_FINISH_SINCE_VERSION = 3;
 enum WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION = 3;
-pragma(inline, true) static void wl_data_offer_set_user_data(wl_data_offer* wl_data_offer, void* user_data) {
+pragma(inline, true) private void wl_data_offer_set_user_data(wl_data_offer* wl_data_offer, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_data_offer, user_data);
 }
-pragma(inline, true) static void* wl_data_offer_get_user_data(wl_data_offer* wl_data_offer) {
+pragma(inline, true) private void* wl_data_offer_get_user_data(wl_data_offer* wl_data_offer) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_data_offer);
 }
-pragma(inline, true) static uint wl_data_offer_get_version(wl_data_offer* wl_data_offer) {
+pragma(inline, true) private uint wl_data_offer_get_version(wl_data_offer* wl_data_offer) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_data_offer);
 }
-pragma(inline, true) static void wl_data_offer_accept(wl_data_offer* wl_data_offer, uint serial, const(char)* mime_type) {
+pragma(inline, true) private void wl_data_offer_accept(wl_data_offer* wl_data_offer, uint serial, const(char)* mime_type) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_offer,
 			 WL_DATA_OFFER_ACCEPT, serial, mime_type);
 }
-pragma(inline, true) static void wl_data_offer_receive(wl_data_offer* wl_data_offer, const(char)* mime_type, int fd) {
+pragma(inline, true) private void wl_data_offer_receive(wl_data_offer* wl_data_offer, const(char)* mime_type, int fd) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_offer,
 			 WL_DATA_OFFER_RECEIVE, mime_type, fd);
 }
-pragma(inline, true) static void wl_data_offer_destroy(wl_data_offer* wl_data_offer) {
+pragma(inline, true) private void wl_data_offer_destroy(wl_data_offer* wl_data_offer) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_offer,
 			 WL_DATA_OFFER_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_data_offer);
 }
-pragma(inline, true) static void wl_data_offer_finish(wl_data_offer* wl_data_offer) {
+pragma(inline, true) private void wl_data_offer_finish(wl_data_offer* wl_data_offer) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_offer,
 			 WL_DATA_OFFER_FINISH);
 }
-pragma(inline, true) static void wl_data_offer_set_actions(wl_data_offer* wl_data_offer, uint dnd_actions, uint preferred_action) {
+pragma(inline, true) private void wl_data_offer_set_actions(wl_data_offer* wl_data_offer, uint dnd_actions, uint preferred_action) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_offer,
 			 WL_DATA_OFFER_SET_ACTIONS, dnd_actions, preferred_action);
 }
@@ -612,7 +612,7 @@ enum wl_data_source_error {
 	WL_DATA_SOURCE_ERROR_INVALID_ACTION_MASK = 0,
 	WL_DATA_SOURCE_ERROR_INVALID_SOURCE = 1,
 }
-pragma(inline, true) static int wl_data_source_add_listener(wl_data_source* wl_data_source, const(wl_data_source_listener)* listener, void* data) {
+pragma(inline, true) private int wl_data_source_add_listener(wl_data_source* wl_data_source, const(wl_data_source_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_data_source,
 				     cast(void function()) listener, data);
 }
@@ -628,32 +628,32 @@ enum WL_DATA_SOURCE_ACTION_SINCE_VERSION = 3;
 enum WL_DATA_SOURCE_OFFER_SINCE_VERSION = 1;
 enum WL_DATA_SOURCE_DESTROY_SINCE_VERSION = 1;
 enum WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION = 3;
-pragma(inline, true) static void wl_data_source_set_user_data(wl_data_source* wl_data_source, void* user_data) {
+pragma(inline, true) private void wl_data_source_set_user_data(wl_data_source* wl_data_source, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_data_source, user_data);
 }
-pragma(inline, true) static void* wl_data_source_get_user_data(wl_data_source* wl_data_source) {
+pragma(inline, true) private void* wl_data_source_get_user_data(wl_data_source* wl_data_source) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_data_source);
 }
-pragma(inline, true) static uint wl_data_source_get_version(wl_data_source* wl_data_source) {
+pragma(inline, true) private uint wl_data_source_get_version(wl_data_source* wl_data_source) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_data_source);
 }
-pragma(inline, true) static void wl_data_source_offer(wl_data_source* wl_data_source, const(char)* mime_type) {
+pragma(inline, true) private void wl_data_source_offer(wl_data_source* wl_data_source, const(char)* mime_type) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_source,
 			 WL_DATA_SOURCE_OFFER, mime_type);
 }
-pragma(inline, true) static void wl_data_source_destroy(wl_data_source* wl_data_source) {
+pragma(inline, true) private void wl_data_source_destroy(wl_data_source* wl_data_source) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_source,
 			 WL_DATA_SOURCE_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_data_source);
 }
-pragma(inline, true) static void wl_data_source_set_actions(wl_data_source* wl_data_source, uint dnd_actions) {
+pragma(inline, true) private void wl_data_source_set_actions(wl_data_source* wl_data_source, uint dnd_actions) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_source,
 			 WL_DATA_SOURCE_SET_ACTIONS, dnd_actions);
 }
 enum wl_data_device_error {
 	WL_DATA_DEVICE_ERROR_ROLE = 0,
 }
-pragma(inline, true) static int wl_data_device_add_listener(wl_data_device* wl_data_device, const(wl_data_device_listener)* listener, void* data) {
+pragma(inline, true) private int wl_data_device_add_listener(wl_data_device* wl_data_device, const(wl_data_device_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_data_device,
 				     cast(void function()) listener, data);
 }
@@ -669,27 +669,27 @@ enum WL_DATA_DEVICE_SELECTION_SINCE_VERSION = 1;
 enum WL_DATA_DEVICE_START_DRAG_SINCE_VERSION = 1;
 enum WL_DATA_DEVICE_SET_SELECTION_SINCE_VERSION = 1;
 enum WL_DATA_DEVICE_RELEASE_SINCE_VERSION = 2;
-pragma(inline, true) static void wl_data_device_set_user_data(wl_data_device* wl_data_device, void* user_data) {
+pragma(inline, true) private void wl_data_device_set_user_data(wl_data_device* wl_data_device, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_data_device, user_data);
 }
-pragma(inline, true) static void* wl_data_device_get_user_data(wl_data_device* wl_data_device) {
+pragma(inline, true) private void* wl_data_device_get_user_data(wl_data_device* wl_data_device) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_data_device);
 }
-pragma(inline, true) static uint wl_data_device_get_version(wl_data_device* wl_data_device) {
+pragma(inline, true) private uint wl_data_device_get_version(wl_data_device* wl_data_device) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_data_device);
 }
-pragma(inline, true) static void wl_data_device_destroy(wl_data_device* wl_data_device) {
+pragma(inline, true) private void wl_data_device_destroy(wl_data_device* wl_data_device) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_data_device);
 }
-pragma(inline, true) static void wl_data_device_start_drag(wl_data_device* wl_data_device, wl_data_source* source, wl_surface* origin, wl_surface* icon, uint serial) {
+pragma(inline, true) private void wl_data_device_start_drag(wl_data_device* wl_data_device, wl_data_source* source, wl_surface* origin, wl_surface* icon, uint serial) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_device,
 			 WL_DATA_DEVICE_START_DRAG, source, origin, icon, serial);
 }
-pragma(inline, true) static void wl_data_device_set_selection(wl_data_device* wl_data_device, wl_data_source* source, uint serial) {
+pragma(inline, true) private void wl_data_device_set_selection(wl_data_device* wl_data_device, wl_data_source* source, uint serial) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_device,
 			 WL_DATA_DEVICE_SET_SELECTION, source, serial);
 }
-pragma(inline, true) static void wl_data_device_release(wl_data_device* wl_data_device) {
+pragma(inline, true) private void wl_data_device_release(wl_data_device* wl_data_device) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_data_device,
 			 WL_DATA_DEVICE_RELEASE);
 	wl_proxy_destroy(cast(wl_proxy*) wl_data_device);
@@ -704,16 +704,16 @@ enum WL_DATA_DEVICE_MANAGER_CREATE_DATA_SOURCE = 0;
 enum WL_DATA_DEVICE_MANAGER_GET_DATA_DEVICE = 1;
 enum WL_DATA_DEVICE_MANAGER_CREATE_DATA_SOURCE_SINCE_VERSION = 1;
 enum WL_DATA_DEVICE_MANAGER_GET_DATA_DEVICE_SINCE_VERSION = 1;
-pragma(inline, true) static void wl_data_device_manager_set_user_data(wl_data_device_manager* wl_data_device_manager, void* user_data) {
+pragma(inline, true) private void wl_data_device_manager_set_user_data(wl_data_device_manager* wl_data_device_manager, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_data_device_manager, user_data);
 }
-pragma(inline, true) static void* wl_data_device_manager_get_user_data(wl_data_device_manager* wl_data_device_manager) {
+pragma(inline, true) private void* wl_data_device_manager_get_user_data(wl_data_device_manager* wl_data_device_manager) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_data_device_manager);
 }
-pragma(inline, true) static uint wl_data_device_manager_get_version(wl_data_device_manager* wl_data_device_manager) {
+pragma(inline, true) private uint wl_data_device_manager_get_version(wl_data_device_manager* wl_data_device_manager) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_data_device_manager);
 }
-pragma(inline, true) static void wl_data_device_manager_destroy(wl_data_device_manager* wl_data_device_manager) {
+pragma(inline, true) private void wl_data_device_manager_destroy(wl_data_device_manager* wl_data_device_manager) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_data_device_manager);
 }
 pragma(inline, true) static wl_data_source* wl_data_device_manager_create_data_source(wl_data_device_manager* wl_data_device_manager) {
@@ -733,16 +733,16 @@ enum wl_shell_error {
 }
 enum WL_SHELL_GET_SHELL_SURFACE = 0;
 enum WL_SHELL_GET_SHELL_SURFACE_SINCE_VERSION = 1;
-pragma(inline, true) static void wl_shell_set_user_data(wl_shell* wl_shell, void* user_data) {
+pragma(inline, true) private void wl_shell_set_user_data(wl_shell* wl_shell, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_shell, user_data);
 }
-pragma(inline, true) static void* wl_shell_get_user_data(wl_shell* wl_shell) {
+pragma(inline, true) private void* wl_shell_get_user_data(wl_shell* wl_shell) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_shell);
 }
-pragma(inline, true) static uint wl_shell_get_version(wl_shell* wl_shell) {
+pragma(inline, true) private uint wl_shell_get_version(wl_shell* wl_shell) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_shell);
 }
-pragma(inline, true) static void wl_shell_destroy(wl_shell* wl_shell) {
+pragma(inline, true) private void wl_shell_destroy(wl_shell* wl_shell) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_shell);
 }
 pragma(inline, true) static wl_shell_surface* wl_shell_get_shell_surface(wl_shell* wl_shell, wl_surface* surface) {
@@ -760,7 +760,7 @@ enum wl_shell_surface_fullscreen_method {
 	WL_SHELL_SURFACE_FULLSCREEN_METHOD_DRIVER = 2,
 	WL_SHELL_SURFACE_FULLSCREEN_METHOD_FILL = 3,
 }
-pragma(inline, true) static int wl_shell_surface_add_listener(wl_shell_surface* wl_shell_surface, const(wl_shell_surface_listener)* listener, void* data) {
+pragma(inline, true) private int wl_shell_surface_add_listener(wl_shell_surface* wl_shell_surface, const(wl_shell_surface_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_shell_surface, cast(void function()) listener, data);
 }
 enum WL_SHELL_SURFACE_PONG = 0;
@@ -787,52 +787,52 @@ enum WL_SHELL_SURFACE_SET_MAXIMIZED_SINCE_VERSION = 1;
 enum WL_SHELL_SURFACE_SET_TITLE_SINCE_VERSION = 1;
 enum WL_SHELL_SURFACE_SET_CLASS_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_shell_surface_set_user_data(wl_shell_surface* wl_shell_surface, void* user_data) {
+pragma(inline, true) private void wl_shell_surface_set_user_data(wl_shell_surface* wl_shell_surface, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_shell_surface, user_data);
 }
-pragma(inline, true) static void* wl_shell_surface_get_user_data(wl_shell_surface* wl_shell_surface) {
+pragma(inline, true) private void* wl_shell_surface_get_user_data(wl_shell_surface* wl_shell_surface) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_shell_surface);
 }
-pragma(inline, true) static uint wl_shell_surface_get_version(wl_shell_surface* wl_shell_surface) {
+pragma(inline, true) private uint wl_shell_surface_get_version(wl_shell_surface* wl_shell_surface) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_shell_surface);
 }
-pragma(inline, true) static void wl_shell_surface_destroy(wl_shell_surface* wl_shell_surface) {
+pragma(inline, true) private void wl_shell_surface_destroy(wl_shell_surface* wl_shell_surface) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_shell_surface);
 }
-pragma(inline, true) static void wl_shell_surface_pong(wl_shell_surface* wl_shell_surface, uint serial) {
+pragma(inline, true) private void wl_shell_surface_pong(wl_shell_surface* wl_shell_surface, uint serial) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_PONG, serial);
 }
-pragma(inline, true) static void wl_shell_surface_move(wl_shell_surface* wl_shell_surface, wl_seat* seat, uint serial) {
+pragma(inline, true) private void wl_shell_surface_move(wl_shell_surface* wl_shell_surface, wl_seat* seat, uint serial) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_MOVE, seat, serial);
 }
-pragma(inline, true) static void wl_shell_surface_resize(wl_shell_surface* wl_shell_surface, wl_seat* seat, uint serial, uint edges) {
+pragma(inline, true) private void wl_shell_surface_resize(wl_shell_surface* wl_shell_surface, wl_seat* seat, uint serial, uint edges) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_RESIZE, seat, serial, edges);
 }
-pragma(inline, true) static void wl_shell_surface_set_toplevel(wl_shell_surface* wl_shell_surface) {
+pragma(inline, true) private void wl_shell_surface_set_toplevel(wl_shell_surface* wl_shell_surface) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface, WL_SHELL_SURFACE_SET_TOPLEVEL);
 }
-pragma(inline, true) static void wl_shell_surface_set_transient(wl_shell_surface* wl_shell_surface, wl_surface* parent, int x, int y, uint flags) {
+pragma(inline, true) private void wl_shell_surface_set_transient(wl_shell_surface* wl_shell_surface, wl_surface* parent, int x, int y, uint flags) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_SET_TRANSIENT, parent, x, y, flags);
 }
-pragma(inline, true) static void wl_shell_surface_set_fullscreen(wl_shell_surface* wl_shell_surface, uint method, uint framerate, wl_output* output) {
+pragma(inline, true) private void wl_shell_surface_set_fullscreen(wl_shell_surface* wl_shell_surface, uint method, uint framerate, wl_output* output) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_SET_FULLSCREEN, method, framerate, output);
 }
-pragma(inline, true) static void wl_shell_surface_set_popup(wl_shell_surface* wl_shell_surface, wl_seat* seat, uint serial, wl_surface* parent, int x, int y, uint flags) {
+pragma(inline, true) private void wl_shell_surface_set_popup(wl_shell_surface* wl_shell_surface, wl_seat* seat, uint serial, wl_surface* parent, int x, int y, uint flags) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_SET_POPUP, seat, serial, parent, x, y, flags);
 }
-pragma(inline, true) static void wl_shell_surface_set_maximized(wl_shell_surface* wl_shell_surface, wl_output* output) {
+pragma(inline, true) private void wl_shell_surface_set_maximized(wl_shell_surface* wl_shell_surface, wl_output* output) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface, WL_SHELL_SURFACE_SET_MAXIMIZED, output);
 }
-pragma(inline, true) static void wl_shell_surface_set_title(wl_shell_surface* wl_shell_surface, const(char)* title) {
+pragma(inline, true) private void wl_shell_surface_set_title(wl_shell_surface* wl_shell_surface, const(char)* title) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface, WL_SHELL_SURFACE_SET_TITLE, title);
 }
-pragma(inline, true) static void wl_shell_surface_set_class(wl_shell_surface* wl_shell_surface, const(char)* class_) {
+pragma(inline, true) private void wl_shell_surface_set_class(wl_shell_surface* wl_shell_surface, const(char)* class_) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_shell_surface,
 			 WL_SHELL_SURFACE_SET_CLASS, class_);
 }
@@ -840,7 +840,7 @@ enum wl_surface_error {
 	WL_SURFACE_ERROR_INVALID_SCALE = 0,
 	WL_SURFACE_ERROR_INVALID_TRANSFORM = 1,
 }
-pragma(inline, true) static int wl_surface_add_listener(wl_surface* wl_surface, const(wl_surface_listener)* listener, void* data) {
+pragma(inline, true) private int wl_surface_add_listener(wl_surface* wl_surface, const(wl_surface_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_surface, cast(void function()) listener, data);
 }
 enum WL_SURFACE_DESTROY = 0;
@@ -866,25 +866,25 @@ enum WL_SURFACE_SET_BUFFER_TRANSFORM_SINCE_VERSION = 2;
 enum WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION = 3;
 enum WL_SURFACE_DAMAGE_BUFFER_SINCE_VERSION = 4;
 
-pragma(inline, true) static void wl_surface_set_user_data(wl_surface* wl_surface, void* user_data) {
+pragma(inline, true) private void wl_surface_set_user_data(wl_surface* wl_surface, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_surface, user_data);
 }
-pragma(inline, true) static void* wl_surface_get_user_data(wl_surface* wl_surface) {
+pragma(inline, true) private void* wl_surface_get_user_data(wl_surface* wl_surface) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_surface);
 }
-pragma(inline, true) static uint wl_surface_get_version(wl_surface* wl_surface) {
+pragma(inline, true) private uint wl_surface_get_version(wl_surface* wl_surface) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_surface);
 }
-pragma(inline, true) static void wl_surface_destroy(wl_surface* wl_surface) {
+pragma(inline, true) private void wl_surface_destroy(wl_surface* wl_surface) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_surface);
 }
-pragma(inline, true) static void wl_surface_attach(wl_surface* wl_surface, wl_buffer* buffer, int x, int y) {
+pragma(inline, true) private void wl_surface_attach(wl_surface* wl_surface, wl_buffer* buffer, int x, int y) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_ATTACH, buffer, x, y);
 }
-pragma(inline, true) static void wl_surface_damage(wl_surface* wl_surface, int x, int y, int width, int height) {
+pragma(inline, true) private void wl_surface_damage(wl_surface* wl_surface, int x, int y, int width, int height) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_DAMAGE, x, y, width, height);
 }
@@ -894,31 +894,31 @@ pragma(inline, true) static wl_callback* wl_surface_frame(wl_surface* wl_surface
 			 WL_SURFACE_FRAME, &wl_callback_interface, null);
 	return cast(wl_callback*) callback;
 }
-pragma(inline, true) static void wl_surface_set_opaque_region(wl_surface* wl_surface, wl_region* region) {
+pragma(inline, true) private void wl_surface_set_opaque_region(wl_surface* wl_surface, wl_region* region) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_SET_OPAQUE_REGION, region);
 }
-pragma(inline, true) static void wl_surface_set_input_region(wl_surface* wl_surface, wl_region* region) {
+pragma(inline, true) private void wl_surface_set_input_region(wl_surface* wl_surface, wl_region* region) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_SET_INPUT_REGION, region);
 }
-pragma(inline, true) static void wl_surface_commit(wl_surface* wl_surface) {
+pragma(inline, true) private void wl_surface_commit(wl_surface* wl_surface) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_COMMIT);
 }
-pragma(inline, true) static void wl_surface_set_buffer_transform(wl_surface* wl_surface, int transform) {
+pragma(inline, true) private void wl_surface_set_buffer_transform(wl_surface* wl_surface, int transform) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_SET_BUFFER_TRANSFORM, transform);
 }
-pragma(inline, true) static void wl_surface_set_buffer_scale(wl_surface* wl_surface, int scale) {
+pragma(inline, true) private void wl_surface_set_buffer_scale(wl_surface* wl_surface, int scale) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_SET_BUFFER_SCALE, scale);
 }
-pragma(inline, true) static void wl_surface_damage_buffer(wl_surface* wl_surface, int x, int y, int width, int height) {
+pragma(inline, true) private void wl_surface_damage_buffer(wl_surface* wl_surface, int x, int y, int width, int height) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_surface,
 			 WL_SURFACE_DAMAGE_BUFFER, x, y, width, height);
 }
-pragma(inline, true) static int wl_seat_add_listener(wl_seat* wl_seat, const(wl_seat_listener)* listener, void* data) {
+pragma(inline, true) private int wl_seat_add_listener(wl_seat* wl_seat, const(wl_seat_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_seat,
 				     cast(void function()) listener, data);
 }
@@ -933,17 +933,17 @@ enum WL_SEAT_GET_KEYBOARD_SINCE_VERSION = 1;
 enum WL_SEAT_GET_TOUCH_SINCE_VERSION = 1;
 enum WL_SEAT_RELEASE_SINCE_VERSION = 5;
 
-pragma(inline, true) static void wl_seat_set_user_data(wl_seat* wl_seat, void* user_data) {
+pragma(inline, true) private void wl_seat_set_user_data(wl_seat* wl_seat, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_seat, user_data);
 }
-pragma(inline, true) static void* wl_seat_get_user_data(wl_seat* wl_seat) {
+pragma(inline, true) private void* wl_seat_get_user_data(wl_seat* wl_seat) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_seat);
 }
-pragma(inline, true) static uint wl_seat_get_version(wl_seat* wl_seat) {
+pragma(inline, true) private uint wl_seat_get_version(wl_seat* wl_seat) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_seat);
 }
 
-pragma(inline, true) static void wl_seat_destroy(wl_seat* wl_seat) {
+pragma(inline, true) private void wl_seat_destroy(wl_seat* wl_seat) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_seat);
 }
 pragma(inline, true) static wl_pointer* wl_seat_get_pointer(wl_seat* wl_seat) {
@@ -963,7 +963,7 @@ pragma(inline, true) static wl_touch* wl_seat_get_touch(wl_seat* wl_seat) {
 	id = wl_proxy_marshal_constructor(cast(wl_proxy*) wl_seat, WL_SEAT_GET_TOUCH, &wl_touch_interface, null);
 	return cast(wl_touch*) id;
 }
-pragma(inline, true) static void wl_seat_release(wl_seat* wl_seat) {
+pragma(inline, true) private void wl_seat_release(wl_seat* wl_seat) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_seat, WL_SEAT_RELEASE);
 	wl_proxy_destroy(cast(wl_proxy*) wl_seat);
 }
@@ -975,7 +975,7 @@ enum wl_pointer_axis_source {
 	WL_POINTER_AXIS_SOURCE_FINGER = 1,
 	WL_POINTER_AXIS_SOURCE_CONTINUOUS = 2,
 }
-pragma(inline, true) static int wl_pointer_add_listener(wl_pointer* wl_pointer, const(wl_pointer_listener)* listener, void* data) {
+pragma(inline, true) private int wl_pointer_add_listener(wl_pointer* wl_pointer, const(wl_pointer_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_pointer, cast(void function()) listener, data);
 }
 enum WL_POINTER_SET_CURSOR = 0;
@@ -992,28 +992,28 @@ enum WL_POINTER_AXIS_DISCRETE_SINCE_VERSION = 5;
 enum WL_POINTER_SET_CURSOR_SINCE_VERSION = 1;
 enum WL_POINTER_RELEASE_SINCE_VERSION = 3;
 
-pragma(inline, true) static void wl_pointer_set_user_data(wl_pointer* wl_pointer, void* user_data) {
+pragma(inline, true) private void wl_pointer_set_user_data(wl_pointer* wl_pointer, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_pointer, user_data);
 }
-pragma(inline, true) static void* wl_pointer_get_user_data(wl_pointer* wl_pointer) {
+pragma(inline, true) private void* wl_pointer_get_user_data(wl_pointer* wl_pointer) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_pointer);
 }
-pragma(inline, true) static uint wl_pointer_get_version(wl_pointer* wl_pointer) {
+pragma(inline, true) private uint wl_pointer_get_version(wl_pointer* wl_pointer) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_pointer);
 }
-pragma(inline, true) static void wl_pointer_destroy(wl_pointer* wl_pointer) {
+pragma(inline, true) private void wl_pointer_destroy(wl_pointer* wl_pointer) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_pointer);
 }
-pragma(inline, true) static void wl_pointer_set_cursor(wl_pointer* wl_pointer, uint serial, wl_surface* surface, int hotspot_x, int hotspot_y) {
+pragma(inline, true) private void wl_pointer_set_cursor(wl_pointer* wl_pointer, uint serial, wl_surface* surface, int hotspot_x, int hotspot_y) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_pointer,
 			 WL_POINTER_SET_CURSOR, serial, surface, hotspot_x, hotspot_y);
 }
-pragma(inline, true) static void wl_pointer_release(wl_pointer* wl_pointer) {
+pragma(inline, true) private void wl_pointer_release(wl_pointer* wl_pointer) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_pointer,
 			 WL_POINTER_RELEASE);
 	wl_proxy_destroy(cast(wl_proxy*) wl_pointer);
 }
-pragma(inline, true) static int wl_keyboard_add_listener(wl_keyboard* wl_keyboard, const(wl_keyboard_listener)* listener, void* data) {
+pragma(inline, true) private int wl_keyboard_add_listener(wl_keyboard* wl_keyboard, const(wl_keyboard_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_keyboard,
 				     cast(void function()) listener, data);
 }
@@ -1026,21 +1026,21 @@ enum WL_KEYBOARD_MODIFIERS_SINCE_VERSION = 1;
 enum WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION = 4;
 enum WL_KEYBOARD_RELEASE_SINCE_VERSION = 3;
 
-pragma(inline, true) static void wl_keyboard_set_user_data(wl_keyboard* wl_keyboard, void* user_data) {
+pragma(inline, true) private void wl_keyboard_set_user_data(wl_keyboard* wl_keyboard, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_keyboard, user_data);
 }
 
-pragma(inline, true) static void* wl_keyboard_get_user_data(wl_keyboard* wl_keyboard) {
+pragma(inline, true) private void* wl_keyboard_get_user_data(wl_keyboard* wl_keyboard) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_keyboard);
 }
-pragma(inline, true) static uint wl_keyboard_get_version(wl_keyboard* wl_keyboard) {
+pragma(inline, true) private uint wl_keyboard_get_version(wl_keyboard* wl_keyboard) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_keyboard);
 }
 
-pragma(inline, true) static void wl_keyboard_destroy(wl_keyboard* wl_keyboard) {
+pragma(inline, true) private void wl_keyboard_destroy(wl_keyboard* wl_keyboard) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_keyboard);
 }
-pragma(inline, true) static void wl_keyboard_release(wl_keyboard* wl_keyboard) {
+pragma(inline, true) private void wl_keyboard_release(wl_keyboard* wl_keyboard) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_keyboard,
 			 WL_KEYBOARD_RELEASE);
 	wl_proxy_destroy(cast(wl_proxy*) wl_keyboard);
@@ -1052,7 +1052,7 @@ struct wl_touch_listener {
 	void function(void* data, wl_touch* wl_touch) frame;
 	void function(void* data, wl_touch* wl_touch) cancel;
 };
-pragma(inline, true) static int wl_touch_add_listener(wl_touch* wl_touch, const(wl_touch_listener)* listener, void* data) {
+pragma(inline, true) private int wl_touch_add_listener(wl_touch* wl_touch, const(wl_touch_listener)* listener, void* data) {
 	return wl_proxy_add_listener(cast(wl_proxy*) wl_touch, cast(void function()) listener, data);
 }
 enum WL_TOUCH_RELEASE = 0;
@@ -1063,21 +1063,21 @@ enum WL_TOUCH_FRAME_SINCE_VERSION = 1;
 enum WL_TOUCH_CANCEL_SINCE_VERSION = 1;
 enum WL_TOUCH_RELEASE_SINCE_VERSION = 3;
 
-pragma(inline, true) static void wl_touch_set_user_data(wl_touch* wl_touch, void* user_data) {
+pragma(inline, true) private void wl_touch_set_user_data(wl_touch* wl_touch, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_touch, user_data);
 }
 
-pragma(inline, true) static void* wl_touch_get_user_data(wl_touch* wl_touch) {
+pragma(inline, true) private void* wl_touch_get_user_data(wl_touch* wl_touch) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_touch);
 }
-pragma(inline, true) static uint wl_touch_get_version(wl_touch* wl_touch) {
+pragma(inline, true) private uint wl_touch_get_version(wl_touch* wl_touch) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_touch);
 }
 
-pragma(inline, true) static void wl_touch_destroy(wl_touch* wl_touch) {
+pragma(inline, true) private void wl_touch_destroy(wl_touch* wl_touch) {
 	wl_proxy_destroy(cast(wl_proxy*) wl_touch);
 }
-pragma(inline, true) static void wl_touch_release(wl_touch* wl_touch) {
+pragma(inline, true) private void wl_touch_release(wl_touch* wl_touch) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_touch, WL_TOUCH_RELEASE);
 	wl_proxy_destroy(cast(wl_proxy*) wl_touch);
 }
@@ -1106,16 +1106,16 @@ enum WL_OUTPUT_DONE_SINCE_VERSION = 2;
 enum WL_OUTPUT_SCALE_SINCE_VERSION = 2;
 enum WL_OUTPUT_RELEASE_SINCE_VERSION = 3;
 
-pragma(inline, true) static void wl_output_set_user_data(wl_output* wl_output, void* user_data) {
+pragma(inline, true) private void wl_output_set_user_data(wl_output* wl_output, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_output, user_data);
 }
-pragma(inline, true) static void* wl_output_get_user_data(wl_output* wl_output) {
+pragma(inline, true) private void* wl_output_get_user_data(wl_output* wl_output) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_output);
 }
-pragma(inline, true) static uint wl_output_get_version(wl_output* wl_output) {
+pragma(inline, true) private uint wl_output_get_version(wl_output* wl_output) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_output);
 }
-pragma(inline, true) static void wl_output_release(wl_output* wl_output) {
+pragma(inline, true) private void wl_output_release(wl_output* wl_output) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_output, WL_OUTPUT_RELEASE);
 	wl_proxy_destroy(cast(wl_proxy*) wl_output);
 }
@@ -1126,26 +1126,26 @@ enum WL_REGION_DESTROY_SINCE_VERSION = 1;
 enum WL_REGION_ADD_SINCE_VERSION = 1;
 enum WL_REGION_SUBTRACT_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_region_set_user_data(wl_region* wl_region, void* user_data) {
+pragma(inline, true) private void wl_region_set_user_data(wl_region* wl_region, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_region, user_data);
 }
 
-pragma(inline, true) static void* wl_region_get_user_data(wl_region* wl_region) {
+pragma(inline, true) private void* wl_region_get_user_data(wl_region* wl_region) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_region);
 }
-pragma(inline, true) static uint wl_region_get_version(wl_region* wl_region) {
+pragma(inline, true) private uint wl_region_get_version(wl_region* wl_region) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_region);
 }
-pragma(inline, true) static void wl_region_destroy(wl_region* wl_region) {
+pragma(inline, true) private void wl_region_destroy(wl_region* wl_region) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_region,
 			 WL_REGION_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_region);
 }
-pragma(inline, true) static void wl_region_add(wl_region* wl_region, int x, int y, int width, int height) {
+pragma(inline, true) private void wl_region_add(wl_region* wl_region, int x, int y, int width, int height) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_region,
 			 WL_REGION_ADD, x, y, width, height);
 }
-pragma(inline, true) static void wl_region_subtract(wl_region* wl_region, int x, int y, int width, int height) {
+pragma(inline, true) private void wl_region_subtract(wl_region* wl_region, int x, int y, int width, int height) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_region,
 			 WL_REGION_SUBTRACT, x, y, width, height);
 }
@@ -1158,18 +1158,18 @@ enum WL_SUBCOMPOSITOR_DESTROY_SINCE_VERSION = 1;
 enum WL_SUBCOMPOSITOR_GET_SUBSURFACE_SINCE_VERSION = 1;
 
 
-pragma(inline, true) static void wl_subcompositor_set_user_data(wl_subcompositor* wl_subcompositor, void* user_data) {
+pragma(inline, true) private void wl_subcompositor_set_user_data(wl_subcompositor* wl_subcompositor, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_subcompositor, user_data);
 }
 
 
-pragma(inline, true) static void* wl_subcompositor_get_user_data(wl_subcompositor* wl_subcompositor) {
+pragma(inline, true) private void* wl_subcompositor_get_user_data(wl_subcompositor* wl_subcompositor) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_subcompositor);
 }
-pragma(inline, true) static uint wl_subcompositor_get_version(wl_subcompositor* wl_subcompositor) {
+pragma(inline, true) private uint wl_subcompositor_get_version(wl_subcompositor* wl_subcompositor) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_subcompositor);
 }
-pragma(inline, true) static void wl_subcompositor_destroy(wl_subcompositor* wl_subcompositor) {
+pragma(inline, true) private void wl_subcompositor_destroy(wl_subcompositor* wl_subcompositor) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subcompositor,
 			 WL_SUBCOMPOSITOR_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_subcompositor);
@@ -1196,36 +1196,36 @@ enum WL_SUBSURFACE_PLACE_BELOW_SINCE_VERSION = 1;
 enum WL_SUBSURFACE_SET_SYNC_SINCE_VERSION = 1;
 enum WL_SUBSURFACE_SET_DESYNC_SINCE_VERSION = 1;
 
-pragma(inline, true) static void wl_subsurface_set_user_data(wl_subsurface* wl_subsurface, void* user_data) {
+pragma(inline, true) private void wl_subsurface_set_user_data(wl_subsurface* wl_subsurface, void* user_data) {
 	wl_proxy_set_user_data(cast(wl_proxy*) wl_subsurface, user_data);
 }
-pragma(inline, true) static void* wl_subsurface_get_user_data(wl_subsurface* wl_subsurface) {
+pragma(inline, true) private void* wl_subsurface_get_user_data(wl_subsurface* wl_subsurface) {
 	return wl_proxy_get_user_data(cast(wl_proxy*) wl_subsurface);
 }
-pragma(inline, true) static uint wl_subsurface_get_version(wl_subsurface* wl_subsurface) {
+pragma(inline, true) private uint wl_subsurface_get_version(wl_subsurface* wl_subsurface) {
 	return wl_proxy_get_version(cast(wl_proxy*) wl_subsurface);
 }
-pragma(inline, true) static void wl_subsurface_destroy(wl_subsurface* wl_subsurface) {
+pragma(inline, true) private void wl_subsurface_destroy(wl_subsurface* wl_subsurface) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subsurface, WL_SUBSURFACE_DESTROY);
 	wl_proxy_destroy(cast(wl_proxy*) wl_subsurface);
 }
-pragma(inline, true) static void wl_subsurface_set_position(wl_subsurface* wl_subsurface, int x, int y) {
+pragma(inline, true) private void wl_subsurface_set_position(wl_subsurface* wl_subsurface, int x, int y) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subsurface,
 			 WL_SUBSURFACE_SET_POSITION, x, y);
 }
-pragma(inline, true) static void wl_subsurface_place_above(wl_subsurface* wl_subsurface, wl_surface* sibling) {
+pragma(inline, true) private void wl_subsurface_place_above(wl_subsurface* wl_subsurface, wl_surface* sibling) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subsurface,
 			 WL_SUBSURFACE_PLACE_ABOVE, sibling);
 }
-pragma(inline, true) static void wl_subsurface_place_below(wl_subsurface* wl_subsurface, wl_surface* sibling) {
+pragma(inline, true) private void wl_subsurface_place_below(wl_subsurface* wl_subsurface, wl_surface* sibling) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subsurface,
 			 WL_SUBSURFACE_PLACE_BELOW, sibling);
 }
-pragma(inline, true) static void wl_subsurface_set_sync(wl_subsurface* wl_subsurface) {
+pragma(inline, true) private void wl_subsurface_set_sync(wl_subsurface* wl_subsurface) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subsurface,
 			 WL_SUBSURFACE_SET_SYNC);
 }
-pragma(inline, true) static void wl_subsurface_set_desync(wl_subsurface* wl_subsurface) {
+pragma(inline, true) private void wl_subsurface_set_desync(wl_subsurface* wl_subsurface) {
 	wl_proxy_marshal(cast(wl_proxy*) wl_subsurface,
 			 WL_SUBSURFACE_SET_DESYNC);
 }

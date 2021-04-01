@@ -25,12 +25,12 @@ The translation is not affiliated with the original project.
 If you are using dub, add this package as a dependency.
 In `dub.sdl`:
 ```
-dependency "glfw-d" version="~>1.0.1"
+dependency "glfw-d" version="~>1.0.2"
 ```
 In `dub.json`:
 ```
 "dependencies": {
-	"glfw-d": "~>1.0.1"
+	"glfw-d": "~>1.0.2"
 }
 ```
 
@@ -45,14 +45,16 @@ void main() {
 }
 ```
 Example GLFW projects can be found in the [examples folder](https://github.com/dkorpel/glfw-d/tree/master/examples/).
-You can run them from the root of the repository using:
+You can run them from the root of this repository using:
 ```
 dub run glfw-d:empty-window
 dub run glfw-d:triangle-gl
+dub run glfw-d:triangle-vulkan
 ```
-Note that you probably want to use OpenGL / Vulkan bindings ([bindbc-opengl](https://code.dlang.org/packages/bindbc-opengl) or [erupted](https://code.dlang.org/packages/erupted)) in order to actually display anything in your window.
 
-See also: the [tutorial on glfw.org](https://www.glfw.org/docs/latest/quick.html)
+See also: the [tutorial on glfw.org](https://www.glfw.org/docs/latest/quick.html) for a quick introduction.
+
+If you have any trouble, feel free to open an [Issue](https://github.com/dkorpel/glfw-d/issues) or [Discussion](https://github.com/dkorpel/glfw-d/discussions).
 
 ## Reasons for using it
 Using GLFW in your D project usually involves depending on a binding to the C-library, (such as [bindbc-glfw](https://github.com/BindBC/bindbc-glfw) or [derelict-glfw3](https://github.com/DerelictOrg/DerelictGLFW3)).
@@ -69,7 +71,7 @@ It's very easy for issues to arise:
 With this translation, you can simply use Dub, and your D compiler settings (C runtime, optimization flags, debug info) also apply to GLFW.
 
 Compile times are pretty short.
-I get these results from the 'total' time of `time dub build glfw-d --force` on Debian Linux:
+I get these results from the 'total' time of `time dub build glfw-d --force` on my Debian Linux box:
 
 | build type   | time (s) |
 |--------------|----------|
@@ -84,13 +86,13 @@ Dub caches builds, so these compile times only apply the first time.
 - The C sources are more battle-tested.
 There is a chance the translation introduced new bugs.
 - While GLFW is pretty stable, it is still being maintained by a group of contributors and new releases with new features and fixes come out.
-Once GLFW 3.4 comes out, this translation will lag behind for who knows how long.
-However, you can always switch back to compiling the C sources.
+Once GLFW 3.4 comes out, this translation might get behind.
+However, you can easily switch back to compiling the C sources if this becomes an issue.
 
 ### Todo
 - Thoroughly test on platforms
 So far I used this library for my own OpenGL application and succesfully ran it on Debian Linux with X11 and Windows 7, but there are aspects that are not yet tested.
-I have not used this with Vulkan or OpenGL ES.
+I have not used this with OpenGL ES.
 I haven't used the native api (`glfw3/apinative.d` here) or functions for custom cursor creation yet.
 
 - Add Wayland support
@@ -147,13 +149,18 @@ versions "GLFW_EXPOSE_NATIVE_WIN32" "GLFW_EXPOSE_NATIVE_WGL"
 If you don't want to use dub, it is not hard to compile it manually since all source files you need are in a single folder: `source/glfw3`.
 Look in `dub.sdl` which source files and version identifier your desired platform uses, then pass them to a D compiler:
 ```
-# from the root of this repository
+# From the root of this repository, enter the source folder
 cd source/glfw3
+
+# Windows example:
 dmd -version=_GLFW_WIN32 -I../ -m64 -lib -of=../../build/glfw.lib context.d init.d input.d monitor.d vulkan.d window.d mappings.d internal.d api.d win32_platform.d win32_init.d win32_joystick.d win32_monitor.d win32_time.d win32_thread.d win32_window.d wgl_context.d egl_context.d osmesa_context.d directinput8.d
+
+# Linux example:
+dmd -version=_GLFW_X11 -L=X11 -I../ -lib -of=../../build/glfw.a context.d init.d input.d monitor.d vulkan.d window.d mappings.d internal.d api.d x11_platform.d x11_init.d x11_monitor.d x11_window.d xkb_unicode.d posix_time.d posix_thread.d glx_context.d egl_context.d osmesa_context.d linux_joystick.d linuxinput.d
 ```
 
 ### BetterC
-Since it's a direct translation of a C codebase, it might compile [with `-betterC`](https://dlang.org/spec/betterc.html), but there might be linking errors because of certain C macros that are functions in druntime, such as:
+Since it's a direct translation of a C codebase, it compiles [with `-betterC`](https://dlang.org/spec/betterc.html), but there might be linking errors because of certain C macros that are functions in druntime, such as:
 ```
 core.sys.posix.sys.select.FD_SET
 core.sys.posix.sys.select.FD_ZERO
@@ -161,6 +168,5 @@ core.sys.posix.sys.select.FD_ZERO
 This might or might not give linker errors in your application, depending on your compiler and settings.
 
 ## Building a shared library DLL
-Building a shared library from the D sources should be possible, but I haven't tried it yet.
-It may be as simple as adding `export` to functions that had `GLFWAPI` in the C sources, and adding a configuration with `targetType "sharedLibrary"` in `dub.sdl`,
-but it also may be more difficult than that.
+Building a shared library from the D sources could be possible, but it's not a supported use-case currently.
+You're welcome to try it, but I can't guide you here.

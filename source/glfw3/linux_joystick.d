@@ -64,6 +64,8 @@ struct _GLFWjoystickLinux {
     int[ABS_CNT] absMap;
     input_absinfo[ABS_CNT] absInfo;
     int[2][4] hats;
+    bool hasRumble = false;
+    ff_effect rumble;
 }
 
 // Linux-specific joystick API data
@@ -92,7 +94,7 @@ private void handleKeyEvent(_GLFWjoystick* js, int code, int value) {
 
 // Apply an EV_ABS event to the specified joystick
 //
-static void handleAbsEvent(_GLFWjoystick* js, int code, int value) {
+private void handleAbsEvent(_GLFWjoystick* js, int code, int value) {
     const(int) index = js.linjs.absMap[code];
 
     if (code >= ABS_HAT0X && code <= ABS_HAT3Y)
@@ -153,8 +155,32 @@ private void pollAbsState(_GLFWjoystick* js) {
     }
 }
 
-//  #define isBitSet(bit, arr) (arr[(bit) / 8] & (1 << ((bit) % 8)))
-enum string isBitSet(string bit, string arr) = ` (`~arr~`[(`~bit~`) / 8] & (1 << ((`~bit~`) % 8)))`;
+// #define isBitSet(bit, arr) (arr[(bit) / 8] & (1 << ((bit) % 8)))
+// enum string isBitSet(string bit, string arr) = ` (`~arr~`[(`~bit~`) / 8] & (1 << ((`~bit~`) % 8)))`;
+private bool isBitSet(int bit, scope const ubyte[] arr) {return cast(bool) (arr[bit / 8] & (1 << (bit % 8)));}
+
+private void initJoystickForceFeedback(_GLFWjoystickLinux *linjs)
+{
+    linjs.hasRumble = false;
+
+    ubyte[(FF_CNT + 7) / 8] ffBits = 0;
+    if (ioctl(linjs.fd, EVIOCGBIT!(typeof(ffBits))(EV_FF), ffBits.ptr) < 0)
+    {
+        return;
+    }
+
+    if (isBitSet(FF_RUMBLE, ffBits))
+    {
+        linjs.rumble.type =      FF_RUMBLE;
+        linjs.rumble.id =        -1;
+        linjs.rumble.direction = 0;
+        linjs.rumble.trigger = ff_trigger(/*.button*/ 0, /*.interval*/ 0);
+        linjs.rumble.replay = ff_replay(/*length*/ 2000, /*delay*/ 0);
+        linjs.rumble.u.rumble = ff_rumble_effect(/*strong_magnitude*/ 0, /*weak_magnitude*/ 0); // xinput rumble lasts ~2 seconds
+
+        linjs.hasRumble = (ioctl(linjs.fd, EVIOCSFF, &linjs.rumble) >= 0);
+    }
+}
 
 // Attempt to open the specified joystick device
 //
@@ -168,13 +194,13 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     }
 
     _GLFWjoystickLinux linjs = _GLFWjoystickLinux(0);
-    linjs.fd = open(path, O_RDONLY | O_NONBLOCK);
+    linjs.fd = open(path, O_RDWR | O_NONBLOCK);
     if (linjs.fd == -1)
         return GLFW_FALSE;
 
-    char[(EV_CNT + 7) / 8] evBits = '\0';
-    char[(KEY_CNT + 7) / 8] keyBits = '\0';
-    char[(ABS_CNT + 7) / 8] absBits = '\0';
+    ubyte[(EV_CNT + 7) / 8] evBits = 0;
+    ubyte[(KEY_CNT + 7) / 8] keyBits = 0;
+    ubyte[(ABS_CNT + 7) / 8] absBits = 0;
     input_id id;
 
     if (ioctl(linjs.fd, EVIOCGBIT!(typeof(evBits) )(     0), evBits.ptr) < 0 ||
@@ -190,7 +216,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     }
 
     // Ensure this device supports the events expected of a joystick
-    if (!mixin(isBitSet!("EV_KEY", "evBits")) || !mixin(isBitSet!("EV_ABS", "evBits")))
+    if (!isBitSet(EV_KEY, evBits) || !isBitSet(EV_ABS, evBits))
     {
         close(linjs.fd);
         return GLFW_FALSE;
@@ -225,7 +251,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
 
     for (int code = BTN_MISC;  code < KEY_CNT;  code++)
     {
-        if (!mixin(isBitSet!("code", "keyBits")))
+        if (!isBitSet(code, keyBits))
             continue;
 
         linjs.keyMap[code - BTN_MISC] = buttonCount;
@@ -235,7 +261,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     for (int code = 0;  code < ABS_CNT;  code++)
     {
         linjs.absMap[code] = -1;
-        if (!mixin(isBitSet!("code", "absBits")))
+        if (!isBitSet(code, absBits))
             continue;
 
         if (code >= ABS_HAT0X && code <= ABS_HAT3Y)
@@ -254,6 +280,8 @@ private GLFWbool openJoystickDevice(const(char)* path) {
             axisCount++;
         }
     }
+
+    initJoystickForceFeedback(&linjs);
 
     _GLFWjoystick* js = _glfwAllocJoystick(name.ptr, guid.ptr, axisCount, buttonCount, hatCount);
     if (!js)
@@ -508,4 +536,31 @@ int _glfwPlatformPollJoystick(_GLFWjoystick* js, int mode) {
 }
 
 void _glfwPlatformUpdateGamepadGUID(char* guid) {
+}
+
+int _glfwPlatformSetJoystickRumble(_GLFWjoystick* js, float slowMotorIntensity, float fastMotorIntensity)
+{
+    _GLFWjoystickLinux *linjs = &js.linjs;
+
+    if (!js.linjs.hasRumble)
+        return GLFW_FALSE;
+
+    js.linjs.rumble.u.rumble = ff_rumble_effect(
+        /*strong_magnitude*/ cast(ushort) (65_535 * slowMotorIntensity),
+        /*weak_magnitude*/   cast(ushort) (65_535 * fastMotorIntensity)
+    );
+
+    input_event play;
+    play.type = EV_FF;
+    play.code = linjs.rumble.id;
+    play.value = 1;
+
+    if (ioctl(linjs.fd, EVIOCSFF, &linjs.rumble) < 0) {
+        return GLFW_FALSE;
+    }
+    if (write(linjs.fd, &play, play.sizeof) < 0) {
+        return GLFW_FALSE;
+    }
+
+    return GLFW_TRUE;
 }

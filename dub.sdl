@@ -9,14 +9,12 @@ targetType "library"
 
 subPackage "examples/empty-window"
 subPackage "examples/triangle-gl"
-//subPackage "examples/triangle-vulkan"
+subPackage "examples/triangle-vulkan"
 
-dflags "-preview=dip1000" "-preview=dip25"
+dflags "-preview=dip1000"
 dflags "-preview=fieldwise"
-dflags "-preview=markdown"
 dflags "-preview=fixAliasThis"
 dflags "-preview=intpromote"
-dflags "-preview=dtorfields"
 dflags "-mixin=build/mixin.d"
 
 sourcePaths // by default dub includes everything in source/, which we don't want here
@@ -48,6 +46,7 @@ configuration "x11" {
 	sourceFiles "source/glfw3/egl_context.d"
 	sourceFiles "source/glfw3/osmesa_context.d"
 	sourceFiles "source/glfw3/linux_joystick.d"
+	sourceFiles "source/glfw3/linuxinput.d" // missing symbol on ubuntu-dmd-2.085: glfw3.linuxinput.ff_effect.__init
 }
 
 configuration "windows" {

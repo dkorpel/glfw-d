@@ -53,9 +53,9 @@ _GLFWlibrary _glfw = _GLFWlibrary(GLFW_FALSE);
 // These are outside of _glfw so they can be used before initialization and
 // after termination
 //
-static _GLFWerror _glfwMainThreadError;
-static GLFWerrorfun _glfwErrorCallback;
-static _GLFWinitconfig _glfwInitHints = _GLFWinitconfig(
+private _GLFWerror _glfwMainThreadError;
+private GLFWerrorfun _glfwErrorCallback;
+private _GLFWinitconfig _glfwInitHints = _GLFWinitconfig(
     GLFW_TRUE,      // hat buttons
     _GLFWinitconfig._Ns(
         GLFW_TRUE,  // macOS menu bar

@@ -1252,6 +1252,34 @@ int glfwGetGamepadState(int jid, GLFWgamepadstate* state) {
     return GLFW_TRUE;
 }
 
+int glfwSetJoystickRumble(int jid, float slowMotorIntensity, float fastMotorIntensity)
+{
+    _GLFWjoystick* js;
+
+    assert(jid >= GLFW_JOYSTICK_1);
+    assert(jid <= GLFW_JOYSTICK_LAST);
+
+    mixin(_GLFW_REQUIRE_INIT_OR_RETURN!"GLFW_FALSE");
+
+    if (jid < 0 || jid > GLFW_JOYSTICK_LAST)
+    {
+        _glfwInputError(GLFW_INVALID_ENUM, "Invalid joystick ID %i", jid);
+        return GLFW_FALSE;
+    }
+
+    js = _glfw.joysticks.ptr + jid;
+    if (!js.present)
+        return GLFW_FALSE;
+
+    slowMotorIntensity = slowMotorIntensity < 0.0f ? 0.0f : slowMotorIntensity;
+    slowMotorIntensity = slowMotorIntensity > 1.0f ? 1.0f : slowMotorIntensity;
+
+    fastMotorIntensity = fastMotorIntensity < 0.0f ? 0.0f : fastMotorIntensity;
+    fastMotorIntensity = fastMotorIntensity > 1.0f ? 1.0f : fastMotorIntensity;
+
+    return _glfwPlatformSetJoystickRumble(js, slowMotorIntensity, fastMotorIntensity);
+}
+
 void glfwSetClipboardString(GLFWwindow* handle, const(char)* string) {
     assert(string != null);
 

@@ -1,5 +1,5 @@
 /// Translated from C to D
-module x11_monitor;
+module glfw3.x11_monitor;
 
 extern(C): @nogc: nothrow: __gshared:
 //========================================================================
@@ -41,13 +41,13 @@ import core.stdc.config: c_long, c_ulong;
 
 // Check whether the display mode should be included in enumeration
 //
-static GLFWbool modeIsGood(const(XRRModeInfo)* mi) {
+private GLFWbool modeIsGood(const(XRRModeInfo)* mi) {
     return (mi.modeFlags & RR_Interlace) == 0;
 }
 
 // Calculates the refresh rate, in Hz, from the specified RandR mode info
 //
-static int calculateRefreshRate(const(XRRModeInfo)* mi) {
+private int calculateRefreshRate(const(XRRModeInfo)* mi) {
     if (mi.hTotal && mi.vTotal)
         return cast(int) round(cast(double) mi.dotClock / (cast(double) mi.hTotal * cast(double) mi.vTotal));
     else
@@ -56,7 +56,7 @@ static int calculateRefreshRate(const(XRRModeInfo)* mi) {
 
 // Returns the mode info for a RandR mode XID
 //
-static const(XRRModeInfo)* getModeInfo(const(XRRScreenResources)* sr, RRMode id) {
+private const(XRRModeInfo)* getModeInfo(const(XRRScreenResources)* sr, RRMode id) {
     for (int i = 0;  i < sr.nmode;  i++)
     {
         if (sr.modes[i].id == id)
@@ -68,7 +68,7 @@ static const(XRRModeInfo)* getModeInfo(const(XRRScreenResources)* sr, RRMode id)
 
 // Convert RandR mode info to GLFW video mode
 //
-static GLFWvidmode vidmodeFromModeInfo(const(XRRModeInfo)* mi, const(XRRCrtcInfo)* ci) {
+private GLFWvidmode vidmodeFromModeInfo(const(XRRModeInfo)* mi, const(XRRCrtcInfo)* ci) {
     GLFWvidmode mode;
 
     if (ci.rotation == RR_Rotate_90 || ci.rotation == RR_Rotate_270)

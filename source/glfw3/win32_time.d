@@ -31,8 +31,8 @@ extern(C): @nogc: nothrow: __gshared:
 // Please use C89 style variable declarations in this file because VS 2010
 //========================================================================
 
-public import glfw3.internal;
-
+import glfw3.internal;
+package:
 
 //////////////////////////////////////////////////////////////////////////
 //////                       GLFW internal API                      //////

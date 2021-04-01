@@ -36,22 +36,15 @@ int main() {
 
 	const GLuint program = getProgram();
 	const GLuint vaoTriangle = getTriangleVao();
-	const GLint mvp_location = glGetUniformLocation(program, "MVP");
 
-	double oldTime = glfwGetTime();
 	while (!glfwWindowShouldClose(window)) {
-		const newTime = glfwGetTime();
-		const elapsedTime = newTime - oldTime;
-		oldTime = newTime;
-
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
-		const float ratio = width / cast(float) height;
 		glViewport(0, 0, width, height);
 
 		glUseProgram(program);
 		glBindVertexArray(vaoTriangle);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, /*first*/ 0, /*count*/ 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -66,12 +59,11 @@ extern(C) @nogc nothrow void errorCallback(int error, const(char)* description) 
 // SHADER PROGRAM /////////////////////////
 
 immutable string vertexShaderSource = "#version 330
-uniform mat4 MVP;
 layout(location = 0) in vec2 position;
 layout(location = 1) in vec3 color;
 out vec3 fragColor;
 void main() {
-	gl_Position = vec4(position, 0.0, 1.0); // MVP *
+	gl_Position = vec4(position, 0.0, 1.0);
 	fragColor = color;
 }";
 

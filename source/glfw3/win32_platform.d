@@ -40,6 +40,8 @@ public import glfw3.xinput;
 public import core.sys.windows.objbase; // GUID
 public import core.sys.windows.dbt;
 
+package:
+
 // TODO: make this @nogc nothrow upstream
 @nogc nothrow extern (Windows) ULONGLONG VerSetConditionMask(ULONGLONG, DWORD, BYTE);
 
@@ -103,10 +105,10 @@ version (all) {
 enum DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = cast(HANDLE) -4;
 
 // HACK: Define versionhelpers.h functions manually as MinGW lacks the header
-static {
-    private enum _WIN32_WINNT_WINXP = 0x0501;
-    private enum _WIN32_WINNT_VISTA = 0x0600;
-    private enum _WIN32_WINNT_WIN7 = 0x0601;
+package {
+    enum _WIN32_WINNT_WINXP = 0x0501;
+    enum _WIN32_WINNT_VISTA = 0x0600;
+    enum _WIN32_WINNT_WIN7 = 0x0601;
 
     // note: already in core.sys.windows.winver, but not @nogc
     bool IsWindowsXPOrGreater() {
@@ -169,8 +171,10 @@ extern(Windows) {
     // xinput.dll function pointer typedefs
     alias PFN_XInputGetCapabilities = DWORD function(DWORD,DWORD,XINPUT_CAPABILITIES*);
     alias PFN_XInputGetState = DWORD function(DWORD,XINPUT_STATE*);
+    alias PFN_XInputSetState = DWORD function(DWORD,XINPUT_VIBRATION*);
     enum XInputGetCapabilities = "_glfw.win32.xinput.GetCapabilities";
     enum XInputGetState = "_glfw.win32.xinput.GetState";
+    enum XInputSetState = "_glfw.win32.xinput.SetState";
 
     // dinput8.dll function pointer typedefs
     alias PFN_DirectInput8Create = HRESULT function(HINSTANCE,DWORD,REFIID,LPVOID*,LPUNKNOWN);
@@ -222,6 +226,7 @@ struct VkWin32SurfaceCreateInfoKHR {
 alias PFN_vkCreateWin32SurfaceKHR = VkResult function(VkInstance, const(VkWin32SurfaceCreateInfoKHR)*, const(VkAllocationCallbacks)*, VkSurfaceKHR*);
 alias PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR = VkBool32 function(VkPhysicalDevice, uint32_t);
 
+import glfw3.internal;
 public import glfw3.win32_joystick;
 public import glfw3.wgl_context;
 public import glfw3.egl_context;
@@ -299,6 +304,7 @@ struct _GLFWlibraryWin32 {
         HINSTANCE instance;
         PFN_XInputGetCapabilities GetCapabilities;
         PFN_XInputGetState GetState;
+        PFN_XInputSetState SetState;
     }_Xinput xinput;
 
     struct _User32 {

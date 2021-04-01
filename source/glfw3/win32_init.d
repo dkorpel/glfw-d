@@ -3,9 +3,6 @@ module glfw3.win32_init;
 
 extern(C): @nogc: nothrow: __gshared:
 
-private template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
 //========================================================================
 // GLFW 3.3 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -35,16 +32,21 @@ private template HasVersion(string versionId) {
 // Please use C89 style variable declarations in this file because VS 2010
 //========================================================================
 
-public import glfw3.internal;
+import glfw3.internal;
 
 import core.stdc.stdlib;
 import core.stdc.string;
 
-static const(GUID) _glfw_GUID_DEVINTERFACE_HID = GUID(0x4d1e55b2,0xf16f,0x11cf,[0x88,0xcb,0x00,0x11,0x11,0x00,0x00,0x30]);
+private const(GUID) _glfw_GUID_DEVINTERFACE_HID = GUID(0x4d1e55b2,0xf16f,0x11cf,[0x88,0xcb,0x00,0x11,0x11,0x00,0x00,0x30]);
+
+package:
 
 enum GUID_DEVINTERFACE_HID = _glfw_GUID_DEVINTERFACE_HID;
 
-static if (HasVersion!"_GLFW_USE_HYBRID_HPG" || HasVersion!"_GLFW_USE_OPTIMUS_HPG") {
+version(_GLFW_USE_HYBRID_HPG) version = _GLFW_USE_HPG;
+version(_GLFW_USE_OPTIMUS_HPG) version = _GLFW_USE_HPG;
+
+version(_GLFW_USE_HPG) {
 
 // Executables (but not DLLs) exporting this symbol with this value will be
 // automatically directed to the high-performance GPU on Nvidia Optimus systems
@@ -58,7 +60,7 @@ DWORD NvOptimusEnablement = 1;
 //
 int AmdPowerXpressRequestHighPerformance = 1;
 
-} // _GLFW_USE_HYBRID_HPG
+}
 
 version (_GLFW_BUILD_DLL) {
 
@@ -68,11 +70,11 @@ extern(Windows) BOOL DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) 
     return TRUE;
 }
 
-} // _GLFW_BUILD_DLL
+}
 
 // Load necessary libraries (DLLs)
 //
-static GLFWbool loadLibraries() {
+private GLFWbool loadLibraries() {
     _glfw.win32.winmm.instance = LoadLibraryA("winmm.dll");
     if (!_glfw.win32.winmm.instance)
     {
@@ -132,6 +134,8 @@ static GLFWbool loadLibraries() {
                     GetProcAddress(_glfw.win32.xinput.instance, "XInputGetCapabilities");
                 _glfw.win32.xinput.GetState = cast(PFN_XInputGetState)
                     GetProcAddress(_glfw.win32.xinput.instance, "XInputGetState");
+                _glfw.win32.xinput.SetState = cast(PFN_XInputSetState)
+                    GetProcAddress(_glfw.win32.xinput.instance, "XInputSetState");
 
                 break;
             }
@@ -333,7 +337,7 @@ private extern(D) void createKeyTables() {
 
 // Creates a dummy window for behind-the-scenes work
 //
-static GLFWbool createHelperWindow() {
+private GLFWbool createHelperWindow() {
     MSG msg;
 
     _glfw.win32.helperWindowHandle =

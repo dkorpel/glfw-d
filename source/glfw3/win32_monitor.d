@@ -31,16 +31,18 @@ extern(C): @nogc: nothrow: __gshared:
 // Please use C89 style variable declarations in this file because VS 2010
 //========================================================================
 
-public import glfw3.internal;
+import glfw3.internal;
 
 import core.stdc.stdlib;
 import core.stdc.string;
 import core.stdc.limits;
 import core.stdc.wchar_;
 
+package:
+
 // Callback for EnumDisplayMonitors in createMonitor
 //
-extern(Windows) static BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect, LPARAM data) {
+extern(Windows) private BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect, LPARAM data) {
     MONITORINFOEXW mi;
     memset(&mi, 0, typeof(mi).sizeof);
     mi.cbSize = typeof(mi).sizeof;
@@ -57,7 +59,7 @@ extern(Windows) static BOOL monitorCallback(HMONITOR handle, HDC dc, RECT* rect,
 
 // Create monitor from an adapter and (optionally) a display
 //
-static _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter, DISPLAY_DEVICEW* display) {
+private extern(D) _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter, DISPLAY_DEVICEW* display) {
     _GLFWmonitor* monitor;
     int widthMM;int heightMM;
     char* name;
