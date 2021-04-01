@@ -46,6 +46,7 @@ configuration "x11" {
 	sourceFiles "source/glfw3/egl_context.d"
 	sourceFiles "source/glfw3/osmesa_context.d"
 	sourceFiles "source/glfw3/linux_joystick.d"
+	sourceFiles "source/glfw3/linuxinput.d" // missing symbol on ubuntu-dmd-2.085: glfw3.linuxinput.ff_effect.__init
 }
 
 configuration "windows" {
