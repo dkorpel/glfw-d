@@ -27,3 +27,6 @@ jobs:
 
             - name: Build OpenGL triangle example
               run: dub -q build glfw-d:triangle-gl
+
+            - name: Build Vulkan triangle example
+              run: dub -q build glfw-d:triangle-vulkan
