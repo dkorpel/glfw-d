@@ -3,7 +3,7 @@
 /// https://github.com/glfw/glfw/blob/33cd8b865d9289cfbcf3d95e6e68e4050b94fcd3/tests/triangle-vulkan.c
 module app;
 
-package: nothrow: @nogc:
+nothrow: @nogc:
 
 import glfw3.api;
 import erupted;
