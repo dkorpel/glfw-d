@@ -9,7 +9,7 @@ targetType "library"
 
 subPackage "examples/empty-window"
 subPackage "examples/triangle-gl"
-//subPackage "examples/triangle-vulkan"
+subPackage "examples/triangle-vulkan"
 
 dflags "-preview=dip1000"
 dflags "-preview=fieldwise"
