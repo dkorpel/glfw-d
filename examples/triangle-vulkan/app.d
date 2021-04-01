@@ -400,7 +400,7 @@ private void demo_flush_init_cmd(Demo* demo) {
 								signalSemaphoreCount: 0,
 								pSignalSemaphores: null};
 
-	err = vkQueueSubmit(demo.queue, 1, &submit_info, VK_NULL_HANDLE);
+	err = vkQueueSubmit(demo.queue, 1, &submit_info, VK_NULL_ND_HANDLE);
 	assert(!err);
 
 	err = vkQueueWaitIdle(demo.queue);
@@ -623,7 +623,7 @@ private void demo_draw(Demo* demo) {
 	// okay to render to the image.
 
 	demo_draw_build_cmd(demo);
-	VkFence nullFence = VK_NULL_HANDLE;
+	VkFence nullFence = VK_NULL_ND_HANDLE;
 	VkPipelineStageFlags pipe_stage_flags = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 	VkSubmitInfo submit_info = {sType: VK_STRUCTURE_TYPE_SUBMIT_INFO,
 								pNext: null,
@@ -764,7 +764,7 @@ private void demo_prepare_buffers(Demo* demo) {
 	// swapchain at this point.
 	// Note: destroying the swapchain also cleans up all its associated
 	// presentable images once the platform is done with them.
-	if (oldSwapchain != VK_NULL_HANDLE) {
+	if (oldSwapchain != VK_NULL_ND_HANDLE) {
 		vkDestroySwapchainKHR(demo.device, oldSwapchain, null);
 	}
 
@@ -845,7 +845,7 @@ private void demo_prepare_depth(Demo* demo) {
 	VkImageViewCreateInfo view = {
 		sType: VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
 		pNext: null,
-		image: VK_NULL_HANDLE,
+		image: VK_NULL_ND_HANDLE,
 		format: depth_format,
 		subresourceRange: {
 			aspectMask: VK_IMAGE_ASPECT_DEPTH_BIT,
@@ -1090,7 +1090,7 @@ private void demo_prepare_textures(Demo* demo) {
 		VkImageViewCreateInfo view = {
 			sType: VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
 			pNext: null,
-			image: VK_NULL_HANDLE,
+			image: VK_NULL_ND_HANDLE,
 			viewType: VK_IMAGE_VIEW_TYPE_2D,
 			format: tex_format,
 			components:
