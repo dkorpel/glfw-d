@@ -16,3 +16,5 @@ From the root of the repository, run it with:
 ```
 dub run glfw-d:triangle-vulkan
 ```
+
+See also: [the GLFW Vulkan guide](https://www.glfw.org/docs/latest/vulkan_guide.html)
