@@ -148,7 +148,7 @@ versions "GLFW_EXPOSE_NATIVE_WIN32" "GLFW_EXPOSE_NATIVE_WGL"
 ### Compiling manually
 If you don't want to use dub, it is not hard to compile it manually since all source files you need are in a single folder: `source/glfw3`.
 Look in `dub.sdl` which source files and version identifier your desired platform uses, then pass them to a D compiler:
-```
+```bash
 # From the root of this repository, enter the source folder
 cd source/glfw3
 
@@ -158,6 +158,15 @@ dmd -version=_GLFW_WIN32 -I../ -m64 -lib -of=../../build/glfw.lib context.d init
 # Linux example:
 dmd -version=_GLFW_X11 -L=X11 -I../ -lib -of=../../build/glfw.a context.d init.d input.d monitor.d vulkan.d window.d mappings.d internal.d api.d x11_platform.d x11_init.d x11_monitor.d x11_window.d xkb_unicode.d posix_time.d posix_thread.d glx_context.d egl_context.d osmesa_context.d linux_joystick.d linuxinput.d
 ```
+
+You can also do:
+```bash
+# From the root of this repository
+dmd -version=_GLFW_WIN32 -i -m64 -lib -Isource source/glfw3/package.d
+ldc2 -d-version=_GLFW_WIN32 -i -m64 -lib -Isource source/glfw3/package.d
+```
+This makes use of the `-i` option that automatically compiles imported modules.
+The file `glfw3/package.d` imports all relevant modules depending on the version set.
 
 ### BetterC
 Since it's a direct translation of a C codebase, it compiles [with `-betterC`](https://dlang.org/spec/betterc.html), but there might be linking errors because of certain C macros that are functions in druntime, such as:
