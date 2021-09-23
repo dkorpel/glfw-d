@@ -11,6 +11,8 @@ subPackage "examples/empty-window"
 subPackage "examples/triangle-gl"
 subPackage "examples/triangle-vulkan"
 
+versions "VK_VERSION_1_0"
+
 dflags "-preview=dip1000"
 dflags "-preview=fieldwise"
 dflags "-preview=fixAliasThis"
