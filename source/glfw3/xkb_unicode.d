@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.xkb_unicode;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org
 //------------------------------------------------------------------------

@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.null_window;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
@@ -31,8 +33,9 @@ extern(C): @nogc: nothrow: __gshared:
 // It is fine to use C99 in this file because it will not be built with VS
 //========================================================================
 
-import glfw3.internal;
+version(_GLFW_OSMESA):
 
+import glfw3.internal;
 
 private int createNativeWindow(_GLFWwindow* window, const(_GLFWwndconfig)* wndconfig) {
     window.null_.width = wndconfig.width;

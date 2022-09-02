@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.osmesa_context;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 OSMesa - www.glfw.org
 //------------------------------------------------------------------------

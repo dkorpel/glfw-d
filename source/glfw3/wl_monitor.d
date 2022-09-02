@@ -1,7 +1,11 @@
 /// Translated from C to D
 module glfw3.wl_monitor;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
+
 //========================================================================
 // GLFW 3.3 Wayland - www.glfw.org
 //------------------------------------------------------------------------

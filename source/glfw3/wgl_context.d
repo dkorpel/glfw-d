@@ -1,7 +1,11 @@
 /// Translated from C to D
 module glfw3.wgl_context;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
+
 //========================================================================
 // GLFW 3.3 WGL - www.glfw.org
 //------------------------------------------------------------------------

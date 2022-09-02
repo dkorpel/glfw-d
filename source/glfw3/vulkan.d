@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.vulkan;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
@@ -53,10 +55,10 @@ GLFWbool _glfwInitVulkan(int mode) {
     if (_glfw.vk.available)
         return GLFW_TRUE;
 
-version (_GLFW_VULKAN_STATIC) {} else {
-version (_GLFW_WIN32) {
+version(_GLFW_VULKAN_STATIC) {} else {
+version(Windows) {
     _glfw.vk.handle = _glfw_dlopen("vulkan-1.dll");
-} else version (_GLFW_COCOA) {
+} else version(OSX) {
     _glfw.vk.handle = _glfw_dlopen("libvulkan.1.dylib");
     if (!_glfw.vk.handle)
         _glfw.vk.handle = _glfwLoadLocalVulkanLoaderNS();
@@ -128,23 +130,23 @@ version (_GLFW_WIN32) {
         if (strcmp(ep[i].extensionName.ptr, "VK_KHR_surface") == 0) {
             _glfw.vk.KHR_surface = GLFW_TRUE;
         } else {
-            version (_GLFW_WIN32) {
+            version(Windows) {
                 if (strcmp(ep[i].extensionName.ptr, "VK_KHR_win32_surface") == 0) {
                     _glfw.vk.KHR_win32_surface = GLFW_TRUE;
                 }
-            } else version (_GLFW_COCOA) {
+            } else version(OSX) {
                 if (strcmp(ep[i].extensionName.ptr, "VK_MVK_macos_surface") == 0)
                     _glfw.vk.MVK_macos_surface = GLFW_TRUE;
                 else if (strcmp(ep[i].extensionName.ptr, "VK_EXT_metal_surface") == 0)
                     _glfw.vk.EXT_metal_surface = GLFW_TRUE;
-            } else version (_GLFW_X11) {
+            } else version(_GLFW_WAYLAND) {
+                if (strcmp(ep[i].extensionName.ptr, "VK_KHR_wayland_surface") == 0)
+                    _glfw.vk.KHR_wayland_surface = GLFW_TRUE;
+            } else version(linux) {
                 if (strcmp(ep[i].extensionName.ptr, "VK_KHR_xlib_surface") == 0)
                     _glfw.vk.KHR_xlib_surface = GLFW_TRUE;
                 else if (strcmp(ep[i].extensionName.ptr, "VK_KHR_xcb_surface") == 0)
                     _glfw.vk.KHR_xcb_surface = GLFW_TRUE;
-            } else version (_GLFW_WAYLAND) {
-                if (strcmp(ep[i].extensionName.ptr, "VK_KHR_wayland_surface") == 0)
-                    _glfw.vk.KHR_wayland_surface = GLFW_TRUE;
             }
         }
     }
@@ -256,7 +258,7 @@ GLFWvkproc glfwGetInstanceProcAddress(VkInstance instance, const(char)* procname
         return null;
 
     proc = cast(GLFWvkproc) _glfw.vk.GetInstanceProcAddr(instance, procname);
-version (_GLFW_VULKAN_STATIC) {
+version(_GLFW_VULKAN_STATIC) {
     if (!proc)
     {
         if (strcmp(procname, "vkGetInstanceProcAddr") == 0)

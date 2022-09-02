@@ -1,7 +1,11 @@
 /// Translated from C to D
 module glfw3.wl_platform;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
+
 //========================================================================
 // GLFW 3.3 Wayland - www.glfw.org
 //------------------------------------------------------------------------
@@ -30,10 +34,10 @@ extern(C): @nogc: nothrow: __gshared:
 
 //public import wayland.client;
 //public import xkbcommon.xkbcommon;
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
     public import xkbcommon.xkbcommon_compose;
 }
-import xkbcommon.xkbcommon;
+//import xkbcommon.xkbcommon;
 public import core.sys.posix.dlfcn;
 import glfw3.internal;
 
@@ -52,7 +56,7 @@ alias VkBool32 function(VkPhysicalDevice, uint, wl_display*) PFN_vkGetPhysicalDe
 
 public import glfw3.posix_thread;
 public import glfw3.posix_time;
-version (linux) {
+version(linux) {
     public import glfw3.linux_joystick;
 } else {
     public import glfw3.null_joystick;
@@ -135,7 +139,7 @@ alias int function(xkb_state*, xkb_keycode_t, const(xkb_keysym_t)**) PFN_xkb_sta
 alias xkb_state_component function(xkb_state*, xkb_mod_mask_t, xkb_mod_mask_t, xkb_mod_mask_t, xkb_layout_index_t, xkb_layout_index_t, xkb_layout_index_t) PFN_xkb_state_update_mask;
 alias xkb_mod_mask_t function(xkb_state*, xkb_state_component) PFN_xkb_state_serialize_mods;
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
     alias xkb_compose_table* function(xkb_context*, const(char)*, xkb_compose_compile_flags) PFN_xkb_compose_table_new_from_locale;
     alias void function(xkb_compose_table*) PFN_xkb_compose_table_unref;
     alias xkb_compose_state* function(xkb_compose_table*, xkb_compose_state_flags) PFN_xkb_compose_state_new;
@@ -278,7 +282,7 @@ struct _GLFWlibraryWayland {
         xkb_keymap* keymap;
         xkb_state* state;
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
         xkb_compose_state* composeState;
 }
 
@@ -302,7 +306,7 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
         PFN_xkb_state_update_mask state_update_mask;
         PFN_xkb_state_serialize_mods state_serialize_mods;
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
         PFN_xkb_compose_table_new_from_locale compose_table_new_from_locale;
         PFN_xkb_compose_table_unref compose_table_unref;
         PFN_xkb_compose_state_new compose_state_new;

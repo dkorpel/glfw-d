@@ -1,6 +1,7 @@
 /// Translated from C to D
 module glfw3.xinput;
 
+version(Windows):
 extern(Windows): @nogc: nothrow: __gshared:
 
 import core.sys.windows.windef;

@@ -112,12 +112,14 @@ struct ff_effect {
 	ff_trigger trigger;
 	ff_replay replay;
 
-	union _U {
-		ff_constant_effect constant;
-		ff_ramp_effect ramp;
-		ff_periodic_effect periodic;
-		ff_condition_effect[2] condition;
-		ff_rumble_effect rumble;
+	struct _U {
+		union {
+			ff_constant_effect constant;
+			ff_ramp_effect ramp;
+			ff_periodic_effect periodic;
+			ff_condition_effect[2] condition;
+			ff_rumble_effect rumble;
+		}
 	}
 	_U u;
 }

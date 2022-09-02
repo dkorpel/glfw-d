@@ -1,5 +1,6 @@
 module glfw3.wayland;
 
+version(TODO):
 extern(C): nothrow: @nogc:
 
 // extensions
@@ -74,9 +75,11 @@ alias wl_fixed_t = uint;
 
 pure @safe nothrow @nogc
 pragma(inline, true) double wl_fixed_to_double(wl_fixed_t f) {
-	static union U {
-		double d;
-		ulong i;
+	static struct U {
+		union {
+			double d;
+			ulong i;
+		}
 	}
 	U u;
 	u.i = ((1023L + 44L) << 52) + (1L << 51) + f;

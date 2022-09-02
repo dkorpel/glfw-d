@@ -1,7 +1,11 @@
 /// Translated from C to D
 module glfw3.wl_window;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
+
 //========================================================================
 // GLFW 3.3 Wayland - www.glfw.org
 //------------------------------------------------------------------------
@@ -129,7 +133,7 @@ private int createTmpfileCloexec(char* tmpname) {
  * receive SIGBUS on accessing mmap()'ed file contents instead.
  */
 private int createAnonymousFile(off_t size) {
-    private const(char)* template_ = "/glfw-shared-XXXXXX";
+    const(char)* template_ = "/glfw-shared-XXXXXX";
     const(char)* path;
     char* name;
     int fd;
@@ -155,7 +159,7 @@ private int createAnonymousFile(off_t size) {
         return 0;
     }
 
-version (HAVE_MEMFD_CREATE) {
+version(HAVE_MEMFD_CREATE) {
     fd = memfd_create("glfw-shared", MFD_CLOEXEC | MFD_ALLOW_SEALING);
     if (fd >= 0)
     {
@@ -172,9 +176,8 @@ version (HAVE_MEMFD_CREATE) {
             return -1;
         }
     }
-} else version (SHM_ANON) {
-    import std.conv: octal;
-    fd = shm_open(SHM_ANON, O_RDWR | O_CLOEXEC, octal!600);
+} else version(SHM_ANON) {
+    fd = shm_open(SHM_ANON, O_RDWR | O_CLOEXEC, 0x180); // 0x180 = octal!600
     if (fd < 0) {
         if (inner() < 0) {
             return -1;
@@ -182,7 +185,7 @@ version (HAVE_MEMFD_CREATE) {
     }
 }
 
-version (SHM_ANON) {
+version(SHM_ANON) {
     // posix_fallocate does not work on SHM descriptors
     ret = ftruncate(fd, size);
 } else {

@@ -1,7 +1,10 @@
 /// Translated from C to D
 module glfw3.win32_init;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
 
 //========================================================================
 // GLFW 3.3 Win32 - www.glfw.org
@@ -62,7 +65,7 @@ int AmdPowerXpressRequestHighPerformance = 1;
 
 }
 
-version (_GLFW_BUILD_DLL) {
+version(_GLFW_BUILD_DLL) {
 
 // GLFW DLL entry point
 //
@@ -610,9 +613,9 @@ void _glfwPlatformTerminate() {
 }
 
 const(char)* _glfwPlatformGetVersionString() {
-    version (MinGW) {
+    version(MinGW) {
         enum clibPart = " MinGW";
-    } else version (CRuntime_Microsoft) {
+    } else version(CRuntime_Microsoft) {
         enum clibPart = " VisualC";
     } else {
         enum clibPart = "";
@@ -625,7 +628,7 @@ const(char)* _glfwPlatformGetVersionString() {
     } else {
         enum optimusPart = "";
     }
-    version (_GLFW_BUILD_DLL) {
+    version(_GLFW_BUILD_DLL) {
         enum dllPart = " DLL";
     } else {
         enum dllPart = "";

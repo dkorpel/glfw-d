@@ -1,7 +1,11 @@
 /// Translated from C to D
 module glfw3.win32_joystick;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
+
 //========================================================================
 // GLFW 3.3 Win32 - www.glfw.org
 //------------------------------------------------------------------------

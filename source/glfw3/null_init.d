@@ -1,7 +1,10 @@
 /// Translated from C to D
 module glfw3.null_init;
 
-extern(C): @nogc: nothrow: __gshared:
+version(_GLFW_OSMESA):
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------

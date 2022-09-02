@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.null_platform;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 - www.glfw.org
 //------------------------------------------------------------------------
@@ -46,7 +48,7 @@ public import glfw3.posix_time;
 public import glfw3.posix_thread;
 public import glfw3.null_joystick;
 
-version (_GLFW_WIN32) {
+version(Windows) {
     auto _glfw_dlopen(const(char)* name) { return LoadLibraryA(name); }
     auto _glfw_dlclose(void* handle) { return FreeLibrary(cast(HMODULE) handle); }
     auto _glfw_dlsym(void* handle, const(char)* name) { return GetProcAddress(cast(HMODULE) handle, name);}

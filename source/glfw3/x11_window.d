@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.x11_window;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org
 //------------------------------------------------------------------------
@@ -77,7 +79,7 @@ private GLFWbool waitForEvent(double* timeout) {
     const(int) fd = ConnectionNumber(_glfw.x11.display);
     int count = fd + 1;
 
-version (linux) {
+version(linux) {
     if (_glfw.linjs.inotify > fd)
         count = _glfw.linjs.inotify + 1;
 }
@@ -85,7 +87,7 @@ version (linux) {
     {
         FD_ZERO(&fds);
         FD_SET(fd, &fds);
-version (linux) {
+version(linux) {
         if (_glfw.linjs.inotify > 0)
             FD_SET(_glfw.linjs.inotify, &fds);
 }
@@ -463,7 +465,7 @@ private size_t encodeUTF8(char* s, uint ch) {
 // Decode a Unicode code point from a UTF-8 stream
 // Based on cutef8 by Jeff Bezanson (Public Domain)
 //
-version (X_HAVE_UTF8_STRING) {
+version(X_HAVE_UTF8_STRING) {
 private uint decodeUTF8(const(char)** s) {
     uint ch = 0;uint count = 0;
     static const(uint)* offsets = [
@@ -1271,7 +1273,7 @@ private extern(D) void processEvent(XEvent* event) {
                 {
                     int count;
                     Status status;
-version (X_HAVE_UTF8_STRING) {
+version(X_HAVE_UTF8_STRING) {
                     char[100] buffer;
                     char* chars = buffer;
 
@@ -2044,7 +2046,7 @@ void _glfwPlatformDestroyWindow(_GLFWwindow* window) {
 }
 
 void _glfwPlatformSetWindowTitle(_GLFWwindow* window, const(char)* title) {
-version (X_HAVE_UTF8_STRING) {
+version(X_HAVE_UTF8_STRING) {
     Xutf8SetWMProperties(_glfw.x11.display,
                          window.x11.handle,
                          title, title,
@@ -2680,7 +2682,7 @@ GLFWbool _glfwPlatformRawMouseMotionSupported() {
 void _glfwPlatformPollEvents() {
     _GLFWwindow* window;
 
-version (linux) {
+version(linux) {
     _glfwDetectJoystickConnectionLinux();
 }
     XPending(_glfw.x11.display);
@@ -2907,7 +2909,7 @@ int _glfwPlatformGetPhysicalDevicePresentationSupport(VkInstance instance, VkPhy
 
     if (_glfw.vk.KHR_xcb_surface && _glfw.x11.x11xcb.handle)
     {
-        version (_GLFW_VULKAN_STATIC) {
+        version(_GLFW_VULKAN_STATIC) {
             PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR vkGetPhysicalDeviceXcbPresentationSupportKHR = cast(PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR)
                 vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceXcbPresentationSupportKHR");
         } else {
@@ -2936,7 +2938,7 @@ int _glfwPlatformGetPhysicalDevicePresentationSupport(VkInstance instance, VkPhy
     }
     else
     {
-        version (_GLFW_VULKAN_STATIC) {
+        version(_GLFW_VULKAN_STATIC) {
             PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR vkGetPhysicalDeviceXlibPresentationSupportKHR = cast(PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR)
                 vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceXlibPresentationSupportKHR");
         } else {
@@ -2972,7 +2974,7 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance, _GLFWwindow* wind
             return VkResult.VK_ERROR_EXTENSION_NOT_PRESENT;
         }
 
-        version (_GLFW_VULKAN_STATIC) {
+        version(_GLFW_VULKAN_STATIC) {
             vkCreateXcbSurfaceKHR = cast(PFN_vkCreateXcbSurfaceKHR)
                 vkGetInstanceProcAddr(instance, "vkCreateXcbSurfaceKHR");
         } else {
@@ -3008,7 +3010,7 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance, _GLFWwindow* wind
         VkXlibSurfaceCreateInfoKHR sci;
         PFN_vkCreateXlibSurfaceKHR vkCreateXlibSurfaceKHR;
 
-        version (_GLFW_VULKAN_STATIC) {
+        version(_GLFW_VULKAN_STATIC) {
             vkCreateXlibSurfaceKHR = cast(PFN_vkCreateXlibSurfaceKHR)
                 vkGetInstanceProcAddr(instance, "vkCreateXlibSurfaceKHR");
         } else {

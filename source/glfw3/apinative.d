@@ -5,7 +5,8 @@
  */
 module glfw3.apinative;
 
-extern(C): @nogc: nothrow: __gshared: export:
+@nogc nothrow:
+extern(C): __gshared:
 
 /*************************************************************************
  * GLFW 3.3 - www.glfw.org
@@ -77,7 +78,7 @@ extern(C): @nogc: nothrow: __gshared: export:
  * Functions
  *************************************************************************/
 
-version (GLFW_EXPOSE_NATIVE_WIN32) {
+version(GLFW_EXPOSE_NATIVE_WIN32) {
 /** Returns the adapter device name of the specified monitor.
  *
  *  Returns: The UTF-8 encoded adapter device name (for example `\\.\DISPLAY1`)
@@ -123,7 +124,7 @@ const(char)* glfwGetWin32Monitor(GLFWmonitor* monitor);
 HWND glfwGetWin32Window(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_WGL) {
+version(GLFW_EXPOSE_NATIVE_WGL) {
 /** Returns the `HGLRC` of the specified window.
  *
  *  Returns: The `HGLRC` of the specified window, or `null` if an
@@ -139,7 +140,7 @@ version (GLFW_EXPOSE_NATIVE_WGL) {
 HGLRC glfwGetWGLContext(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_COCOA) {
+version(GLFW_EXPOSE_NATIVE_COCOA) {
 /** Returns the `CGDirectDisplayID` of the specified monitor.
  *
  *  Returns: The `CGDirectDisplayID` of the specified monitor, or
@@ -169,7 +170,7 @@ CGDirectDisplayID glfwGetCocoaMonitor(GLFWmonitor* monitor);
 id glfwGetCocoaWindow(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_NSGL) {
+version(GLFW_EXPOSE_NATIVE_NSGL) {
 /** Returns the `NSOpenGLContext` of the specified window.
  *
  *  Returns: The `NSOpenGLContext` of the specified window, or `nil` if an
@@ -185,7 +186,7 @@ version (GLFW_EXPOSE_NATIVE_NSGL) {
 id glfwGetNSGLContext(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_X11) {
+version(GLFW_EXPOSE_NATIVE_X11) {
 /** Returns the `Display` used by GLFW.
  *
  *  Returns: The `Display` used by GLFW, or `null` if an
@@ -294,7 +295,7 @@ void glfwSetX11SelectionString(const(char)* string_);
 const(char)* glfwGetX11SelectionString();
 }
 
-version (GLFW_EXPOSE_NATIVE_GLX) {
+version(GLFW_EXPOSE_NATIVE_GLX) {
 /** Returns the `GLXContext` of the specified window.
  *
  *  Returns: The `GLXContext` of the specified window, or `null` if an
@@ -324,7 +325,7 @@ GLXContext glfwGetGLXContext(GLFWwindow* window);
 GLXWindow glfwGetGLXWindow(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_WAYLAND) {
+version(GLFW_EXPOSE_NATIVE_WAYLAND) {
 /** Returns the `struct wl_display*` used by GLFW.
  *
  *  Returns: The `struct wl_display*` used by GLFW, or `null` if an
@@ -368,7 +369,7 @@ wl_output* glfwGetWaylandMonitor(GLFWmonitor* monitor);
 wl_surface* glfwGetWaylandWindow(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_EGL) {
+version(GLFW_EXPOSE_NATIVE_EGL) {
 /** Returns the `EGLDisplay` used by GLFW.
  *
  *  Returns: The `EGLDisplay` used by GLFW, or `EGL_NO_DISPLAY` if an
@@ -412,7 +413,7 @@ EGLContext glfwGetEGLContext(GLFWwindow* window);
 EGLSurface glfwGetEGLSurface(GLFWwindow* window);
 }
 
-version (GLFW_EXPOSE_NATIVE_OSMESA) {
+version(GLFW_EXPOSE_NATIVE_OSMESA) {
 /** Retrieves the color buffer associated with the specified window.
  *
  * Params:

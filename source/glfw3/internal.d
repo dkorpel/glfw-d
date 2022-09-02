@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.internal;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 
 //========================================================================
 // GLFW 3.3 - www.glfw.org
@@ -137,7 +139,7 @@ struct VkExtensionProperties{
 
 alias PFN_vkVoidFunction = void function();
 
-version (_GLFW_VULKAN_STATIC) {
+version(_GLFW_VULKAN_STATIC) {
   PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance, const(char)*);
   VkResult vkEnumerateInstanceExtensionProperties(const(char)*, uint*, VkExtensionProperties*);
 } else {
@@ -147,16 +149,16 @@ version (_GLFW_VULKAN_STATIC) {
   enum vkGetInstanceProcAddr = "_glfw.vk.GetInstanceProcAddr";
 }
 
-version (_GLFW_COCOA) {
-    public import glfw3.cocoa_platform;
-} else version (_GLFW_WIN32) {
-    public import glfw3.win32_platform;
-} else version (_GLFW_X11) {
-    public import glfw3.x11_platform;
-} else version (_GLFW_WAYLAND) {
+version(_GLFW_WAYLAND) {
     public import glfw3.wl_platform;
-} else version (_GLFW_OSMESA) {
+} else version(_GLFW_OSMESA) {
     public import glfw3.null_platform;
+} else version(OSX) {
+    public import glfw3.cocoa_platform;
+} else version(Windows) {
+    public import glfw3.win32_platform;
+} else version(linux) {
+    public import glfw3.x11_platform;
 } else {
     static assert(0, "No supported window creation API selected");
 }
@@ -517,15 +519,15 @@ version(_GLFW_VULKAN_STATIC) {} else {
         PFN_vkGetInstanceProcAddr GetInstanceProcAddr;
 }
         GLFWbool KHR_surface;
-version (_GLFW_WIN32) {
+version(Windows) {
         GLFWbool KHR_win32_surface;
-} else version (_GLFW_COCOA) {
+} else version(OSX) {
         GLFWbool MVK_macos_surface;
         GLFWbool EXT_metal_surface;
-} else version (_GLFW_X11) {
+} else version(linux) {
         GLFWbool KHR_xlib_surface;
         GLFWbool KHR_xcb_surface;
-} else version (_GLFW_WAYLAND) {
+} else version(_GLFW_WAYLAND) {
         GLFWbool KHR_wayland_surface;
 }
     }_Vk vk;

@@ -1,6 +1,7 @@
 /// Translated from C to D
 module glfw3.win32_window;
 
+version(Windows):
 extern(C): __gshared:
 // @nogc: nothrow:
 

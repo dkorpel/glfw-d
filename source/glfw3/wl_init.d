@@ -1,11 +1,11 @@
 /// Translated from C to D
 module glfw3.wl_init;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
 
-private template HasVersion(string versionId) {
-	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
-}
+
 import core.stdc.config: c_long, c_ulong;
 //========================================================================
 // GLFW 3.3 Wayland - www.glfw.org
@@ -47,7 +47,7 @@ import core.stdc.string;
 import core.sys.posix.sys.mman;
 import core.sys.linux.timerfd;
 import core.sys.posix.unistd;
-import xkbcommon.xkbcommon;
+//import xkbcommon.xkbcommon;
 
 //public import wayland-client;
 //import wayland.native.util;
@@ -347,7 +347,7 @@ private void keyboardHandleKeymap(void* data, wl_keyboard* keyboard, uint format
     xkb_keymap* keymap;
     xkb_state* state;
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
     xkb_compose_table* composeTable;
     xkb_compose_state* composeState;
 }
@@ -399,7 +399,7 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
     if (!locale)
         locale = "C";
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
     composeTable =
         xkb_compose_table_new_from_locale(_glfw.wl.xkb.context, locale,
                                           XKB_COMPOSE_COMPILE_NO_FLAGS);
@@ -476,7 +476,7 @@ private int toGLFWKeyCode(uint key) {
     return GLFW_KEY_UNKNOWN;
 }
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
 private xkb_keysym_t composeSymbol(xkb_keysym_t sym) {
     if (sym == XKB_KEY_NoSymbol || !_glfw.wl.xkb.composeState)
         return sym;
@@ -508,7 +508,7 @@ private GLFWbool inputChar(_GLFWwindow* window, uint key) {
 
     if (numSyms == 1)
     {
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
         sym = composeSymbol(syms[0]);
 } else {
         sym = syms[0];
@@ -599,7 +599,7 @@ private void keyboardHandleModifiers(void* data, wl_keyboard* keyboard, uint ser
     _glfw.wl.xkb.modifiers = modifiers;
 }
 
-version (WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION) {
+version(WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION) {
     private void keyboardHandleRepeatInfo(void* data, wl_keyboard* keyboard, int rate, int delay) {
         if (keyboard != _glfw.wl.keyboard)
             return;
@@ -1023,7 +1023,7 @@ int _glfwPlatformInit() {
     _glfw.wl.xkb.state_serialize_mods = cast(PFN_xkb_state_serialize_mods)
         _glfw_dlsym(_glfw.wl.xkb.handle, "xkb_state_serialize_mods");
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
     _glfw.wl.xkb.compose_table_new_from_locale = cast(PFN_xkb_compose_table_new_from_locale)
         _glfw_dlsym(_glfw.wl.xkb.handle, "xkb_compose_table_new_from_locale");
     _glfw.wl.xkb.compose_table_unref = cast(PFN_xkb_compose_table_unref)
@@ -1067,7 +1067,7 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
     // Sync so we got all initial output events
     wl_display_roundtrip(_glfw.wl.display);
 
-version (linux) {
+version(linux) {
     if (!_glfwInitJoysticksLinux())
         return GLFW_FALSE;
 }
@@ -1126,7 +1126,7 @@ version (linux) {
 }
 
 void _glfwPlatformTerminate() {
-version (linux) {
+version(linux) {
     _glfwTerminateJoysticksLinux();
 }
     _glfwTerminateEGL();
@@ -1136,7 +1136,7 @@ version (linux) {
         _glfw.wl.egl.handle = null;
     }
 
-version (HAVE_XKBCOMMON_COMPOSE_H) {
+version(HAVE_XKBCOMMON_COMPOSE_H) {
     if (_glfw.wl.xkb.composeState)
         xkb_compose_state_unref(_glfw.wl.xkb.composeState);
 }
@@ -1218,14 +1218,14 @@ version (HAVE_XKBCOMMON_COMPOSE_H) {
 }
 
 const(char)* _glfwPlatformGetVersionString() {
-    version (_POSIX_TIMERS) {
+    version(_POSIX_TIMERS) {
         enum timeStr = " clock_gettime";
-    } else version (_POSIX_MONOTONIC_CLOCK) {
+    } else version(_POSIX_MONOTONIC_CLOCK) {
         enum timeStr = " gettimeofday";
     } else {
         enum timeStr = " gettimeofday";
     }
-    version (_GLFW_BUILD_DLL) {
+    version(_GLFW_BUILD_DLL) {
         enum dllStr = " shared";
     } else {
         enum dllStr = "";

@@ -4,6 +4,7 @@
 /// Also assumes `UNICODE`, so only the variants that end in W (using wchar) instead of A (using ascii char).
 module glfw3.directinput8;
 
+version(Windows):
 extern(Windows): @nogc: nothrow: __gshared:
 
 import core.sys.windows.windows;

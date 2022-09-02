@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.linux_joystick;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 
 //========================================================================
 // GLFW 3.3 Linux - www.glfw.org
@@ -291,7 +293,7 @@ private GLFWbool openJoystickDevice(const(char)* path) {
     }
 
     strncpy(linjs.path.ptr, path, linjs.path.length - 1);
-    memcpy(&js.linjs, &linjs, linjs.sizeof); // twab: wrong size, linjs.path.length
+    memcpy(&js.linjs, &linjs, linjs.sizeof); // #twab: wrong size, linjs.path.length
 
     pollAbsState(js);
 

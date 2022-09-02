@@ -7,7 +7,9 @@
  */
 module glfw3.api;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 /*************************************************************************
  * GLFW 3.3 - www.glfw.org
  * A library for OpenGL, window and input
@@ -5696,7 +5698,7 @@ int glfwVulkanSupported();
  */
 const(char)** glfwGetRequiredInstanceExtensions(uint* count);
 
-version (VK_VERSION_1_0) {
+version(VK_VERSION_1_0) {
 
 import glfw3.vulkan;
 import glfw3.internal;

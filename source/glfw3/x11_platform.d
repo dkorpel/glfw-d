@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.x11_platform;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org
 //------------------------------------------------------------------------
@@ -112,7 +114,7 @@ alias XineramaQueryScreens = _glfw.x11.xinerama.QueryScreens;
 
 alias XID xcb_window_t;
 alias XID xcb_visualid_t;
-struct xcb_connection_t ;/+alias xcb_connection_t xcb_connection_t;+/
+struct xcb_connection_t;
 alias xcb_connection_t* function(Display*) PFN_XGetXCBConnection;
 alias XGetXCBConnection = _glfw.x11.x11xcb.GetXCBConnection;
 
@@ -169,7 +171,7 @@ public import glfw3.egl_context;
 public import glfw3.osmesa_context;
 import glfw3.internal;
 
-version (linux) {
+version(linux) {
     public import glfw3.linux_joystick;
 } else {
     public import glfw3.null_joystick;

@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.x11_init;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org
@@ -480,7 +482,7 @@ private GLFWbool initExtensions() {
                                       &_glfw.x11.vidmode.errorBase);
     }
 
-version (Cygwin) {
+version(Cygwin) {
     _glfw.x11.xi.handle = _glfw_dlopen("libXi-6.so");
 } else {
     _glfw.x11.xi.handle = _glfw_dlopen("libXi.so.6");
@@ -510,7 +512,7 @@ version (Cygwin) {
         }
     }
 
-version (Cygwin) {
+version(Cygwin) {
     _glfw.x11.randr.handle = _glfw_dlopen("libXrandr-2.so");
 } else {
     _glfw.x11.randr.handle = _glfw_dlopen("libXrandr.so.2");
@@ -602,7 +604,7 @@ version (Cygwin) {
                        RROutputChangeNotifyMask);
     }
 
-version (Cygwin) {
+version(Cygwin) {
     _glfw.x11.xcursor.handle = _glfw_dlopen("libXcursor-1.so");
 } else {
     _glfw.x11.xcursor.handle = _glfw_dlopen("libXcursor.so.1");
@@ -617,7 +619,7 @@ version (Cygwin) {
             _glfw_dlsym(_glfw.x11.xcursor.handle, "XcursorImageLoadCursor");
     }
 
-version (Cygwin) {
+version(Cygwin) {
     _glfw.x11.xinerama.handle = _glfw_dlopen("libXinerama-1.so");
 } else {
     _glfw.x11.xinerama.handle = _glfw_dlopen("libXinerama.so.1");
@@ -669,7 +671,7 @@ version (Cygwin) {
         }
     }
 
-version (Cygwin) {
+version(Cygwin) {
     _glfw.x11.x11xcb.handle = _glfw_dlopen("libX11-xcb-1.so");
 } else {
     _glfw.x11.x11xcb.handle = _glfw_dlopen("libX11-xcb.so.1");
@@ -680,7 +682,7 @@ version (Cygwin) {
             _glfw_dlsym(_glfw.x11.x11xcb.handle, "XGetXCBConnection");
     }
 
-version (Cygwin) {
+version(Cygwin) {
     _glfw.x11.xrender.handle = _glfw_dlopen("libXrender-1.so");
 } else {
     _glfw.x11.xrender.handle = _glfw_dlopen("libXrender.so.1");
@@ -922,7 +924,7 @@ Cursor _glfwCreateCursorX11(const(GLFWimage)* image, int xhot, int yhot) {
 //////////////////////////////////////////////////////////////////////////
 
 int _glfwPlatformInit() {
-version (X_HAVE_UTF8_STRING) {} else {
+version(X_HAVE_UTF8_STRING) {} else {
     // HACK: If the current locale is "C" and the Xlib UTF-8 functions are
     //       unavailable, apply the environment's locale in the hope that it's
     //       both available and not "C"
@@ -980,7 +982,7 @@ version (X_HAVE_UTF8_STRING) {} else {
         }
     }
 
-    version (linux) {
+    version(linux) {
         if (!_glfwInitJoysticksLinux())
             return GLFW_FALSE;
     }
@@ -1072,18 +1074,18 @@ void _glfwPlatformTerminate() {
     _glfwTerminateEGL();
     _glfwTerminateGLX();
 
-    version (linux) {
+    version(linux) {
         _glfwTerminateJoysticksLinux();
     }
 }
 
 const(char)* _glfwPlatformGetVersionString() {
-    version (linux) {
+    version(linux) {
         enum evdev = " evdev";
     } else {
         enum evdev = "";
     }
-    version (_GLFW_BUILD_DLL) {
+    version(_GLFW_BUILD_DLL) {
         enum dllStr = " shared";
     } else {
         enum dllStr = "";

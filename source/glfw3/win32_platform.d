@@ -1,7 +1,11 @@
 /// Translated from C to D
 module glfw3.win32_platform;
 
-extern(C): @nogc: nothrow: __gshared:
+version(Windows):
+@nogc nothrow:
+extern(C): __gshared:
+
+
 //========================================================================
 // GLFW 3.3 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -86,7 +90,7 @@ version(all) {
     //public import dwmapi;
 }
 
-version (all) {
+version(all) {
     enum PROCESS_DPI_AWARENESS {
         PROCESS_DPI_UNAWARE = 0,
         PROCESS_SYSTEM_DPI_AWARE = 1,

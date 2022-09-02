@@ -1,7 +1,9 @@
 /// Translated from C to D
 module glfw3.egl_context;
 
-extern(C): @nogc: nothrow: __gshared:
+@nogc nothrow:
+extern(C): __gshared:
+
 //========================================================================
 // GLFW 3.3 EGL - www.glfw.org
 //------------------------------------------------------------------------
@@ -32,18 +34,18 @@ extern(C): @nogc: nothrow: __gshared:
 //========================================================================
 
 // HEADER
-version (_GLFW_WIN32) {
-    alias EGLNativeDisplayType = HDC;
-    alias EGLNativeWindowType = HWND;
-} else version (_GLFW_COCOA) {
-    alias EGLNativeDisplayType = void*;
-    alias EGLNativeWindowType = id ;
-} else version (_GLFW_X11) {
-    alias EGLNativeDisplayType = Display*;
-    alias EGLNativeWindowType = Window;
-} else version (_GLFW_WAYLAND) {
+version(_GLFW_WAYLAND) {
     alias EGLNativeDisplayType = wl_display*;
     alias EGLNativeWindowType = wl_egl_window*;
+} else version(Windows) {
+    alias EGLNativeDisplayType = HDC;
+    alias EGLNativeWindowType = HWND;
+} else version(OSX) {
+    alias EGLNativeDisplayType = void*;
+    alias EGLNativeWindowType = id ;
+} else version(linux) {
+    alias EGLNativeDisplayType = Display*;
+    alias EGLNativeWindowType = Window;
 } else {
     static assert(0, "No supported EGL platform selected");
 }
@@ -204,9 +206,9 @@ struct _GLFWlibraryEGL {
 GLFWbool _glfwInitEGL();
 void _glfwTerminateEGL();
 GLFWbool _glfwCreateContextEGL(_GLFWwindow* window, const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbconfig)* fbconfig);
-version (_GLFW_X11) {
+version(linux) {
     GLFWbool _glfwChooseVisualEGL(const(_GLFWwndconfig)* wndconfig, const(_GLFWctxconfig)* ctxconfig, const(_GLFWfbconfig)* fbconfig, Visual** visual, int* depth);
-} /*_GLFW_X11*/
+} /*linux*/
 
 //////////////////////
 
@@ -300,7 +302,7 @@ private GLFWbool chooseEGLConfig(const(_GLFWctxconfig)* ctxconfig, const(_GLFWfb
         if (!(getEGLConfigAttrib(n, EGL_SURFACE_TYPE) & EGL_WINDOW_BIT))
             continue;
 
-        version (_GLFW_X11)
+        version(linux)
         {
             XVisualInfo vi = XVisualInfo(null);
 
@@ -439,7 +441,7 @@ private GLFWglproc getProcAddressEGL(const(char)* procname) {
 private void destroyContextEGL(_GLFWwindow* window) {
     // NOTE: Do not unload libGL.so.1 while the X11 display is still open,
     //       as it will make XCloseDisplay segfault
-    version (_GLFW_X11) {
+    version(linux) {
         const bool condition = window.context.client != GLFW_OPENGL_API;
     } else {
         const bool condition = true;
@@ -475,9 +477,9 @@ private void destroyContextEGL(_GLFWwindow* window) {
 //
 GLFWbool _glfwInitEGL() {
     int i;
-    version(_GLFW_WIN32) {
+    version(Windows) {
         static immutable char*[] sonames = ["libEGL.dll", "EGL.dll", null];
-    } else version(_GLFW_COCOA) {
+    } else version(OSX) {
         static immutable char*[] sonames = ["libEGL.dylib", null];
     } else version(Cygwin) {
         static immutable char*[] sonames = ["libEGL-1.so", null];
@@ -781,30 +783,30 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window, const(_GLFWctxconfig)* ctxco
         int i;
         const(char*)* sonames;
 
-        version(_GLFW_WIN32) {
+        version(Windows) {
             static immutable char*[3] es1sonames = ["GLESv1_CM.dll","libGLES_CM.dll", null];
-        } else version(_GLFW_COCOA) {
+        } else version(OSX) {
             static immutable char*[2] es1sonames = ["libGLESv1_CM.dylib", null];
         } else {
             static immutable char*[3] es1sonames = ["libGLESv1_CM.so.1","libGLES_CM.so.1", null];
         }
 
-        version(_GLFW_WIN32) {
-            static immutable char*[3] es2sonames = ["GLESv2.dll","libGLESv2.dll",null];
-        } else version(_GLFW_COCOA) {
-            static immutable char*[2] es2sonames = ["libGLESv2.dylib",null];
+        version(Windows) {
+            static immutable char*[3] es2sonames = ["GLESv2.dll","libGLESv2.dll", null];
+        } else version(OSX) {
+            static immutable char*[2] es2sonames = ["libGLESv2.dylib", null];
         } else version(Cygwin) {
-            static immutable char*[2] es2sonames = ["libGLESv2-2.so",null];
+            static immutable char*[2] es2sonames = ["libGLESv2-2.so", null];
         } else {
-            static immutable char*[2] es2sonames = ["libGLESv2.so.2",null];
+            static immutable char*[2] es2sonames = ["libGLESv2.so.2", null];
         }
 
-        version(_GLFW_WIN32) {
+        version(Windows) {
             static immutable char*[1] glsonames = [null];
-        } else version(_GLFW_COCOA) {
+        } else version(OSX) {
             static immutable char*[1] glsonames = [null];
         } else {
-            static immutable char*[2] glsonames = ["libGL.so.1",null];
+            static immutable char*[2] glsonames = ["libGL.so.1", null];
         }
 
         if (ctxconfig.client == GLFW_OPENGL_ES_API)
@@ -849,7 +851,7 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window, const(_GLFWctxconfig)* ctxco
 
 // Returns the Visual and depth of the chosen EGLConfig
 //
-version (_GLFW_X11) {
+version(linux) {
 GLFWbool _glfwChooseVisualEGL(
     const(_GLFWwndconfig)* wndconfig, const(_GLFWctxconfig)* ctxconfig,
     const(_GLFWfbconfig)* fbconfig, Visual** visual, int* depth
@@ -887,7 +889,7 @@ GLFWbool _glfwChooseVisualEGL(
     XFree(result);
     return GLFW_TRUE;
 }
-} // _GLFW_X11
+} // linux
 
 
 //////////////////////////////////////////////////////////////////////////

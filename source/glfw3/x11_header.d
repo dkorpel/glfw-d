@@ -14,9 +14,8 @@ import core.stdc.stddef: wchar_t;
 import core.stdc.stdio: fopen;
 import core.stdc.stdlib: free, malloc, calloc, realloc;
 
-extern(C)
-nothrow:
-@nogc:
+extern(C):
+nothrow @nogc:
 
 const uint X_PROTOCOL = 11;
 const uint X_PROTOCOL_REVISION = 0;
@@ -3043,12 +3042,8 @@ struct Box {
 }
 alias Box BOX;
 alias Box BoxRec;
-int MAX(int a, int b) {
-    return (a < b) ? b : a;
-}
-int MIN(int a, int b) {
-    return (a > b) ? b : a;
-}
+// private extern(D) int MAX(int a, int b) {return (a < b) ? b : a;}
+// private extern(D) int MIN(int a, int b) {return (a > b) ? b : a;}
 struct _XRegion {
     c_long size;
     c_long numRects;
