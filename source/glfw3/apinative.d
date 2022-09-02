@@ -36,6 +36,8 @@ extern(C): __gshared:
  *
  *************************************************************************/
 
+import glfw3.api;
+
 /** @defgroup native Native access
  *  Functions related to accessing native handles.
  *
@@ -79,6 +81,8 @@ extern(C): __gshared:
  *************************************************************************/
 
 version(GLFW_EXPOSE_NATIVE_WIN32) {
+import core.sys.windows.windows: HWND;
+
 /** Returns the adapter device name of the specified monitor.
  *
  *  Returns: The UTF-8 encoded adapter device name (for example `\\.\DISPLAY1`)
@@ -187,6 +191,8 @@ id glfwGetNSGLContext(GLFWwindow* window);
 }
 
 version(GLFW_EXPOSE_NATIVE_X11) {
+import glfw3.x11_header;
+
 /** Returns the `Display` used by GLFW.
  *
  *  Returns: The `Display` used by GLFW, or `null` if an
