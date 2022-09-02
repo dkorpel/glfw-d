@@ -14,9 +14,6 @@ subPackage "examples/triangle-vulkan"
 versions "VK_VERSION_1_0"
 
 dflags "-preview=dip1000"
-dflags "-preview=fieldwise"
-dflags "-preview=fixAliasThis"
-dflags "-preview=intpromote"
 dflags "-mixin=build/mixin.d"
 
 sourcePaths // by default dub includes everything in source/, which we don't want here
