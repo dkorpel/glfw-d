@@ -1858,16 +1858,14 @@ private void demo_init_vk(Demo* demo) {
 		err = vkCreateDebugReportCallbackEXT(demo.inst, &dbgCreateInfo, null,
 											 &demo.msg_callback);
 		switch (err) {
-		case VK_SUCCESS:
-			break;
-		case VK_ERROR_OUT_OF_HOST_MEMORY:
-			ERR_EXIT("CreateDebugReportCallback: out of host memory\n",
-					 "CreateDebugReportCallback Failure");
-			break;
-		default:
-			ERR_EXIT("CreateDebugReportCallback: unknown failure\n",
-					 "CreateDebugReportCallback Failure");
-			break;
+			case VK_SUCCESS:
+				break;
+			case VK_ERROR_OUT_OF_HOST_MEMORY:
+				return ERR_EXIT("CreateDebugReportCallback: out of host memory\n",
+						"CreateDebugReportCallback Failure");
+			default:
+				return ERR_EXIT("CreateDebugReportCallback: unknown failure\n",
+						"CreateDebugReportCallback Failure");
 		}
 	}
 
