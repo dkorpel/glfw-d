@@ -1839,7 +1839,7 @@ private void demo_init_vk(Demo* demo) {
 
 	if (!swapchainExtFound) {
 		ERR_EXIT("vkEnumerateDeviceExtensionProperties failed to find "
-				 ~ "the " ~ VK_KHR_SWAPCHAIN_EXTENSION_NAME
+				 ~ "the VK_KHR_swapchain"
 				 ~ " extension.\n\nDo you have a compatible "
 				 ~ "Vulkan installable client driver (ICD) installed?\nPlease "
 				 ~ "look at the Getting Started guide for additional "
