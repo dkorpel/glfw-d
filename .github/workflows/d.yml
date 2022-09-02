@@ -8,7 +8,7 @@ on:
 
 jobs:
     test:
-        name: Build empty window example
+        name: Build examples
         strategy:
             matrix:
                 os: [ubuntu-latest, windows-latest]
