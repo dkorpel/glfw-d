@@ -148,7 +148,7 @@ private int getWindowState(_GLFWwindow* window) {
                                   _glfw.x11.WM_STATE,
                                   cast(ubyte**) &state) >= 2)
     {
-        result = state.state;
+        result = cast(int)state.state;
     }
 
     if (state)
