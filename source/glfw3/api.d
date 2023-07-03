@@ -1586,7 +1586,7 @@ struct GLFWgamepadstate {
     /** The states of each [gamepad axis](@ref gamepad_axes), in the range -1.0
      *  to 1.0 inclusive.
      */
-    float[6] axes;
+    float[6] axes = 0.0;
 }
 
 

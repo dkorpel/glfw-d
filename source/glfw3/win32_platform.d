@@ -220,7 +220,7 @@ extern(Windows) {
 alias VkFlags VkWin32SurfaceCreateFlagsKHR;
 
 struct VkWin32SurfaceCreateInfoKHR {
-    VkStructureType sType;
+    VkStructureType sType = void;
     const(void)* pNext;
     VkWin32SurfaceCreateFlagsKHR flags;
     HINSTANCE hinstance;

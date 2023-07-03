@@ -143,7 +143,7 @@ alias VkFlags VkXlibSurfaceCreateFlagsKHR;
 alias VkFlags VkXcbSurfaceCreateFlagsKHR;
 
 struct VkXlibSurfaceCreateInfoKHR {
-    VkStructureType sType;
+    VkStructureType sType = void;
     const(void)* pNext;
     VkXlibSurfaceCreateFlagsKHR flags;
     Display* dpy;
@@ -151,7 +151,7 @@ struct VkXlibSurfaceCreateInfoKHR {
 }
 
 struct VkXcbSurfaceCreateInfoKHR {
-    VkStructureType sType;
+    VkStructureType sType = void;
     const(void)* pNext;
     VkXcbSurfaceCreateFlagsKHR flags;
     xcb_connection_t* connection;
@@ -205,13 +205,17 @@ struct _GLFWwindowX11 {
     GLFWbool transparent;
 
     // Cached position and size used to filter out duplicate events
-    int width;int height;
-    int xpos;int ypos;
+    int width;
+    int height;
+    int xpos;
+    int ypos;
 
     // The last received cursor position, regardless of source
-    int lastCursorPosX;int lastCursorPosY;
+    int lastCursorPosX;
+    int lastCursorPosY;
     // The last position the cursor was warped to by GLFW
-    int warpCursorPosX;int warpCursorPosY;
+    int warpCursorPosX;
+    int warpCursorPosY;
 
     // The time of the last KeyPress event
     Time lastKeyTime;
@@ -226,7 +230,8 @@ struct _GLFWlibraryX11 {
     Window root;
 
     // System content scale
-    float contentScaleX;float contentScaleY;
+    float contentScaleX = 0.0;
+    float contentScaleY = 0.0;
     // Helper window for IPC
     Window helperWindowHandle;
     // Invisible cursor for hidden cursor mode
@@ -242,13 +247,14 @@ struct _GLFWlibraryX11 {
     // Clipboard string (while the selection is owned)
     char* clipboardString;
     // Key name string
-    char[5][GLFW_KEY_LAST + 1] keynames;
+    char[5][GLFW_KEY_LAST + 1] keynames = '\0';
     // X11 keycode to GLFW key LUT
     int[256] keycodes;
     // GLFW key to X11 keycode LUT
     int[GLFW_KEY_LAST + 1] scancodes;
     // Where to place the cursor when re-enabled
-    double restoreCursorPosX;double restoreCursorPosY;
+    double restoreCursorPosX = 0.0;
+    double restoreCursorPosY = 0.0;
     // The window whose disabled cursor mode is active
     _GLFWwindow* disabledCursorWindow;
 

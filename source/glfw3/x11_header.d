@@ -470,8 +470,8 @@ struct _XkbNewKeyboardNotify {
     int old_min_key_code;
     int old_max_key_code;
     uint changed;
-    char req_major;
-    char req_minor;
+    char req_major = 0;
+    char req_minor = 0;
 }
 alias _XkbNewKeyboardNotify XkbNewKeyboardNotifyEvent;
 struct _XkbMapNotifyEvent {
@@ -527,9 +527,9 @@ struct _XkbStateNotifyEvent {
     ubyte compat_lookup_mods;
     int ptr_buttons;
     KeyCode keycode;
-    char event_type;
-    char req_major;
-    char req_minor;
+    char event_type = 0;
+    char req_major = 0;
+    char req_minor = 0;
 }
 alias _XkbStateNotifyEvent XkbStateNotifyEvent;
 struct _XkbControlsNotify {
@@ -545,9 +545,9 @@ struct _XkbControlsNotify {
     uint enabled_ctrl_changes;
     int num_groups;
     KeyCode keycode;
-    char event_type;
-    char req_major;
-    char req_minor;
+    char event_type = 0;
+    char req_major = 0;
+    char req_minor = 0;
 }
 alias _XkbControlsNotify XkbControlsNotifyEvent;
 struct _XkbIndicatorNotify {
@@ -629,7 +629,7 @@ struct _XkbActionMessage {
     Bool key_event_follows;
     int group;
     uint mods;
-    char[XkbActionMessageLength + 1] message;
+    char[XkbActionMessageLength + 1] message = '\0';
 }
 alias _XkbActionMessage XkbActionMessageEvent;
 struct _XkbAccessXNotify {
@@ -979,7 +979,7 @@ struct XGCValues {
     int clip_y_origin;
     Pixmap clip_mask;
     int dash_offset;
-    char dashes;
+    char dashes = 0;
 }
 alias _XGC* GC;
 struct Visual {
@@ -1144,7 +1144,7 @@ struct XKeyboardState {
     uint bell_pitch, bell_duration;
     c_ulong led_mask;
     int global_auto_repeat;
-    char[32] auto_repeats;
+    char[32] auto_repeats = '\0';
 }
 struct XTimeCoord {
     Time time;
@@ -1204,7 +1204,7 @@ struct XMotionEvent {
     int x, y;
     int x_root, y_root;
     uint state;
-    char is_hint;
+    char is_hint = 0;
     Bool same_screen;
 }
 alias XMotionEvent XPointerMovedEvent;
@@ -1244,7 +1244,7 @@ struct XKeymapEvent {
     Bool send_event;
     Display* display;
     Window window;
-    char[32] key_vector;
+    char[32] key_vector = '\0';
 }
 struct XExposeEvent {
     int type;
@@ -1465,7 +1465,7 @@ struct XClientMessageEvent {
     Atom message_type;
     int format;
     union _data {
-        char[20] b;
+        char[20] b = '\0';
         short[10] s;
         c_long[5] l;
     }
@@ -4068,10 +4068,10 @@ struct XIDeviceEvent {
     Window root;
     Window event;
     Window child;
-    double root_x;
-    double root_y;
-    double event_x;
-    double event_y;
+    double root_x = 0.0;
+    double root_y = 0.0;
+    double event_x = 0.0;
+    double event_y = 0.0;
     int flags;
     XIButtonState buttons;
     XIValuatorState valuators;
@@ -4107,10 +4107,10 @@ struct XIEnterEvent {
     Window root;
     Window event;
     Window child;
-    double root_x;
-    double root_y;
-    double event_x;
-    double event_y;
+    double root_x = 0;
+    double root_y = 0;
+    double event_x = 0;
+    double event_y = 0;
     int mode;
     Bool focus;
     Bool same_screen;

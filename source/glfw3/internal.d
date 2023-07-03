@@ -133,7 +133,7 @@ enum VkResult {
 struct VkAllocationCallbacks;
 
 struct VkExtensionProperties{
-    char[256] extensionName;
+    char[256] extensionName = '\0';
     uint specVersion;
 }
 
@@ -196,7 +196,7 @@ struct _GLFWerror
 {
     _GLFWerror* next;
     int code;
-    char[_GLFW_MESSAGE_SIZE] description;
+    char[_GLFW_MESSAGE_SIZE] description = '\0';
 }
 
 // Initialization configuration
@@ -356,7 +356,8 @@ struct _GLFWwindow
     char[GLFW_MOUSE_BUTTON_LAST + 1] mouseButtons = 0;
     char[GLFW_KEY_LAST + 1] keys = 0;
     // Virtual cursor position when cursor is disabled
-    double virtualCursorPosX;double virtualCursorPosY;
+    double virtualCursorPosX = 0.0;
+    double virtualCursorPosY = 0.0;
     GLFWbool rawMouseMotion;
 
     _GLFWcontext context;
@@ -474,6 +475,9 @@ struct _GLFWmutex
     // This is defined in the platform's thread.h
     mixin _GLFW_PLATFORM_MUTEX_STATE;
 }
+
+// Don't want to emit 137Kb init symbol
+static assert(__traits(isZeroInit, _GLFWlibrary), _GLFWlibrary.init);
 
 // Library global data
 //
