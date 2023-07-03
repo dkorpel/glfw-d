@@ -1313,6 +1313,7 @@ private VkShaderModule demo_prepare_fs(Demo* demo) {
 }
 
 private void demo_prepare_pipeline(Demo* demo) {
+	enum NUM_DYNAMIC_STATES = 2; /*Viewport + Scissor*/
 	VkGraphicsPipelineCreateInfo pipeline;
 	VkPipelineCacheCreateInfo pipelineCache;
 
@@ -1323,7 +1324,7 @@ private void demo_prepare_pipeline(Demo* demo) {
 	VkPipelineDepthStencilStateCreateInfo ds;
 	VkPipelineViewportStateCreateInfo vp;
 	VkPipelineMultisampleStateCreateInfo ms;
-	VkDynamicState[VK_DYNAMIC_STATE_RANGE_SIZE] dynamicStateEnables;
+	VkDynamicState[NUM_DYNAMIC_STATES] dynamicStateEnables;
 	VkPipelineDynamicStateCreateInfo dynamicState;
 
 	VkResult err;
