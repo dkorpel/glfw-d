@@ -284,9 +284,10 @@ struct _GLFWlibraryWin32 {
     char* clipboardString;
     int[512] keycodes;
     int[GLFW_KEY_LAST + 1] scancodes;
-    char[5][GLFW_KEY_LAST + 1] keynames;
+    char[5][GLFW_KEY_LAST + 1] keynames = void;
     // Where to place the cursor when re-enabled
-    double restoreCursorPosX;double restoreCursorPosY;
+    double restoreCursorPosX = 0.0;
+    double restoreCursorPosY = 0.0;
     // The window whose disabled cursor mode is active
     _GLFWwindow* disabledCursorWindow;
     RAWINPUT* rawInput;

@@ -5,17 +5,15 @@ public {
 	import glfw3.apinative;
 }
 
-version(all) {
- 	import glfw3.context;
- 	import glfw3.init;
- 	import glfw3.input;
- 	import glfw3.monitor;
- 	import glfw3.vulkan;
- 	import glfw3.window;
- 	import glfw3.mappings;
- 	import glfw3.internal;
- 	import glfw3.api;
-}
+import glfw3.context;
+import glfw3.init;
+import glfw3.input;
+import glfw3.monitor;
+import glfw3.vulkan;
+import glfw3.window;
+import glfw3.mappings;
+import glfw3.internal;
+import glfw3.api;
 
 version(_GLFW_WAYLAND) {
 	import glfw3.wl_platform;

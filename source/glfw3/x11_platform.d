@@ -247,7 +247,7 @@ struct _GLFWlibraryX11 {
     // Clipboard string (while the selection is owned)
     char* clipboardString;
     // Key name string
-    char[5][GLFW_KEY_LAST + 1] keynames = '\0';
+    char[5][GLFW_KEY_LAST + 1] keynames = void; // ='\0'; older dmd versions can't initialize 2D static array with element
     // X11 keycode to GLFW key LUT
     int[256] keycodes;
     // GLFW key to X11 keycode LUT

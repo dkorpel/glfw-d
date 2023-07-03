@@ -477,7 +477,9 @@ struct _GLFWmutex
 }
 
 // Don't want to emit 137Kb init symbol
-static assert(__traits(isZeroInit, _GLFWlibrary), _GLFWlibrary.init);
+static if (__VERSION__ >= 2100) {
+    static assert(__traits(isZeroInit, _GLFWlibrary), _GLFWlibrary.init);
+}
 
 // Library global data
 //
