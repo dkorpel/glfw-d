@@ -125,7 +125,7 @@ void printMonitorState() {
 void printJoystickState() {
 	for (int js = GLFW_JOYSTICK_1; js <= GLFW_JOYSTICK_LAST; js++) {
 		if (glfwJoystickPresent(js)) {
-			glfwSetJoystickRumble(js, /*slow*/ 0.25, /*fast*/ 0.25);
+			//glfwSetJoystickRumble(js, /*slow*/ 0.25, /*fast*/ 0.25);
 			printf("Joystick %d has name `%s` and GUID `%s`\n", js, glfwGetJoystickName(js), glfwGetJoystickGUID(js));
 			int buttonsLength, axesLength, hatsLength;
 			const(ubyte)* buttonsPtr = glfwGetJoystickButtons(js, &buttonsLength);
@@ -134,7 +134,7 @@ void printJoystickState() {
 			const(ubyte)[] buttons = buttonsPtr[0..buttonsLength];
 			const(float)[] axes = axesPtr[0..axesLength];
 			const(ubyte)[] hats = hatsPtr[0..hatsLength];
-			printf("axes: %d\n", cast(int) axes.length);
+			printf("number of axes: %d\n", cast(int) axes.length);
 
 			if (glfwJoystickIsGamepad(js)) {
 				printf("  It is a gamepad with name `%s`\n", glfwGetGamepadName(js));

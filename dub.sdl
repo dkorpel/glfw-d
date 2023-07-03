@@ -13,8 +13,7 @@ subPackage "examples/triangle-vulkan"
 
 versions "VK_VERSION_1_0"
 
-dflags "-preview=dip1000"
-dflags "-mixin=build/mixin.d"
+dflags "-mixin=build/mixin.d" platform="dmd"
 
 sourcePaths // by default dub includes everything in source/, which we don't want here
 sourceFiles "source/glfw3/context.d"
@@ -32,7 +31,7 @@ configuration "x11" {
 	versions "_GLFW_X11"
 	libs "X11" platform="linux"
 	sourceFiles "source/glfw3/x11_header.d"
-	buildOptions "betterC"
+	//buildOptions "betterC"
 
 	sourceFiles "source/glfw3/x11_platform.d"
 	sourceFiles "source/glfw3/x11_init.d"
@@ -51,7 +50,7 @@ configuration "x11" {
 configuration "windows" {
 	platforms "windows"
 	versions "_GLFW_WIN32"
-	buildOptions "betterC"
+	//buildOptions "betterC"
 
 	sourceFiles "source/glfw3/win32_platform.d"
 	sourceFiles "source/glfw3/win32_init.d"
