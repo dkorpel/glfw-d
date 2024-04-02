@@ -10,5 +10,5 @@ dub run
 
 From the root of the repository, run it with:
 ```
-dub run glfw-d:empty-window
+dub run glfw-d:triangle-gl
 ```
