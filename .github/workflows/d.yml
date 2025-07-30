@@ -17,9 +17,6 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Install ALSA and PulseAudio
-              run: sudo apt-get install libasound2 libasound2-dev pulseaudio libpulse-dev
-
             - name: Install D compiler
               uses: dlang-community/setup-dlang@v1
               with:
