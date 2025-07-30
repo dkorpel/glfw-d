@@ -3,6 +3,7 @@ module glfw3.posix_time;
 
 @nogc nothrow:
 extern(C): __gshared:
+version(Posix):
 
 //========================================================================
 // GLFW 3.3 POSIX - www.glfw.org

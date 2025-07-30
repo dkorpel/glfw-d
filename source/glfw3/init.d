@@ -2,7 +2,6 @@
 module glfw3.init;
 
 extern(C): nothrow: __gshared:
-// @nogc: varargs
 
 //========================================================================
 // GLFW 3.3 - www.glfw.org
@@ -48,7 +47,9 @@ import core.stdc.assert_;
 
 // Global state shared between compilation units of GLFW
 //
-_GLFWlibrary _glfw = _GLFWlibrary(GLFW_FALSE);
+_GLFWlibrary _glfw; // = _GLFWlibrary.init;
+
+// #compiletime: CTFE for _GLFWlibrary.init or _GLFWlibrary(GLFW_FALSE) takes 21ms
 
 // These are outside of _glfw so they can be used before initialization and
 // after termination

@@ -1,6 +1,8 @@
 /// Needed C declarations taken out of /usr/include/linux/input.h
 module glfw3.linuxinput;
 
+version(linux):
+
 import core.sys.posix.sys.ioctl;
 
 struct input_absinfo {

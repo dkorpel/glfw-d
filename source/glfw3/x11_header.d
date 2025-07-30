@@ -1,5 +1,8 @@
 /// C declarations for the X11 windowing system
 module glfw3.x11_header;
+
+version(linux):
+
 /*
 I started out using https://github.com/nomad-software/x11/, but I had some problems with it:
 - many headers GLFW needs were missing
@@ -15,7 +18,7 @@ import core.stdc.stdio: fopen;
 import core.stdc.stdlib: free, malloc, calloc, realloc;
 
 extern(C):
-nothrow @nogc:
+@nogc nothrow:
 
 const uint X_PROTOCOL = 11;
 const uint X_PROTOCOL_REVISION = 0;
@@ -1939,7 +1942,7 @@ struct _XDisplay {
     XID resource_mask;
     XID resource_id;
     int resource_shift;
-    extern(C) @nogc nothrow XID function(_XDisplay*) resource_alloc;
+    extern(C) nothrow XID function(_XDisplay*) resource_alloc;
     int byte_order;
     int bitmap_unit;
     int bitmap_pad;
@@ -1984,7 +1987,7 @@ struct _XDisplay {
     _XInternalAsync* async_handlers;
     c_ulong bigreq_size;
     _XLockPtrs* lock_fns;
-    extern(C) @nogc nothrow void function(
+    extern(C) nothrow void function(
             Display*, XID*, int) idlist_alloc;
     _XKeytrans* key_bindings;
     Font cursor_font;
@@ -1992,7 +1995,7 @@ struct _XDisplay {
     uint mode_switch;
     uint num_lock;
     _XContextDB* context_db;
-    extern(C) @nogc nothrow Bool function(
+    extern(C) nothrow Bool function(
             Display*, XErrorEvent*, xError*)* error_vec;
     struct cms {
         XPointer defaultCCCs;

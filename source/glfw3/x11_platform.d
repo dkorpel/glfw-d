@@ -1,9 +1,9 @@
 /// Translated from C to D
 module glfw3.x11_platform;
 
+version(linux):
 @nogc nothrow:
 extern(C): __gshared:
-
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org
 //------------------------------------------------------------------------

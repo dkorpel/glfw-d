@@ -3,7 +3,7 @@ module glfw3.linux_joystick;
 
 @nogc nothrow:
 extern(C): __gshared:
-
+version(linux):
 
 //========================================================================
 // GLFW 3.3 Linux - www.glfw.org
@@ -346,15 +346,6 @@ private extern(D) bool isEventFile(const(char)* str) {
     assert(!isEventFile("event"));
     assert(!isEventFile("even0"));
     assert(!isEventFile("event0A"));
-}
-
-static if (__VERSION__ < 2094) {
-    // workaround for missing @nogc attribute in core.sys.linux.sys.inotify
-    // should be fixed in dmd 2.094
-    extern(C) nothrow @nogc int inotify_init();
-    extern(C) nothrow @nogc int inotify_init1(int flags);
-    extern(C) nothrow @nogc int inotify_add_watch(int fd, const(char)* name, uint mask);
-    extern(C) nothrow @nogc int inotify_rm_watch(int fd, uint wd);
 }
 
 // Initialize joystick interface

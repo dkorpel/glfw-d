@@ -3,6 +3,7 @@ module glfw3.glx_context;
 
 @nogc nothrow:
 extern(C): __gshared:
+version(linux):
 
 //========================================================================
 // GLFW 3.3 GLX - www.glfw.org

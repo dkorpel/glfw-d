@@ -15,18 +15,7 @@ import glfw3.mappings;
 import glfw3.internal;
 import glfw3.api;
 
-version(_GLFW_WAYLAND) {
-	import glfw3.wl_platform;
-	import glfw3.wl_init;
-	import glfw3.wl_monitor;
-	import glfw3.wl_window;
-	import glfw3.linux_joystick;
-	import glfw3.posix_time;
-	import glfw3.posix_thread;
-	import glfw3.xkb_unicode;
-	import glfw3.egl_context;
-	import glfw3.osmesa_context;
-} else version(_GLFW_OSMESA) {
+version(_GLFW_OSMESA) {
 	import glfw3.null_init;
 	import glfw3.null_monitor;
 	import glfw3.null_window;
@@ -35,8 +24,8 @@ version(_GLFW_WAYLAND) {
 	import glfw3.posix_thread;
 	import glfw3.osmesa_context;
 } else version(Windows) {
-	pragma(lib, "Gdi32");
-	pragma(lib, "User32");
+	pragma(lib, "gdi32");
+	pragma(lib, "user32");
 	import glfw3.win32_platform;
 	import glfw3.win32_init;
 	import glfw3.win32_joystick;
@@ -63,15 +52,4 @@ version(_GLFW_WAYLAND) {
 	import glfw3.osmesa_context;
 	import glfw3.linux_joystick;
 	import glfw3.linuxinput;
-} else version(OSX) {
-	import glfw3.cocoa_platform;
-	import glfw3.cocoa_init;
-	import glfw3.cocoa_joystick;
-	import glfw3.cocoa_monitor;
-	import glfw3.cocoa_time;
-	import glfw3.cocoa_window;
-	import glfw3.posix_thread;
-	import glfw3.nsgl_context;
-	import glfw3.egl_context;
-	import glfw3.osmesa_context;
 }

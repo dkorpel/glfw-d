@@ -49,9 +49,9 @@ public import glfw3.posix_thread;
 public import glfw3.null_joystick;
 
 version(Windows) {
-    auto _glfw_dlopen(const(char)* name) { return LoadLibraryA(name); }
-    auto _glfw_dlclose(void* handle) { return FreeLibrary(cast(HMODULE) handle); }
-    auto _glfw_dlsym(void* handle, const(char)* name) { return GetProcAddress(cast(HMODULE) handle, name);}
+    // auto _glfw_dlopen(const(char)* name) { return LoadLibraryA(name); }
+    // auto _glfw_dlclose(void* handle) { return FreeLibrary(cast(HMODULE) handle); }
+    // auto _glfw_dlsym(void* handle, const(char)* name) { return GetProcAddress(cast(HMODULE) handle, name);}
 } else {
     auto _glfw_dlopen(const(char)* name) {return dlopen(name, RTLD_LAZY | RTLD_LOCAL);}
     auto _glfw_dlclose(void* handle) {return dlclose(handle);}

@@ -3,6 +3,7 @@ module glfw3.x11_window;
 
 @nogc nothrow:
 extern(C): __gshared:
+version(linux):
 
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org
@@ -148,7 +149,7 @@ private int getWindowState(_GLFWwindow* window) {
                                   _glfw.x11.WM_STATE,
                                   cast(ubyte**) &state) >= 2)
     {
-        result = cast(int)state.state;
+        result = cast(int) state.state;
     }
 
     if (state)

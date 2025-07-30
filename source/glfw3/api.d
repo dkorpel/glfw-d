@@ -5201,10 +5201,6 @@ const(char)* glfwGetGamepadName(int jid);
  */
 int glfwGetGamepadState(int jid, GLFWgamepadstate* state);
 
-// This version identifier needs to be defined because there might be breaking API changes,
-// as of writing the pull request is not merged in the GLFW repository:
-// https://github.com/glfw/glfw/pull/1678
-
 /** Sets the intensity of a joystick's rumble effect.
  *
  *  This function sends vibration data to joysticks that implement haptic feedback

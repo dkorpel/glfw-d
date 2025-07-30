@@ -3,7 +3,6 @@ module glfw3.win32_window;
 
 version(Windows):
 extern(C): __gshared:
-// @nogc: nothrow:
 
 //========================================================================
 // GLFW 3.3 Win32 - www.glfw.org

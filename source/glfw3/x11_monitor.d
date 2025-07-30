@@ -35,6 +35,7 @@ extern(C): __gshared:
 
 import glfw3.internal;
 
+version(linux):
 import core.stdc.limits;
 import core.stdc.stdlib;
 import core.stdc.string;

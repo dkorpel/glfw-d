@@ -3,7 +3,7 @@ module glfw3.x11_init;
 
 @nogc nothrow:
 extern(C): __gshared:
-
+version(linux):
 
 //========================================================================
 // GLFW 3.3 X11 - www.glfw.org

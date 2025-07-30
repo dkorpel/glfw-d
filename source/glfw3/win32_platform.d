@@ -46,11 +46,21 @@ public import core.sys.windows.dbt;
 
 package:
 
-// TODO: make this @nogc nothrow upstream
+// TODO: make this nothrow upstream
 @nogc nothrow extern (Windows) ULONGLONG VerSetConditionMask(ULONGLONG, DWORD, BYTE);
 
 // HACK: Define macros that some windows.h variants don't
-enum WM_MOUSEHWHEEL = 0x020E;
+version(LDC)
+{
+    static if (__VERSION__ < 2111)
+        enum WM_MOUSEHWHEEL = 0x020E;
+}
+else
+{
+    static if (__VERSION__ < 2110)
+        enum WM_MOUSEHWHEEL = 0x020E;
+}
+
 enum WM_DWMCOMPOSITIONCHANGED = 0x031E;
 enum WM_COPYGLOBALDATA = 0x0049;
 //enum UNICODE_NOCHAR = 0xFFFF;
