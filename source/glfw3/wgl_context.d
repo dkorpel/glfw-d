@@ -2,7 +2,7 @@
 module glfw3.wgl_context;
 
 version(Windows):
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 

@@ -2,7 +2,7 @@
 module glfw3.win32_init;
 
 version(Windows):
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 

@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.glx_context;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 version(linux):
 

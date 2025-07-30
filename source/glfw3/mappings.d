@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.mappings;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 //========================================================================
 // GLFW 3.5 - www.glfw.org

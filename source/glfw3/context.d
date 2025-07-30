@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.context;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 //========================================================================

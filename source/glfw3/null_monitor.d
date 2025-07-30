@@ -2,7 +2,7 @@
 module glfw3.null_monitor;
 
 version(_GLFW_OSMESA):
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 //========================================================================

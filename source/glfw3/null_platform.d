@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.null_platform;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 //========================================================================

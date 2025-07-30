@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.x11_monitor;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 //========================================================================

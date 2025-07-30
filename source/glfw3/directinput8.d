@@ -5,7 +5,7 @@
 module glfw3.directinput8;
 
 version(Windows):
-extern(Windows): @nogc: nothrow: __gshared:
+extern(Windows): nothrow: __gshared:
 
 import core.sys.windows.windows;
 import core.sys.windows.objbase;
@@ -15,7 +15,7 @@ enum DIRECTINPUT_VERSION =	0x0800;
 // @nogc IUnknown interface
 // Compiler doesn't care where it's from as long as it's named IUnknown
 private interface IUnknown {
-extern(Windows) @nogc nothrow @system:
+extern(Windows) nothrow @system:
 	HRESULT QueryInterface(IID* riid, void** pvObject);
 	ULONG AddRef();
 	ULONG Release();
@@ -936,7 +936,7 @@ alias LPDIRECTINPUTDEVICE8W = IDirectInputDevice8W;
 alias LPDIRECTINPUTEFFECT = IDirectInputEffect;
 
 interface IDirectInputW : IUnknown {
-extern(Windows) @nogc nothrow @system:
+extern(Windows) nothrow @system:
     HRESULT CreateDevice(REFGUID, LPDIRECTINPUTDEVICEW*, LPUNKNOWN);
     HRESULT EnumDevices(DWORD, LPDIENUMDEVICESCALLBACKW, LPVOID, DWORD);
     HRESULT GetDeviceStatus(REFGUID);
@@ -945,7 +945,7 @@ extern(Windows) @nogc nothrow @system:
 }
 
 interface IDirectInputDeviceW : IUnknown {
-extern(Windows) @nogc nothrow @system:
+extern(Windows) nothrow @system:
     HRESULT GetCapabilities(LPDIDEVCAPS);
     HRESULT EnumObjects(LPDIENUMDEVICEOBJECTSCALLBACKW, LPVOID, DWORD);
     HRESULT GetProperty(REFGUID, LPDIPROPHEADER);
@@ -964,7 +964,7 @@ extern(Windows) @nogc nothrow @system:
 }
 
 interface IDirectInputEffect : IUnknown {
-extern(Windows) @nogc nothrow @system:
+extern(Windows) nothrow @system:
     HRESULT Initialize(HINSTANCE, DWORD, REFGUID);
     HRESULT GetEffectGuid(LPGUID);
     HRESULT GetParameters(LPDIEFFECT, DWORD);
@@ -1038,7 +1038,7 @@ alias const(DIACTIONFORMATW)* LPCDIACTIONFORMATW;
 
 alias IDirectInputDevice8 = IDirectInputDevice8W;
 interface IDirectInputDevice8W : IUnknown {
-extern(Windows) @nogc nothrow @system:
+extern(Windows) nothrow @system:
 	/*** IDirectInputDeviceW methods ***/
 	HRESULT GetCapabilities(LPDIDEVCAPS lpDIDevCaps);
 	HRESULT EnumObjects(LPDIENUMDEVICEOBJECTSCALLBACKW lpCallback, LPVOID pvRef, DWORD dwFlags);
@@ -1107,7 +1107,7 @@ alias const(DICONFIGUREDEVICESPARAMSW)* LPCDICONFIGUREDEVICESPARAMSW;
 
 alias IDirectInput8 = IDirectInput8W;
 interface IDirectInput8W : IUnknown {
-extern(Windows) @nogc nothrow @system:
+extern(Windows) nothrow @system:
 	/*** IDirectInput8W methods ***/
 	HRESULT CreateDevice(REFGUID rguid, LPDIRECTINPUTDEVICE8W* lplpDirectInputDevice, LPUNKNOWN pUnkOuter);
 	HRESULT EnumDevices(DWORD dwDevType, LPDIENUMDEVICESCALLBACKW lpCallback, LPVOID pvRef, DWORD dwFlags);

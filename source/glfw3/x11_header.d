@@ -18,7 +18,7 @@ import core.stdc.stdio: fopen;
 import core.stdc.stdlib: free, malloc, calloc, realloc;
 
 extern(C):
-@nogc nothrow:
+nothrow:
 
 const uint X_PROTOCOL = 11;
 const uint X_PROTOCOL_REVISION = 0;

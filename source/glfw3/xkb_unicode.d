@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.xkb_unicode;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 //========================================================================

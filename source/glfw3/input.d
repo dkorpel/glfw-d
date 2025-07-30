@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.input;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 import core.stdc.config: c_long, c_ulong;

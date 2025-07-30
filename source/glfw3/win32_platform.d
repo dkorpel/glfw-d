@@ -2,7 +2,7 @@
 module glfw3.win32_platform;
 
 version(Windows):
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 
@@ -47,7 +47,7 @@ public import core.sys.windows.dbt;
 package:
 
 // TODO: make this nothrow upstream
-@nogc nothrow extern (Windows) ULONGLONG VerSetConditionMask(ULONGLONG, DWORD, BYTE);
+nothrow extern (Windows) ULONGLONG VerSetConditionMask(ULONGLONG, DWORD, BYTE);
 
 // HACK: Define macros that some windows.h variants don't
 version(LDC)

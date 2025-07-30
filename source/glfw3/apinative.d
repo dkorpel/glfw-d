@@ -5,7 +5,7 @@
  */
 module glfw3.apinative;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 
 /*************************************************************************

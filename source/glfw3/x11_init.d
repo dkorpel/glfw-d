@@ -1,7 +1,7 @@
 /// Translated from C to D
 module glfw3.x11_init;
 
-@nogc nothrow:
+nothrow:
 extern(C): __gshared:
 version(linux):
 
