@@ -22,6 +22,12 @@ jobs:
               with:
                   compiler: ${{ matrix.dc }}
 
+            - name: Install dependencies
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y \
+                  libx11-dev
+
             - name: Build empty window example
               run: dub -q build glfw-d:empty-window
 
